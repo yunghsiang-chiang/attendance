@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "essential-oasis-424001-j0",
+  "private_key_id": "f283832a0ef0c9960fb9a15655760e903a742328",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvvqPp+NdMujOS\nsxUn3nj81xkN3xOq6RSIU7S9CrgdUTd9TyUVSJ/dKSbbMYtaKG7ZAzsDKFdGa5W2\n7sH1u3BWjeLW9Dx3pcH9iGtsEBZwYu7plrt/T0/SO935hUm1V6FyLmVqhKDmcIaP\ny6ON6704zbI214pBwAH2QxQ0lPunatqJvvj48+MPeraWdNJGP/bXPzTj0kRCPpY1\nT4/GRoRy2mACHhqGwBRPuVsQc/nA0SN67pL1xXaDbDIj+cawnT4QU/NWq1qrdWsS\n5pB6Kgt5jSJvbhVfuRaiW6hWeC4nCREUVA1l8R0Hf+Wz4FGhexAgikcUq8P5gZUy\n9E5rGULVAgMBAAECggEABsQFFW3SBA8rCxu/1cAX0kwJl+IdpLfCZZkrXRe7jM1i\noH1ahR49oUsDRu76WWczFUGtlOqJqZlcsyUv7GDh60MdF39hkI2eET+eOxPHeV4l\nqnJ2F2mbPhG18vQxqTyNZ5LnrpkahKSSWZjSXBVWPIiWssvLc8qLiMp+TaPqqEBB\nfSlrC9DxDHt1HsgMRQIMGz+64MyJH71XLTc5ND1wwtdFBMAIy9vfIODC91wyd/Tj\ndOwdGnhdcBNSyT6/KSgk7lMQwRxdPQJJtJW9x8F1MgbGTOQO2dW/nh6cfadBQPQD\nX8NQi7CMNSh8xIyO4xIBQlnMfAYOcITQhfdfHCDLIQKBgQDfQ2A6w6pjmJnJFxwr\nDh/mQlB5PnhVEv7++Iv7/y5xJzGF8z6Ujour8Sg0Vz4sFBMWvxTBHvrBXPB06dFP\nPXW/UMUXLzAhDfl8uOgBeqdGp1bZRfgeUCVea6KQzkTQsQ0mSucXCsZkKlEdW46k\nHDJPqoZq1Gm5hT8aU+fvGsd4CQKBgQDJg5BWyj290sGDcNHMjaEeWeVIoXQe2IyC\nyUEmc4WOwHHFDXJ+Kt7FcImolpfwXFg8pSp7on0yULe4TJInTRLJe0V937uE94hw\nv7hOhDRxD+gfmDnSV0DGiK9KCRbCzgenb47SIdQufleuXano0JVTWTFVhYE1HPkD\nkaPapXWvbQKBgDVlbcxgI44yXwVjC4+YjzSIw6pbsHfYVTgxxXj9bOQPFZ8Nr/fj\np6/1u0HZY7szCeW0yYfumtZIHhI4IaEr989Lx/dlh8NADl0v8/z2kq8pMnJAc7j8\nPhO49mZfjsHCtnxkCaTPJOer3z6AOTsyqy22gPNn3elK3u6zBpN++hnRAoGACt0B\n0fvzGiGbdweE998GuYklGCZECUmpQX+x+G2v3IM5XuMbsfuDqOcpNKJxrG59/z70\nLFgVIbpCPTg7hMzd32i61U9TX5asj092kx0DarjtzY46R8GWZ12E/ZvB01yiAv+7\nlk5mjt8WwPqhp0BfXG/pfe/FiGR4dB3M1IOo9X0CgYEAzaMtziX5WWWtdHe7UNE9\nfTsXzt4BzX6bDX+lyhvW+7iiboWD6xUaVIhJG0dsgAV3X4bfvHBQOClyLyRBVK65\nB1FTel2BVl1yUHUi6yNiI8qrrAqAiDwkG/hsduwAP6yyn/PSWdUDFcTP4Q1KyAdy\nJRUAJIkN/BSh3L4BmhaoYpU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "hochi-attendance@essential-oasis-424001-j0.iam.gserviceaccount.com",
+  "client_id": "108413693028327924105",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hochi-attendance%40essential-oasis-424001-j0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

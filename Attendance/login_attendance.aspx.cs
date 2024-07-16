@@ -41,7 +41,7 @@ namespace Attendance
             String str_password = Request.Form["tb_password"].ToString();
 
             DataTable logindt = new DataTable();
-            logindt = clsDB.MySQL_Select("SELECT person_id, person_name, person_password, person_area, person_subinv,person_calendar FROM hochi_config.c_fellow_hochi_learners\r\nwhere person_id = '" + str_accound + "' and person_password = MD5('" + str_password + "')");
+            logindt = clsDB.MySQL_Select("SELECT person_id, person_name, person_password, person_area, person_subinv,person_calendar FROM hochi_config.c_fellow_hochi_learners where person_id = '" + str_accound + "' and person_password = MD5('" + str_password + "')");
             if (logindt.Rows.Count > 0)
             {
                 //產生一個Cookie

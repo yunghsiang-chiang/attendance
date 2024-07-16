@@ -85,7 +85,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 到班", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 到班", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -355,7 +355,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 外出公務", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 外出公務", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -380,7 +380,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 病假", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 病假", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -405,7 +405,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 生理假", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 生理假", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -430,7 +430,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 事假", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 事假", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -455,7 +455,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 補休", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 補休", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>
@@ -480,7 +480,7 @@ namespace Attendance.attendance
             if (reqCookies != null)
             {
                 string calendarid = Server.UrlDecode(reqCookies["person_calendar"].ToString());
-                googleCalendar.Add_new_event("test project", "測試 " + Server.UrlDecode(reqCookies["person_name"].ToString()) + " 特休", "Asia/Taipei", start, end, calendarid);
+                googleCalendar.Add_new_event("test project", /*"測試 " +*/ Server.UrlDecode(reqCookies["person_name"].ToString()) + " 特休", "Asia/Taipei", start, end, calendarid);
             }
         }
         /// <summary>

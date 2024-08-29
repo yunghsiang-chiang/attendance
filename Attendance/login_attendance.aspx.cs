@@ -44,14 +44,18 @@ namespace Attendance
             logindt = clsDB.MySQL_Select("SELECT person_id, person_name, person_password, person_area, person_subinv,person_calendar FROM hochi_config.c_fellow_hochi_learners where person_id = '" + str_accound + "' and person_password = MD5('" + str_password + "')");
             if (logindt.Rows.Count > 0)
             {
+                //ip address
+                string temp_ip_str = clsDB.GetIPAddress();
                 //產生一個Cookie
                 HttpCookie cookie = new HttpCookie("person");
                 //設定單值
+                cookie["temp_value"] = "temp";
                 cookie["person_id"] = Server.UrlEncode(logindt.Rows[0]["person_id"].ToString());
                 cookie["person_name"] = Server.UrlEncode(logindt.Rows[0]["person_name"].ToString());
                 cookie["person_area"] = Server.UrlEncode(logindt.Rows[0]["person_area"].ToString());
                 cookie["person_subinv"] = Server.UrlEncode(logindt.Rows[0]["person_subinv"].ToString());
                 cookie["person_calendar"] = Server.UrlEncode(logindt.Rows[0]["person_calendar"].ToString());
+                cookie["person_ipaddress"] = Server.UrlEncode(temp_ip_str);
                 //設定過期日
                 cookie.Expires = DateTime.Now.AddDays(365);
                 //寫到用戶端
@@ -60,7 +64,7 @@ namespace Attendance
                 Response.Redirect(Request.QueryString["beforeUrls"]);
             }
 
-            Response.Write("<script>alert('功能撰寫中...\\n帳號:" + str_accound + "\\n密碼:" + str_password + "');</script>");
+            //Response.Write("<script>alert('功能撰寫中...\\n帳號:" + str_accound + "\\n密碼:" + str_password + "');</script>");
         }
     }
 }

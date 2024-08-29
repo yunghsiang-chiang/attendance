@@ -20,14 +20,16 @@ $(document).ready(function () {
         if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
             $('#inside').show();
             $('#outside').hide();
+            $('#alert').hide();
         } else {
             $('#inside').hide();
             $('#outside').show();
+            $('#alert').hide();
         }
     } else {
         $('#inside').hide();
         $('#outside').hide();
-        $('alert').hide();
+        $('#alert').show();
     }
 
     //到班 button
@@ -166,7 +168,8 @@ function getapidata(api_url) {
 }
 
 function postapidata(user_id, user_name, attendance_status) {
-    let yourDate = new Date().toISOString();
+    let yourDate = new Date().toLocaleString('sv',1).replace(' ','T') + 'Z';
+    console.log(yourDate);
     $.ajax({
         type: "POST",
         url: "http://10.10.3.75:8082/api/attendance/appendattendance_record",

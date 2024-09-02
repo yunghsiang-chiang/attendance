@@ -141,6 +141,17 @@ $(document).ready(function () {
                 var userId = getCookie("person_id");
                 var userName = getCookie("person_name");
 
+                // 計算時間差（毫秒）
+                const timeDifference = new Date(end_Date + 'T' + end_Time + ':00') - new Date(start_Date + 'T' + start_Time + ':00');
+
+                // 將時間差轉換為小時數
+                const hoursDifference = timeDifference / (1000 * 60 * 60);
+
+                //超過8小時則鎖定8小時
+                if (hoursDifference>8) {
+                    hoursDifference = 8;
+                }
+
                 // 檢查請假類型是否選擇
                 if (!leaveType) {
                     alert("請選擇請假類型");
@@ -178,7 +189,8 @@ $(document).ready(function () {
                         userName: userName,
                         leaveType: leaveType,
                         startTime: start_Date + 'T' + start_Time+':00.000Z',
-                        endTime: end_Date + 'T' + end_Time + ':00.000Z'
+                        endTime: end_Date + 'T' + end_Time + ':00.000Z',
+                        count_hours: hoursDifference
                     };
 
                     // 發送 POST 請求

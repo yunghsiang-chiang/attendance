@@ -208,7 +208,7 @@ $(document).ready(function () {
         dateFormat: "yy-mm-dd"
     });
 
-     設置時間選擇器
+     //設置時間選擇器
     $("#start-time, #end-time").timepicker({
         timeFormat: "HH:mm"        
     });

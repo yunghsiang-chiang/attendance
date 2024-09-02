@@ -183,7 +183,7 @@
                 <label for="end-time">結束時間</label>
                 <input type="text" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm">
 
-                <button type="button" id="submit-button">確認</button>
+                <%--<button type="button" id="submit-button">確認</button>--%>
             </fieldset>
         </form>
     </div>

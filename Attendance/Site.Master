@@ -56,7 +56,10 @@
                 <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
-
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        
+    
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" runat="server" href="~/attendance/attendance_rwd">到班打卡</a>

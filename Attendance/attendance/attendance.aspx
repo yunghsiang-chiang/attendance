@@ -32,7 +32,7 @@
                         </div>
                         <p></p>
                         <div class="row align-items-start">
-                            <asp:Button ID="bt_going_out_on_business" class="btn btn-warning" runat="server" Text="稍後外出公務" OnClick="bt_going_out_on_business_Click" />
+                            <asp:Button ID="bt_going_out_on_business" class="btn btn-warning" runat="server" Text="外出公務" OnClick="bt_going_out_on_business_Click" />
                         </div>
                         <p></p>
                         <div class="row align-items-start">
@@ -40,7 +40,7 @@
                         </div>
                         <p></p>
                         <div class="row align-items-start">
-                            <asp:Button ID="bt_dayoff" class="btn btn-warning" runat="server" Text="稍後請假" OnClick="bt_dayoff_Click" />
+                            <asp:Button ID="bt_dayoff" class="btn btn-warning" runat="server" Text="請假" OnClick="bt_dayoff_Click" />
                         </div>
 
                     </section>

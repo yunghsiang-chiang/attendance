@@ -64,14 +64,7 @@ $(document).ready(function () {
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:回崗');
         postapidata(getCookie("person_id"), getCookie("person_name"), "回崗");
     });
-    //請假
-    $('#bt_dayoff').click(function () {
-        setCookie('last_status', '請假', 1);
-        setCookie('attendance_state', '請假', 1);
-        setCookie('start', Date().toLocaleString('sv'), 1);
-        $('#personal_infor p:nth-child(3)').text('目前打卡狀態:請假');
-        postapidata(getCookie("person_id"), getCookie("person_name"), "請假");
-    });
+    
     //外出公務
     $('#bt_outside_business').click(function () {
         setCookie('last_status', '外出公務', 1);
@@ -120,6 +113,106 @@ $(document).ready(function () {
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:特休');
         postapidata(getCookie("person_id"), getCookie("person_name"), "特休");
     });
+
+    //請假
+    // 點擊按鈕打開對話框
+    $('#bt_dayoff').click(function () {
+        setCookie('last_status', '請假', 1);
+        setCookie('attendance_state', '請假', 1);
+        setCookie('start', Date().toLocaleString('sv'), 1);
+        $('#personal_infor p:nth-child(3)').text('目前打卡狀態:請假');
+        //postapidata(getCookie("person_id"), getCookie("person_name"), "請假");
+        $("#dialog-form").dialog("open");
+    });
+
+    // 初始化對話框
+    $("#dialog-form").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            "確認": function () {
+                // 表單驗證
+                var isValid = true;
+                var leaveType = $("#leave-type").val();
+                var start_Date = $("#start-date").val();
+                var start_Time = $("#start-time").val();
+                var end_Date = $("#end-date").val();
+                var end_Time = $("#end-time").val();
+                var userId = getCookie("person_id");
+                var userName = getCookie("person_name");
+
+                // 檢查請假類型是否選擇
+                if (!leaveType) {
+                    alert("請選擇請假類型");
+                    isValid = false;
+                }
+
+                // 檢查日期和時間格式
+                var dateRegex = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD 格式
+                var timeRegex = /^\d{2}:\d{2}$/; // HH:mm 格式
+
+                if (!dateRegex.test(start_Date)) {
+                    alert("開始日期格式不正確，請使用 YYYY-MM-DD 格式");
+                    isValid = false;
+                }
+
+                if (!timeRegex.test(start_Time)) {
+                    alert("開始時間格式不正確，請使用 HH:mm 格式");
+                    isValid = false;
+                }
+
+                if (!dateRegex.test(end_Date)) {
+                    alert("結束日期格式不正確，請使用 YYYY-MM-DD 格式");
+                    isValid = false;
+                }
+
+                if (!timeRegex.test(end_Time)) {
+                    alert("結束時間格式不正確，請使用 HH:mm 格式");
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    // 構建要發送的數據
+                    var postData = {
+                        userId: userId,
+                        userName: userName,
+                        leaveType: leaveType,
+                        startTime: start_Date + 'T' + start_Time+':00.000Z',
+                        endTime: end_Date + 'T' + end_Time + ':00.000Z'
+                    };
+
+                    // 發送 POST 請求
+                    $.ajax({
+                        url: 'http://internal.hochi.org.tw:8082/api/attendance/appendleave_record', // API 端點 URL
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(postData),
+                        success: function (response) {
+                            alert("請假申請已成功提交！");
+                            $("#dialog-form").dialog("close");
+                        },
+                        error: function (xhr, status, error) {
+                            alert("提交失敗: " + xhr.responseText);
+                        }
+                    });
+                }
+            },
+            "取消": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    // 設置日期選擇器
+    $("#start-date, #end-date").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+     設置時間選擇器
+    $("#start-time, #end-time").timepicker({
+        timeFormat: "HH:mm"        
+    });
+
 })
 
 //取得cookie數值
@@ -167,12 +260,13 @@ function getapidata(api_url) {
     return "";
 }
 
+//將資料 上傳至資料庫
 function postapidata(user_id, user_name, attendance_status) {
     let yourDate = new Date().toLocaleString('sv',1).replace(' ','T') + 'Z';
     console.log(yourDate);
     $.ajax({
         type: "POST",
-        url: "http://10.10.3.75:8082/api/attendance/appendattendance_record",
+        url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
         data: JSON.stringify({
             "user_id": user_id,
             "user_name": user_name,

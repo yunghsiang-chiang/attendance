@@ -2,8 +2,27 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <script src="../Scripts/attendance/attendance_rwd.js"></script>
+    <!-- Timepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script async defer src="https://apis.google.com/js/api.js"></script>
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css">
+    <!-- Timepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.css">
+
     <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #dialog-form {
+            display: none;
+        }
+
+        .ui-widget-content {
+            font-size: 16px;
+        }
+
         #today_status, #attended_meetings {
             display: flex; /* 使用 Flexbox 來進行布局 */
             justify-content: space-between; /* 讓兩個內部 container 水平並排，並在空間中分配 */
@@ -122,7 +141,7 @@
                         <input type="button" id="bt_menstrual_leave" class="btn btn-warning" value="請生理假" />
                     </div>
                     <div class="row align-items-start">
-                        <input type="button" id="bt_personal_leave" class="btn btn-light" value="請事假"/>
+                        <input type="button" id="bt_personal_leave" class="btn btn-light" value="請事假" />
                     </div>
                     <div class="row align-items-start">
                         <input type="button" id="bt_compensatory_leave" class="btn btn-success" value="補休" />
@@ -134,8 +153,39 @@
                 <div class="container" id="alert">
                     <string>請先登入，謝謝!😄</string>
                 </div>
+
+
             </div>
         </div>
+    </div>
+
+    <div id="dialog-form" title="請假申請">
+        <form id="leave-form">
+            <fieldset>
+                <label for="leave-type">請假類型</label>
+                <select name="leave-type" id="leave-type" class="text ui-widget-content ui-corner-all">
+                    <option value="">請選擇</option>
+                    <option value="病假">病假</option>
+                    <option value="事假">事假</option>
+                    <option value="特休">特休</option>
+                    <option value="補休">補休</option>
+                </select>
+                <br />
+                <label for="start-date">開始日期</label>
+                <input type="text" name="start-date" id="start-date" class="text ui-widget-content ui-corner-all">
+
+                <label for="start-time">開始時間</label>
+                <input type="text" name="start-time" id="start-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm">
+
+                <label for="end-date">結束日期</label>
+                <input type="text" name="end-date" id="end-date" class="text ui-widget-content ui-corner-all">
+
+                <label for="end-time">結束時間</label>
+                <input type="text" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm">
+
+                <button type="button" id="submit-button">確認</button>
+            </fieldset>
+        </form>
     </div>
 
 </asp:Content>

@@ -71,7 +71,7 @@ namespace Attendance.attendance
         protected void bt_start_Click(object sender, EventArgs e)
         {
             List<Button> buttons = new List<Button> { bt_start, bt_end, bt_going_out_on_business, bt_come_back, bt_dayoff };
-            List<string> strings = new List<string> { "到班", "下班", "稍後外出公務", "回崗", "稍後請假" };
+            List<string> strings = new List<string> { "到班", "下班", "外出公務", "回崗", "請假" };
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Text = strings[i];
@@ -96,7 +96,7 @@ namespace Attendance.attendance
         protected void bt_end_Click(object sender, EventArgs e)
         {
             List<Button> buttons = new List<Button> { bt_start, bt_end, bt_going_out_on_business, bt_come_back, bt_dayoff };
-            List<string> strings = new List<string> { "到班", "下班", "稍後外出公務", "回崗", "稍後請假" };
+            List<string> strings = new List<string> { "到班", "下班", "外出公務", "回崗", "請假" };
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Text = strings[i];
@@ -114,12 +114,12 @@ namespace Attendance.attendance
         protected void bt_going_out_on_business_Click(object sender, EventArgs e)
         {
             List<Button> buttons = new List<Button> { bt_start, bt_end, bt_going_out_on_business, bt_come_back, bt_dayoff };
-            List<string> strings = new List<string> { "到班", "下班", "稍後外出公務", "回崗", "稍後請假" };
+            List<string> strings = new List<string> { "到班", "下班", "外出公務", "回崗", "請假" };
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Text = strings[i];
             }
-            bt_going_out_on_business.Text = "🏃稍後外出公務🏃";
+            bt_going_out_on_business.Text = "🏃外出公務🏃";
             cookie_by_day_state("in", bt_going_out_on_business);
             Response.Write("<script>alert('按了外出公務按鈕');</script>");
         }
@@ -131,7 +131,7 @@ namespace Attendance.attendance
         protected void bt_come_back_Click(object sender, EventArgs e)
         {
             List<Button> buttons = new List<Button> { bt_start, bt_end, bt_going_out_on_business, bt_come_back, bt_dayoff };
-            List<string> strings = new List<string> { "到班", "下班", "稍後外出公務", "回崗", "稍後請假" };
+            List<string> strings = new List<string> { "到班", "下班", "外出公務", "回崗", "請假" };
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Text = strings[i];
@@ -148,14 +148,14 @@ namespace Attendance.attendance
         protected void bt_dayoff_Click(object sender, EventArgs e)
         {
             List<Button> buttons = new List<Button> { bt_start, bt_end, bt_going_out_on_business, bt_come_back, bt_dayoff };
-            List<string> strings = new List<string> { "到班", "下班", "稍後外出公務", "回崗", "稍後請假" };
+            List<string> strings = new List<string> { "到班", "下班", "外出公務", "回崗", "請假" };
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Text = strings[i];
             }
-            bt_dayoff.Text = "🏃稍後請假🏃";
+            bt_dayoff.Text = "🏃請假🏃";
             cookie_by_day_state("in", bt_dayoff);
-            Response.Write("<script>alert('按了稍後請假按鈕');</script>");
+            Response.Write("<script>alert('按了請假按鈕');</script>");
         }
         /// <summary>
         /// 紀錄 晨光上/下/晨會 勾選紀錄 by Day

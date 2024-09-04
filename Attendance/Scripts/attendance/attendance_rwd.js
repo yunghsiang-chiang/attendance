@@ -145,7 +145,7 @@ $(document).ready(function () {
                 const timeDifference = new Date(end_Date + 'T' + end_Time + ':00') - new Date(start_Date + 'T' + start_Time + ':00');
 
                 // 將時間差轉換為小時數
-                const hoursDifference = timeDifference / (1000 * 60 * 60);
+                let hoursDifference = timeDifference / (1000 * 60 * 60);
 
                 //超過8小時則鎖定8小時
                 if (hoursDifference>8) {
@@ -220,10 +220,10 @@ $(document).ready(function () {
         dateFormat: "yy-mm-dd"
     });
 
-     //設置時間選擇器
-    $("#start-time, #end-time").timepicker({
-        timeFormat: "HH:mm"        
-    });
+    // //設置時間選擇器
+    //$("#start-time, #end-time").timepicker({
+    //    timeFormat: "HH:mm"        
+    //});
 
 })
 

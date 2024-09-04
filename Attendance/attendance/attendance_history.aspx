@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="attendance_history.aspx.cs" Inherits="Attendance.attendance.attendance_history" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <script src="../Scripts/attendance/attendance_history.js"></script>
     <main>
         <section>
 
@@ -17,8 +18,6 @@
                     <select id="name-select" name="name">
                         <option value="">請選擇</option>
                         <!-- 使用後端語言或 JavaScript 填充選項 -->
-                        <option value="1">張三</option>
-                        <option value="2">李四</option>
                         <!-- 更多選項 -->
                     </select>
 
@@ -28,13 +27,13 @@
                     <label for="end-date">結束日期：</label>
                     <input type="date" id="end-date" name="end-date">
 
-                    <button type="submit">搜尋</button>
+                    <input type="button" id="search" value="搜尋" />
                 </form>
             </section>
 
             <section id="records">
                 <h2>時間記錄清單</h2>
-                <table>
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>姓名</th>
@@ -50,7 +49,7 @@
 
             <section id="statistics">
                 <h2>姓名統計表格</h2>
-                <table>
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>姓名</th>

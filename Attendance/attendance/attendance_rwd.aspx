@@ -164,7 +164,7 @@
             <fieldset>
                 <mark>
                     單日請假開始-結束時間超過8小時則扣除8小時對應假期時數<br />
-                    不足8小時其12:30~13:30為午餐時間，不會計算請假工時
+                    不足8小時其12:30~13:30為午餐時間，不會計算請假工時<br />
                 </mark>
                 <label for="leave-type">請假類型</label>
                 <select name="leave-type" id="leave-type" class="text ui-widget-content ui-corner-all">
@@ -179,13 +179,13 @@
                 <input type="text" name="start-date" id="start-date" class="text ui-widget-content ui-corner-all" required>
 
                 <label for="start-time">開始時間</label>
-                <input type="text" name="start-time" id="start-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" required>
+                <input type="text" name="start-time" id="start-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" autocomplete="off" required>
 
                 <label for="end-date">結束日期</label>
                 <input type="text" name="end-date" id="end-date" class="text ui-widget-content ui-corner-all" required>
 
                 <label for="end-time">結束時間</label>
-                <input type="text" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" required>
+                <input type="text" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" autocomplete="off" required>
 
                 <%--<button type="button" id="submit-button">確認</button>--%>
             </fieldset>

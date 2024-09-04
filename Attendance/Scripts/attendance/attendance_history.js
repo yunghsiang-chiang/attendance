@@ -49,6 +49,7 @@ function search_attendance_record(userid, startdate, enddate) {
                 var overtimehours = 0; //加班小時
                 var leavehours = 0; //事假小時
                 var special_vacation_hours = 0; //特休小時
+                var sick_leave_hours = 0 //病假小時
                 var compensatory_leave_hours = 0; //補休小時
                 try {
                     let unit = '';
@@ -77,12 +78,14 @@ function search_attendance_record(userid, startdate, enddate) {
                                         special_vacation_hours += data[i].count_hours;
                                     } else if (data[i].leaveType == "補休") {
                                         compensatory_leave_hours += data[i].count_hours;
+                                    } else if (data[i].leaveType == "病假") {
+                                        sick_leave_hours += data[i].count_hours;
                                     }
                                 }
-                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + compensatory_leave_hours + '</td></tr>';
+                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>'+sick_leave_hours+'</td><td>' + compensatory_leave_hours + '</td></tr>';
                                 $('#statistics-tbody').append(recordsbody);
                             } else {
-                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + compensatory_leave_hours + '</td></tr>';
+                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + sick_leave_hours +'</td><td>' + compensatory_leave_hours + '</td></tr>';
                                 $('#statistics-tbody').append(recordsbody);
                             }
                         });

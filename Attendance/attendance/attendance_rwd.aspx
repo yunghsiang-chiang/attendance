@@ -15,7 +15,7 @@
             font-family: Arial, sans-serif;
         }
 
-        #dialog-form {
+        #dialog-form,dialog {
             display: none;
         }
 
@@ -162,8 +162,7 @@
     <div id="dialog-form" title="請假申請">
         <form id="leave-form">
             <fieldset>
-                <mark>
-                    單日請假開始-結束時間超過8小時則扣除8小時對應假期時數<br />
+                <mark>單日請假開始-結束時間超過8小時則扣除8小時對應假期時數<br />
                     不足8小時其12:30~13:30為午餐時間，不會計算請假工時<br />
                 </mark>
                 <label for="leave-type">請假類型</label>
@@ -173,6 +172,7 @@
                     <option value="事假">事假</option>
                     <option value="特休">特休</option>
                     <option value="補休">補休</option>
+                    <option value="生理假">生理假</option>
                 </select>
                 <br />
                 <label for="start-date">開始日期</label>
@@ -191,5 +191,17 @@
             </fieldset>
         </form>
     </div>
+
+    <!-- Dialog 的 HTML 內容 -->
+    <div id="dialog" title="申報加班">
+        <form id="overtime-form">
+            <fieldset>
+                <p id="message"></p>
+                <label for="overtime-hours">請選擇申報加班的小時數：</label>
+                <input type="number" id="overtime-hours" min="0" step="0.5">
+            </fieldset>
+        </form>
+    </div>
+
 
 </asp:Content>

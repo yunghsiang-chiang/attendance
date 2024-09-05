@@ -47,6 +47,21 @@ $(document).ready(function () {
         setCookie('start', Date().toLocaleString('sv'), 1);
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:下班');
         postapidata(getCookie("person_id"), getCookie("person_name"), "下班");
+        //檢查下班時間>半小時以上，彈跳申請加班頁面
+        // 獲取當前時間
+        const now = new Date();
+        // 創建一個表示今晚 6 點的時間
+        const targetTime = new Date(now);
+        targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+        // 計算時間差，單位為毫秒
+        const timeDifferenceMs = now - targetTime;
+        // 將時間差轉換為小時數（包括正負值）
+        const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60);
+        if (timeDifferenceHours >= 0.5) {
+            $("#dialog").dialog("open");
+            $('#overtime-hours').attr('max', timeDifferenceHours);
+        }
+
     });
     //外出公務
     $('#bt_going_out_on_business').click(function () {
@@ -123,9 +138,11 @@ $(document).ready(function () {
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:請假');
         //postapidata(getCookie("person_id"), getCookie("person_name"), "請假");
         $("#dialog-form").dialog("open");
+        
     });
 
-    // 初始化對話框
+
+    // 初始化請假對話框
     $("#dialog-form").dialog({
         autoOpen: false,
         modal: true,
@@ -214,6 +231,54 @@ $(document).ready(function () {
             }
         }
     });
+    // 初始化加班對話框
+    $('#dialog').dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            "確認": function () {
+                // 表單驗證
+                var userName = getCookie("person_name");
+
+                var evening6 = new Date();
+                evening6.setHours(18, 0, 0, 0); // 設置到晚上6點
+                var diff6 = (now - evening6) / (1000 * 60 * 60); // 距離晚上6點的差距，單位：小時
+                //檢查數值為整數或浮點數，且不可為負數
+                var isValid = isValidNumber(diff6);
+
+                if (isValid) {
+                    // 構建要發送的數據
+                    var postData = {
+                        user_name: getCookie("person_name"),
+                        attendance_day: Date().toLocaleString('sv').split(' ')[0],
+                        attendance_state: attendance_state,
+                        consecutive_hours: isValidNumber,
+                        morning_light_up: 0,
+                        morning_light_down: 0,
+                        morning_meeting: 0
+                    };
+
+                    // 發送 POST 請求
+                    $.ajax({
+                        url: 'http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day', // API 端點 URL
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(postData),
+                        success: function (response) {
+                            alert("加班申請已成功提交！");
+                            $("#dialog-form").dialog("close");
+                        },
+                        error: function (xhr, status, error) {
+                            alert("加班申請提交失敗: " + xhr.responseText);
+                        }
+                    });
+                }
+            },
+            "取消": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 
     // 設置日期選擇器
     $("#start-date, #end-date").datepicker({
@@ -222,9 +287,14 @@ $(document).ready(function () {
 
     // //設置時間選擇器
     //$("#start-time, #end-time").timepicker({
-    //    timeFormat: "HH:mm"        
+    //    timeFormat: "HH:mm"
     //});
 
+    //檢查數值為整數或浮點數，且不可為負數
+    function isValidNumber(value) {
+        const numberValue = parseFloat(value);
+        return !isNaN(numberValue) && numberValue >= 0 && (Number.isInteger(numberValue) || !Number.isInteger(numberValue));
+    }
 })
 
 //取得cookie數值
@@ -290,7 +360,7 @@ function postapidata(user_id, user_name, attendance_status) {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            alert('上傳成功!');
+            alert('狀態' + attendance_status +'上傳成功!');
         },
         error: function (data) {
             console.log(data);

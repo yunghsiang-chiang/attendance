@@ -30,7 +30,27 @@
                     <input type="button" id="search" value="搜尋" />
                 </form>
             </section>
-
+            <!-- 考量排版，先統計再明細，統計資訊就不會被冗長的明細資料排到下方 -->
+            <section id="statistics">
+                <h2>姓名統計表格</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>出勤天數</th>
+                            <th>加班時數</th>
+                            <th>事假時數</th>
+                            <th>特休時數</th>
+                            <th>病假時數</th>
+                            <th>補休時數</th>
+                            <th>生理假時數</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statistics-tbody">
+                        <!-- 使用後端語言或 JavaScript 填充數據 -->
+                    </tbody>
+                </table>
+            </section>
             <section id="records">
                 <h2>時間記錄清單</h2>
                 <table class="table table-striped">
@@ -47,25 +67,7 @@
                 </table>
             </section>
 
-            <section id="statistics">
-                <h2>姓名統計表格</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>姓名</th>
-                            <th>出勤天數</th>
-                            <th>加班時數</th>
-                            <th>事假時數</th>
-                            <th>特休時數</th>
-                            <th>病假時數</th>
-                            <th>補休時數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statistics-tbody">
-                        <!-- 使用後端語言或 JavaScript 填充數據 -->
-                    </tbody>
-                </table>
-            </section>
+
             <%--<div class="col-md-6">
             <asp:GridView ID="gv_byMon" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical">
                 <AlternatingRowStyle BackColor="White" />

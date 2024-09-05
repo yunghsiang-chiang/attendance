@@ -2,7 +2,6 @@
 $(document).ready(function () {
     //將同修資訊並丟到下拉選單
     get_person_information_to_dropdownlist();
-
     //搜尋按鈕事件
     $("#search").click(function () {
         var isReady = false;
@@ -11,14 +10,10 @@ $(document).ready(function () {
             isReady = true;
         }
         if (isReady) {
-
             search_attendance_record($('#name-select option:selected').val(), $('#start-date').val(), $('#end-date').val());
         }
     });
-
-
 })
-
 //將同修資訊並丟到下拉選單
 function get_person_information_to_dropdownlist() {
     let api_url = "http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
@@ -34,7 +29,7 @@ function get_person_information_to_dropdownlist() {
             $('#name-select').append(unit);
         });
 }
-
+//搜尋出勤資料
 function search_attendance_record(userid, startdate, enddate) {
     $('#records-tbody').empty();
     $('#statistics-tbody').empty();
@@ -51,6 +46,7 @@ function search_attendance_record(userid, startdate, enddate) {
                 var special_vacation_hours = 0; //特休小時
                 var sick_leave_hours = 0 //病假小時
                 var compensatory_leave_hours = 0; //補休小時
+                var menstrual_leave_hours = 0 //生理假 ... 先設計，往後也許會用的到
                 try {
                     let unit = '';
                     let username = data[0].user_name; //姓名
@@ -80,12 +76,14 @@ function search_attendance_record(userid, startdate, enddate) {
                                         compensatory_leave_hours += data[i].count_hours;
                                     } else if (data[i].leaveType == "病假") {
                                         sick_leave_hours += data[i].count_hours;
+                                    } else if (data[i].leaveType == "生理假") {
+                                        menstrual_leave_hours += data[i].count_hours;
                                     }
                                 }
-                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>'+sick_leave_hours+'</td><td>' + compensatory_leave_hours + '</td></tr>';
+                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + sick_leave_hours + '</td><td>' + compensatory_leave_hours + '</td><td>' + menstrual_leave_hours +'</td></tr>';
                                 $('#statistics-tbody').append(recordsbody);
                             } else {
-                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + sick_leave_hours +'</td><td>' + compensatory_leave_hours + '</td></tr>';
+                                let recordsbody = '<tr><td>' + username + '</td><td>' + attendancedaysarray.size + '</td><td>' + overtimehours + '</td><td>' + leavehours + '</td><td>' + special_vacation_hours + '</td><td>' + sick_leave_hours + '</td><td>' + compensatory_leave_hours + '</td><td>' + menstrual_leave_hours +'</td></tr>';
                                 $('#statistics-tbody').append(recordsbody);
                             }
                         });

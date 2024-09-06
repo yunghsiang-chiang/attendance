@@ -1,0 +1,39 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Wpadmin.master.cs" Inherits="Attendance.Wpadmin" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>和氣大愛 出勤後台</title>
+    <link href="Content/WpAdmin.css" rel="stylesheet" />
+    <script src="Scripts/jquery-3.7.0.min.js"></script>
+    <script src="Scripts/jquery-ui-1-13.3.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <div>
+            <div class="navbar">
+                <ul>
+                    <li><a href="Default.aspx">首頁</a></li>
+                    <li><a href="Schedule.aspx">排班</a></li>
+                    <li><a href="Attendance.aspx">出勤</a></li>
+                    <li><a href="Leave.aspx">休假</a></li>
+                    <li><a href="Apply.aspx">申請</a></li>
+                    <li><a href="Notification.aspx">內部通知</a></li>
+                    <li><a href="Restriction.aspx">禁止異動期間</a></li>
+                    <li><a href="Reports.aspx">報表</a></li>
+                    <li><a href="Management.aspx">管理</a></li>
+                    <li><a href="CompanySettings.aspx">公司設定</a></li>
+                </ul>
+            </div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>

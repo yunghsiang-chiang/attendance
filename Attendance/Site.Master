@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="和氣大愛出勤網頁，提供同修打卡/請假/加班/加班費明細等資訊">
-    <meta name="keywords" content="和氣大愛1, 出勤">
+    <meta name="keywords" content="和氣大愛, 出勤">
 
     <title><%: Page.Title %> - 和氣大愛 到班打卡</title>
 

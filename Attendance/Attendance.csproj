@@ -127,6 +127,7 @@
     <Content Include="attendance\attendance_history.aspx" />
     <Content Include="attendance\attendance_rwd.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\Management\Default.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -241,6 +242,7 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1-13.3.js" />
     <Content Include="Scripts\jquery-ui-1.13.3.min.js" />
+    <Content Include="Scripts\Management\Default.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
@@ -263,6 +265,7 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="Scripts\Wpadmin.js" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />

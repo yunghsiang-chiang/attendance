@@ -94,19 +94,27 @@
 
     // 使用API保存選取的日期
     $('#saveButton').on('click', function () {
-        console.log(selectedDays);
-        //$.ajax({
-        //    url: '/api/calendar/days',
-        //    type: 'POST',
-        //    contentType: 'application/json',
-        //    data: JSON.stringify({ selectedDays: [...selectedDays] }),
-        //    success: function (response) {
-        //        alert('Selection saved!');
-        //    },
-        //    error: function (error) {
-        //        console.error('Error saving selection:', error);
-        //    }
-        //});
+        if (selectedDays.size>0) {
+            $.ajax({
+                type: "POST",
+                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar",
+                data: JSON.stringify({
+                    "calendar_year": $('#monthLabel').text().split(' ')[0].replace("月", ""),
+                    "calendar_month": $('#monthLabel').text().split(' ')[1],
+                    "attendance_days": Array.from(selectedDays).join(',')
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                success: function (data) {
+                    alert('上傳成功!');
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
     });
 
     // 從API加載儲存的選取日期

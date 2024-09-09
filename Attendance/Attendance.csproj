@@ -128,6 +128,7 @@
     <Content Include="attendance\attendance_rwd.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\Management\Default.css" />
+    <Content Include="Content\Management\Schedule.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -243,6 +244,7 @@
     <Content Include="Scripts\jquery-ui-1-13.3.js" />
     <Content Include="Scripts\jquery-ui-1.13.3.min.js" />
     <Content Include="Scripts\Management\Default.js" />
+    <Content Include="Scripts\Management\Schedule.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />

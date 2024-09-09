@@ -1,0 +1,51 @@
+﻿body {
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    width: 100%;
+    max-width: 90vw;
+    margin: 0 auto;
+}
+
+.day {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    border: 1px solid #ddd;
+    height: 80px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+.selected {
+    background-color: lightblue;
+}
+
+.highlight {
+    background-color: lightyellow;
+}
+
+.month-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+button {
+    margin: 0 10px;
+}
+
+@media (max-width: 768px) {
+    .day {
+        height: 60px;
+        font-size: 1rem;
+    }
+}

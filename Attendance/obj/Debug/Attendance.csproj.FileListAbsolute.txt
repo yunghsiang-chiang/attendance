@@ -90,3 +90,4 @@ C:\Users\egrou\source\repos\Attendance\Attendance\bin\Google.Apis.Calendar.v3.xm
 C:\Users\egrou\source\repos\Attendance\Attendance\bin\Google.Apis.Core.pdb
 C:\Users\egrou\source\repos\Attendance\Attendance\bin\Google.Apis.Core.xml
 C:\Users\egrou\source\repos\Attendance\Attendance\bin\System.CodeDom.xml
+C:\Users\egrou\source\repos\Attendance\Attendance\bin\System.Web.Cors.dll

@@ -94,14 +94,17 @@
 
     // 使用API保存選取的日期
     $('#saveButton').on('click', function () {
-        if (selectedDays.size>0) {
+        if (selectedDays.size > 0) {
+            let calendar_year = $('#monthLabel').text().split(' ')[1];
+            let calendar_month = $('#monthLabel').text().split(' ')[0].replace("月", "");
+            let attendance_days = Array.from(selectedDays).join(',');
             $.ajax({
                 type: "POST",
                 url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar",
                 data: JSON.stringify({
-                    "calendar_year": $('#monthLabel').text().split(' ')[0].replace("月", ""),
-                    "calendar_month": $('#monthLabel').text().split(' ')[1],
-                    "attendance_days": Array.from(selectedDays).join(',')
+                    "calendar_year": calendar_year,
+                    "calendar_month": calendar_month,
+                    "attendance_days": attendance_days
                 }),
                 headers: {
                     'Accept': 'application/json',

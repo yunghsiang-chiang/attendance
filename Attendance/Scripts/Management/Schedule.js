@@ -9,7 +9,15 @@
     // 產生日曆
     function generateCalendar(month, year) {
         $('#calendar').empty(); // 清空日曆
-        const daysInMonth = new Date(year, month+1, 0).getDate(); // 取得該月份天數
+
+        // 計算該月第一天是星期幾
+        const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 表示周日，1 表示周一，依此類推
+        const daysInMonth = new Date(year, month + 1, 0).getDate(); // 取得該月份的總天數
+
+        // 在日曆上加入空白，直到第一天對應的星期
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            $('#calendar').append('<div class="day empty"></div>'); // 用空白元素佔位
+        }
 
         for (let i = 1; i <= daysInMonth; i++) {
             const dayElement = $('<div>').addClass('day').text(i);

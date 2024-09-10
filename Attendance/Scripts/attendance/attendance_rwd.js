@@ -238,24 +238,35 @@ $(document).ready(function () {
         buttons: {
             "確認": function () {
                 // 表單驗證
+                var userId = getCookie("person_id");
                 var userName = getCookie("person_name");
-
                 var evening6 = new Date();
                 evening6.setHours(18, 0, 0, 0); // 設置到晚上6點
                 var diff6 = (now - evening6) / (1000 * 60 * 60); // 距離晚上6點的差距，單位：小時
                 //檢查數值為整數或浮點數，且不可為負數
                 var isValid = isValidNumber(diff6);
-
+                var count_hours = parseFloat($('#overtime-hours').val());
+                var start_Date = Date().toLocaleString('sv').split(' ')[0];
+                var start_Time = '18:00';
+                // 合併日期和時間為一個 ISO 字符串
+                var start_DateTime = new Date(start_Date + 'T' + start_Time);
+                // 複製一個新的 Date 物件來避免更改原始 start_DateTime
+                var end_DateTime = new Date(start_DateTime.getTime());
+                // 計算結束時間，添加指定的時間小時數
+                end_DateTime.setHours(end_DateTime.getHours() + count_hours);
+                var end_Date = Date().toLocaleString('sv').split(' ')[0];
+                // 格式化結束時間為 'YYYY-MM-DDTHH:MM:SS' 格式
+                var endTime = end_DateTime.toISOString().slice(11, 16); // 例如: '2024-09-10T19:30'
+                var end_Time = endTime;
                 if (isValid) {
                     // 構建要發送的數據
                     var postData = {
-                        user_name: getCookie("person_name"),
-                        attendance_day: Date().toLocaleString('sv').split(' ')[0],
-                        attendance_state: attendance_state,
-                        consecutive_hours: isValidNumber,
-                        morning_light_up: 0,
-                        morning_light_down: 0,
-                        morning_meeting: 0
+                        userID: userId,
+                        userName: userName,
+                        overtimeType: '加班',
+                        startTime: start_Date + 'T' + start_Time + ':00.000Z',
+                        endTime: endTime + ':00.000Z',
+                        count_hours: count_hours
                     };
 
                     // 發送 POST 請求

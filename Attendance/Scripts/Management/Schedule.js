@@ -100,12 +100,13 @@
             let attendance_days = Array.from(selectedDays).join(',');
             $.ajax({
                 type: "POST",
-                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar",
-                data: JSON.stringify({
+                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar", // 目標 Web API 的 URL
+                data: JSON.stringify({ // 將資料轉換為 JSON 字符串
                     "calendar_year": calendar_year,
                     "calendar_month": calendar_month,
                     "attendance_days": attendance_days
                 }),
+                crossDomain: true, // 啟用跨域請求
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -121,7 +122,9 @@
     });
 
     // 從API加載儲存的選取日期
-    function loadSelections(year,month) {
+    function loadSelections(year, month) {
+        //清空selectedDays
+        selectedDays.clear();
         //將單位資訊取得 並丟到cookie裡
         let api_url = "http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=" + year + "&calendarmonth=" + month;
         var myAPI = api_url;
@@ -151,8 +154,8 @@
         } else {
             currentMonth--;
         }
-        updateMonthLabel();
-        generateCalendar(currentMonth, currentYear);
+        updateMonthLabel(); // 更新月份標籤
+        generateCalendar(currentMonth, currentYear); // 產生日曆
     });
 
     $('#nextMonth').on('click', function () {
@@ -162,11 +165,12 @@
         } else {
             currentMonth++;
         }
-        updateMonthLabel();
-        generateCalendar(currentMonth, currentYear);
+        updateMonthLabel(); // 更新月份標籤
+        generateCalendar(currentMonth, currentYear); // 產生日曆
     });
 
     // 初始化日曆
     updateMonthLabel();
+    // 產生日曆
     generateCalendar(currentMonth, currentYear);
 });

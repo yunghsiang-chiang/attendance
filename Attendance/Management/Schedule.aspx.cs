@@ -11,7 +11,10 @@ namespace Attendance.Management
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            //Response.AppendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            //Response.AppendHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+            //Response.AppendHeader("Content-Type", "application/json; charset=utf-8");
         }
     }
 }

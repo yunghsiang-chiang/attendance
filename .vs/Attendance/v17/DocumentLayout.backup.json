@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\schedule.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\schedule.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\schedule.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     },
@@ -22,8 +26,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Schedule.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Schedule.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Schedule.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Schedule.js",
+              "RelativeToolTip": "Attendance\\Scripts\\Management\\Schedule.js",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAAAK8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-09-10T01:41:52.094Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -39,19 +56,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Wpadmin.Master",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Wpadmin.Master",
               "RelativeDocumentMoniker": "Attendance\\Wpadmin.Master",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Wpadmin.Master",
               "RelativeToolTip": "Attendance\\Wpadmin.Master",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
               "WhenOpened": "2024-09-06T06:36:02.236Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Default.aspx",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Default.aspx",
               "RelativeDocumentMoniker": "Attendance\\Management\\Default.aspx",

@@ -38,7 +38,26 @@ $(document).ready(function () {
         setCookie('attendance_state', '到班', 1);
         setCookie('start', Date().toLocaleString('sv'), 1);
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:到班');
-        postapidata(getCookie("person_id"), getCookie("person_name"),"到班");
+        postapidata(getCookie("person_id"), getCookie("person_name"), "到班");
+        //如果晚上6點之後才按了到班
+        // 獲取當前時間
+        const now = new Date();
+        // 創建一個表示今晚 6 點的時間
+        const targetTime = new Date(now);
+        targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+        // 計算時間差，單位為毫秒
+        const timeDifferenceMs = now - targetTime;
+        // 將時間差轉換為小時數（包括正負值）
+        const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60);
+        if (timeDifferenceHours >= 0) {
+            // 計算今天晚上 23:59:59 的時間
+            const expires = new Date();
+            expires.setHours(23, 59, 59, 999);  // 設置為 23:59:59.999
+            // 設置 cookie 的過期時間
+            const expiresStr = expires.toUTCString();
+            // 設置 cookie
+            document.cookie = `overtimein=` + now.now().toLocaleString('sv',1) +`; expires=${expiresStr}; path=/`;
+        }
     });
     //下班 button
     $('#bt_end').click(function () {
@@ -53,6 +72,19 @@ $(document).ready(function () {
         // 創建一個表示今晚 6 點的時間
         const targetTime = new Date(now);
         targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+        //如果下班後還登入繼續作業
+        if (getCookie('overtimein') != '') {
+            // 原始字串 2024-09-11 18:59:54
+            const dateString = getCookie('overtimein');
+            // 將字串分割為日期和時間部分
+            const [datePart, timePart] = dateString.split(' ');
+            // 將日期部分分割為年、月、日
+            const [year, month, day] = datePart.split('-').map(Number);
+            // 將時間部分分割為時、分、秒
+            const [hours, minutes, seconds] = timePart.split(':').map(Number);
+            // 複寫targetTime: month-1，因 month 從0~11 表示 1~12月...很搞
+            targetTime = new Date(year, month - 1, day, hours, minutes, seconds);
+        }
         // 計算時間差，單位為毫秒
         const timeDifferenceMs = now - targetTime;
         // 將時間差轉換為小時數（包括正負值）
@@ -242,36 +274,50 @@ $(document).ready(function () {
                 var userName = getCookie("person_name");
                 var evening6 = new Date();
                 evening6.setHours(18, 0, 0, 0); // 設置到晚上6點
-                var diff6 = (now - evening6) / (1000 * 60 * 60); // 距離晚上6點的差距，單位：小時
+                var diff6 = (Date.now() - evening6) / (1000 * 60 * 60); // 距離晚上6點的差距，單位：小時
                 //檢查數值為整數或浮點數，且不可為負數
                 var isValid = isValidNumber(diff6);
                 var count_hours = parseFloat($('#overtime-hours').val());
-                var start_Date = Date().toLocaleString('sv').split(' ')[0];
-                var start_Time = '18:00';
+                var start_Date = new Date(Date.now()).toLocaleString('sv', 1).split(' ')[0]; //注意!Date.now()取得number格式!
+                var start_Time = ' 18:00';
+                //如果下班後還登入繼續作業
+                if (getCookie('overtimein') != '') {
+                    // 原始字串 2024-09-11 18:59:54
+                    const dateString = getCookie('overtimein');
+                    start_Date = dateString.split(' ')[0];
+                    start_Time = dateString.split(' ')[1].substring(0,5);
+                }
                 // 合併日期和時間為一個 ISO 字符串
-                var start_DateTime = new Date(start_Date + 'T' + start_Time);
+                var start_DateTime = new Date(start_Date + start_Time);
                 // 複製一個新的 Date 物件來避免更改原始 start_DateTime
                 var end_DateTime = new Date(start_DateTime.getTime());
                 // 計算結束時間，添加指定的時間小時數
                 end_DateTime.setHours(end_DateTime.getHours() + count_hours);
-                var end_Date = Date().toLocaleString('sv').split(' ')[0];
-                // 格式化結束時間為 'YYYY-MM-DDTHH:MM:SS' 格式
-                var endTime = end_DateTime.toISOString().slice(11, 16); // 例如: '2024-09-10T19:30'
-                var end_Time = endTime;
+                //轉換成JSON格式時間
+                var start_DateTime_JS = start_DateTime.toLocaleString('sv', 1).replace(' ', 'T') + 'Z';
+
+                var end_DateTime_JS = end_DateTime.toLocaleString('sv', 1).replace(' ', 'T') + 'Z';
+                console.log(userId);
+                console.log(userName);
+                console.log(count_hours);
+                console.log(start_DateTime_JS);
+                console.log(end_DateTime_JS);
+                console.log(count_hours);
+                console.log(isValid);
                 if (isValid) {
                     // 構建要發送的數據
                     var postData = {
                         userID: userId,
                         userName: userName,
                         overtimeType: '加班',
-                        startTime: start_Date + 'T' + start_Time + ':00.000Z',
-                        endTime: endTime + ':00.000Z',
+                        startTime: start_DateTime_JS,
+                        endTime: end_DateTime_JS,
                         count_hours: count_hours
                     };
-
+                    console.log(postData);
                     // 發送 POST 請求
                     $.ajax({
-                        url: 'http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day', // API 端點 URL
+                        url: 'http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record', // API 端點 URL
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(postData),
@@ -356,7 +402,6 @@ function getapidata(api_url) {
 //將資料 上傳至資料庫
 function postapidata(user_id, user_name, attendance_status) {
     let yourDate = new Date().toLocaleString('sv',1).replace(' ','T') + 'Z';
-    console.log(yourDate);
     $.ajax({
         type: "POST",
         url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",

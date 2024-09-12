@@ -1,0 +1,67 @@
+﻿/* 預設設計（PC 裝置） */
+.mainapply {
+    display: flex;
+    width: 100%; /* 佔據整個容器寬度 */
+    height: 100vh; /* 佔據整個視窗高度 */
+}
+
+.attendance_apply, .other_apply {
+    width: 50%; /* 各佔一半寬度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 保證內部元素均勻分佈 */
+    padding: 20px;
+    box-sizing: border-box; /* 確保 padding 不會影響寬度 */
+}
+
+.attendance_apply {
+    background-color: #f7f9fc; /* 淡藍色背景 */
+}
+
+.other_apply {
+    background-color: #f2f2f2; /* 淡灰色背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overtime_apply, .after_apply, .before_apply {
+    flex: 1; /* 每個元素佔據 33% 高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* 每個區塊之間的間距 */
+    background-color: #e3e7f0; /* 淡藍色背景 */
+    border-radius: 8px; /* 圓角 */
+    text-align: center;
+    padding: 10px;
+}
+
+    .overtime_apply:last-child, .after_apply:last-child, .before_apply:last-child {
+        margin-bottom: 0; /* 移除最後一個元素的底部間距 */
+    }
+
+/* 手機裝置的響應式設計 */
+@media (max-width: 768px) {
+    .mainapply {
+        flex-direction: column; /* 讓 attendance_apply 和 other_apply 垂直排列 */
+        height: auto; /* 移除固定高度，讓其根據內容自適應 */
+    }
+
+    .attendance_apply, .other_apply {
+        width: 100%; /* 讓每個區域在手機上佔據 100% 寬度 */
+        padding: 15px;
+    }
+
+    .attendance_apply {
+        margin-bottom: 20px; /* 增加間距以分隔上下兩區域 */
+    }
+
+    .overtime_apply, .after_apply, .before_apply {
+        margin-bottom: 15px; /* 調整垂直區塊間距 */
+    }
+
+        .overtime_apply:last-child, .after_apply:last-child, .before_apply:last-child {
+            margin-bottom: 0; /* 移除最後一個元素的底部間距 */
+        }
+}

@@ -44,24 +44,24 @@
 }
 
 /* 調整員工狀態總覽區域的佈局 */
-.status-overview {
-    margin-bottom: 20px;
+.status-container {
+    display: flex;
+    justify-content: space-between; /* 控制間距 */
+    flex-wrap: wrap; /* 使項目在小螢幕上能夠換行 */
+    gap: 20px; /* 控制每個項目之間的間距 */
 }
 
 .form-group {
-    margin-bottom: 15px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 讓標籤置中 */
 }
 
 .status-item {
-    display: block;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
 .status-count {
-    display: block;
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #555;
 }

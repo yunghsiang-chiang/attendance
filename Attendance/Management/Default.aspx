@@ -9,31 +9,33 @@
     <script src="../Scripts/Management/Default.js"></script>
     <div class="homepage">
         <div class="status-overview">
-            <p>員工狀態總覽：</p>
+            <p>員工狀態總覽：<label class="status-item" id="staff_qty"></label></p>
             <!-- 員工狀態總覽以 label 呈現 -->
-            <div class="form-group">
-                <label class="status-item">上班打卡次數</label>
-                <label class="status-count">5</label>
-            </div>
+            <div class="status-container">
+                <div class="form-group">
+                    <label class="status-item">上班打卡次數</label>
+                    <label class="status-count" id="attendance_qty">0</label>
+                </div>
 
-            <div class="form-group">
-                <label class="status-item">遲到次數</label>
-                <label class="status-count">1</label>
-            </div>
+                <div class="form-group">
+                    <label class="status-item">遲到次數</label>
+                    <label class="status-count" id="arrive_late_qty">0</label>
+                </div>
 
-            <div class="form-group">
-                <label class="status-item">未打卡次數</label>
-                <label class="status-count">0</label>
-            </div>
+                <div class="form-group">
+                    <label class="status-item">未打卡次數</label>
+                    <label class="status-count" id="no_attendance_qty">0</label>
+                </div>
 
-            <div class="form-group">
-                <label class="status-item">早退次數</label>
-                <label class="status-count">2</label>
-            </div>
+                <div class="form-group">
+                    <label class="status-item">早退次數</label>
+                    <label class="status-count" id="leave_early_qty">0</label>
+                </div>
 
-            <div class="form-group">
-                <label class="status-item">休假次數</label>
-                <label class="status-count">3</label>
+                <div class="form-group">
+                    <label class="status-item">休假次數</label>
+                    <label class="status-count" id="leave_qty">0</label>
+                </div>
             </div>
         </div>
 
@@ -46,7 +48,7 @@
                 <li>公告3: 員工培訓</li>
                 <li>公告4: 年終晚會</li>
             </ul>
-            <button id="view-all-announcements">查看全部</button>
+            <input type="button" id="view-all-announcements" value="查看全部" />
         </div>
 
         <!-- 右上：待處理 -->

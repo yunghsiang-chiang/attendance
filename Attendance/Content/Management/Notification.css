@@ -1,0 +1,55 @@
+﻿/* PC 裝置樣式 */
+.notification_area {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    height: 100vh; /* 高度佔據整個視窗 */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.create_message_box {
+    background-color: #f5f7fa; /* 淡藍色背景 */
+    height: 30%; /* 占整個高度的30% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.notification_list {
+    background-color: #f0f0f0; /* 淡灰色背景 */
+    height: 65%; /* 占整個高度的65% */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    overflow-y: auto; /* 若內容超過範圍，允許滾動 */
+}
+
+    .notification_list h3 {
+        margin: 0 0 10px 0;
+    }
+
+    .notification_list span {
+        font-size: 1em;
+    }
+
+/* 手機裝置的響應式設計 */
+@media (max-width: 768px) {
+    .notification_area {
+        height: auto; /* 取消固定高度，自適應內容 */
+    }
+
+    .create_message_box {
+        height: auto; /* 根據內容自適應高度 */
+        margin-bottom: 15px; /* 增加底部間距 */
+    }
+
+    .notification_list {
+        height: auto; /* 根據內容自適應高度 */
+    }
+}

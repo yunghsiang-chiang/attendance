@@ -131,7 +131,10 @@
     <Content Include="attendance\attendance_rwd.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\attendance\Attendance_calendar.css" />
+    <Content Include="Content\Management\Apply.css" />
+    <Content Include="Content\Management\Attendance.css" />
     <Content Include="Content\Management\Default.css" />
+    <Content Include="Content\Management\Notification.css" />
     <Content Include="Content\Management\Schedule.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -248,7 +251,10 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1-13.3.js" />
     <Content Include="Scripts\jquery-ui-1.13.3.min.js" />
+    <Content Include="Scripts\Management\Apply.js" />
+    <Content Include="Scripts\Management\Attendance.js" />
     <Content Include="Scripts\Management\Default.js" />
+    <Content Include="Scripts\Management\Notification.js" />
     <Content Include="Scripts\Management\Schedule.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />

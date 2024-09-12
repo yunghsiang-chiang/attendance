@@ -130,6 +130,7 @@
     <Content Include="attendance\attendance_history.aspx" />
     <Content Include="attendance\attendance_rwd.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\attendance\Attendance_calendar.css" />
     <Content Include="Content\Management\Default.css" />
     <Content Include="Content\Management\Schedule.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -185,6 +186,7 @@
     <Content Include="Management\Restriction.aspx" />
     <Content Include="Management\Schedule.aspx" />
     <Content Include="regulations.aspx" />
+    <Content Include="Scripts\attendance\Attendance_calendar.js" />
     <Content Include="Scripts\attendance\attendance_history.js" />
     <Content Include="Scripts\attendance\attendance_rwd.js" />
     <Content Include="Content\bootstrap-grid.css" />

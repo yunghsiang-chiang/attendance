@@ -5,10 +5,13 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="../Content/Management/Attendance.css" rel="stylesheet" />
+    
     <script src="../Scripts/Management/Attendance.js"></script>
     <div class="main_attendance_area">
         <div class="attendance_calendar">
-            <span>切換出勤月份區域</span>
+            <input type="button" id="prevMonthBtn" value="上個月">
+            <span id="currentMonthLabel"></span>
+            <input type="button" id="nextMonthBtn" value="下個月">
         </div>
         <div class="attendnace_information">
             <div class="attendance">
@@ -20,7 +23,7 @@
                 </div>
             </div>
             <div class="attendance_chart">
-                <span>圖表顯示區</span>
+                <canvas id="attendanceChart"></canvas>
             </div>
         </div>
     </div>

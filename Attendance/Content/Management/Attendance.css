@@ -4,7 +4,11 @@
     padding: 16px;
 }
 
-.attendance_calendar,
+.attendance_chart {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .staff_attendacne,
 .leave_information,
 .attendance_chart {
@@ -15,7 +19,27 @@
 }
 
 .attendance_calendar {
-    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.attendance_calendar input[type="button"] {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#currentMonthLabel {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.attendance_chart canvas {
+    width: 100% !important; /* 保證圖表在容器中佔滿 */
+    height: auto !important; /* 高度自動調整以維持比例 */
 }
 
 /* PC裝置 */
@@ -26,7 +50,21 @@
     }
 
     .attendance_calendar {
-        margin-bottom: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .attendance_calendar input[type="button"] {
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #currentMonthLabel {
+        margin-top: 10px;
     }
 
     .attendnace_information {

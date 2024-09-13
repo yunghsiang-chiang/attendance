@@ -1,0 +1,86 @@
+﻿/* 基本樣式 */
+.main_leave_area {
+    background-color: #f0f0f0; /* 淡色背景 */
+    padding: 16px;
+}
+
+.leave_calendar,
+.staff_leave,
+.leave_information,
+.leave_chart {
+    background-color: #ffffff; /* 淡色背景 */
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.leave_calendar {
+    margin-bottom: 16px;
+}
+
+/* PC裝置 */
+@media (min-width: 768px) {
+    .main_leave_area {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .leave_calendar {
+        margin-bottom: 16px;
+    }
+
+    .leave_information {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 16px; /* 添加間距 */
+    }
+
+    .leave {
+        display: flex;
+        flex-direction: column;
+        flex: 1; /* 使 leave 占據剩餘空間 */
+        gap: 16px; /* 添加間距 */
+    }
+
+    .staff_leave,
+    .leave_information {
+        background-color: #e8e8e8; /* 淡色背景 */
+        padding: 16px;
+    }
+
+    .leave_chart {
+        background-color: #e9e9e9; /* 淡色背景 */
+        flex: 1; /* 使 leave_chart 占據剩餘空間 */
+    }
+}
+
+/* 手機裝置 */
+@media (max-width: 767px) {
+    .main_leave_area {
+        display: block;
+    }
+
+    .leave_calendar {
+        margin-bottom: 16px;
+    }
+
+    .leave_information {
+        display: block;
+    }
+
+    .leave {
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    .staff_leave,
+    .leave_information,
+    .leave_chart {
+        margin-bottom: 16px;
+    }
+
+    .leave_chart {
+        background-color: #ffffff; /* 淡色背景 */
+    }
+}

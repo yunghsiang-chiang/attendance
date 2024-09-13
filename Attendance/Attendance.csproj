@@ -134,6 +134,7 @@
     <Content Include="Content\Management\Apply.css" />
     <Content Include="Content\Management\Attendance.css" />
     <Content Include="Content\Management\Default.css" />
+    <Content Include="Content\Management\Leave.css" />
     <Content Include="Content\Management\Notification.css" />
     <Content Include="Content\Management\Schedule.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -254,6 +255,7 @@
     <Content Include="Scripts\Management\Apply.js" />
     <Content Include="Scripts\Management\Attendance.js" />
     <Content Include="Scripts\Management\Default.js" />
+    <Content Include="Scripts\Management\Leave.js" />
     <Content Include="Scripts\Management\Notification.js" />
     <Content Include="Scripts\Management\Schedule.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />

@@ -43,9 +43,42 @@ button {
     margin: 0 10px;
 }
 
+.clickable {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* 設置 dialog 背景為淡藍色 */
+.ui-dialog {
+    background-color: #d0e7f9; /* 淡藍色 */
+}
+
+.ui-dialog-content {
+    background-color: #d0e7f9; /* 淡藍色 */
+    padding: 20px;
+    color: #333;
+}
+
 @media (max-width: 768px) {
     .day {
         height: 60px;
         font-size: 1rem;
     }
+}
+
+/* 手機裝置上的對話框樣式 */
+@media screen and (max-width: 600px) {
+    .ui-dialog {
+        width: 90% !important;
+        left: 5% !important;
+        top: 50px !important;
+    }
+}
+
+/* 確保對話框可以在小屏幕上滾動 */
+.ui-dialog {
+    background-color: #d0e7f9; /* 淡藍色背景 */
+    overflow-y: auto; /* 允許內容垂直滾動 */
+    max-height: 90vh; /* 對話框高度限制為視口高度的90% */
 }

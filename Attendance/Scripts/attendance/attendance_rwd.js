@@ -33,6 +33,7 @@ $(document).ready(function () {
     }
 
     //到班 button
+    //2024/9/16 追加邏輯 檢查當天是否為出勤日，為了方便加速使用，資訊由後台!IsPostBack丟入cookie
     $('#bt_start').click(function () {
         setCookie('last_status', '到班', 1);
         setCookie('attendance_state', '到班', 1);
@@ -44,7 +45,20 @@ $(document).ready(function () {
         const now = new Date();
         // 創建一個表示今晚 6 點的時間
         const targetTime = new Date(now);
-        targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+        // Cooie
+        if (getCookie("attendance_information") != '') {
+            const d = new Date();
+            let text = d.toLocaleString().split(' ')[0].replace('/', '-').replace('/', '-');
+            let temp_dates = getCookie("attendance_information").split(',');
+            let temp_dates_set = new Set(temp_dates);
+            if (!temp_dates_set.has(text)) { //休假日
+                //休假日 target不動，使最後的cookie['overtimein'] = 當下時間
+            } else { //出勤日
+                targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+            } 
+        } else {
+            targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
+        }
         // 計算時間差，單位為毫秒
         const timeDifferenceMs = now - targetTime;
         // 將時間差轉換為小時數（包括正負值）
@@ -60,6 +74,7 @@ $(document).ready(function () {
         }
     });
     //下班 button
+    //2024/9/16 追加邏輯 當天非出勤日，彈性設定 方案A 補休+平日薪水 方案B 加班費用
     $('#bt_end').click(function () {
         setCookie('last_status', '下班', 1);
         setCookie('attendance_state', '下班', 1);
@@ -67,7 +82,7 @@ $(document).ready(function () {
         $('#personal_infor p:nth-child(3)').text('目前打卡狀態:下班');
         postapidata(getCookie("person_id"), getCookie("person_name"), "下班");
         //檢查下班時間>半小時以上，彈跳申請加班頁面
-        // 獲取當前時間
+        //獲取當前時間
         const now = new Date();
         // 創建一個表示今晚 6 點的時間
         const targetTime = new Date(now);
@@ -338,9 +353,9 @@ $(document).ready(function () {
     });
 
     // 設置日期選擇器
-    $("#start-date, #end-date").datepicker({
-        dateFormat: "yy-mm-dd"
-    });
+    //$("#start-date, #end-date").datepicker({
+    //    dateFormat: "yy-mm-dd"
+    //});
 
     // //設置時間選擇器
     //$("#start-time, #end-time").timepicker({

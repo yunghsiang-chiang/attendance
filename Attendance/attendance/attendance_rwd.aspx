@@ -15,7 +15,7 @@
             font-family: Arial, sans-serif;
         }
 
-        #dialog-form,dialog {
+        #dialog-form, dialog {
             display: none;
         }
 
@@ -162,9 +162,8 @@
     <div id="dialog-form" title="請假申請">
         <form id="leave-form">
             <fieldset>
-                <mark>單日請假開始-結束時間超過8小時則扣除8小時對應假期時數<br />
-                    不足8小時其12:30~13:30為午餐時間，不會計算請假工時<br />
-                </mark>
+                <p><strong>注意：</strong> 單日請假開始-結束時間超過8小時則扣除8小時對應假期時數。</p>
+                <p>不足8小時其12:30~13:30為午餐時間，不會計算請假工時。</p>
                 <label for="leave-type">請假類型</label>
                 <select name="leave-type" id="leave-type" class="text ui-widget-content ui-corner-all">
                     <option value="">請選擇</option>
@@ -176,18 +175,16 @@
                 </select>
                 <br />
                 <label for="start-date">開始日期</label>
-                <input type="text" name="start-date" id="start-date" class="text ui-widget-content ui-corner-all" required>
+                <input type="date" name="start-date" id="start-date" class="text ui-widget-content ui-corner-all" required>
 
                 <label for="start-time">開始時間</label>
-                <input type="text" name="start-time" id="start-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" autocomplete="off" required>
+                <input type="time" name="start-time" id="start-time" class="text ui-widget-content ui-corner-all" required>
 
                 <label for="end-date">結束日期</label>
-                <input type="text" name="end-date" id="end-date" class="text ui-widget-content ui-corner-all" required>
+                <input type="date" name="end-date" id="end-date" class="text ui-widget-content ui-corner-all" required>
 
                 <label for="end-time">結束時間</label>
-                <input type="text" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" placeholder="HH:mm" autocomplete="off" required>
-
-                <%--<button type="button" id="submit-button">確認</button>--%>
+                <input type="time" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" required>
             </fieldset>
         </form>
     </div>
@@ -202,8 +199,5 @@
             </fieldset>
         </form>
     </div>
-
-    
-
 
 </asp:Content>

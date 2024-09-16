@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Newtonsoft.Json;
 using System.Data;
+using System.Net;
 
 namespace Attendance.attendance
 {
@@ -27,14 +28,20 @@ namespace Attendance.attendance
                 clsDB clsDB = new clsDB();
                 DataTable dt = new DataTable();
                 dt = clsDB.MySQL_Select("SELECT attendance_days FROM attendance.c_attendance_calendar where calendar_year="+DateTime.Now.Year.ToString()+" and calendar_month = "+DateTime.Now.Month.ToString());
-                //產生一個Cookie
-                HttpCookie cookie = new HttpCookie("attendance_days");
-                //設定單值
-                cookie["attendance_information"] = dt.Rows[0][0].ToString();
-                //設定過期日 當天晚上23:59:59
-                cookie.Expires = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd") + " 23:59:59");
-                //寫到用戶端
-                Response.Cookies.Add(cookie);
+                if (dt.Rows.Count>0)
+                {
+                    string[] temp_array = dt.Rows[0][0].ToString().Split(',');
+                    string temp_attendance_days = String.Join("'.'", temp_array);
+                    //產生一個Cookie
+                    HttpCookie cookie = new HttpCookie("attendance_days");
+                    //設定單值
+                    cookie.Value = temp_attendance_days;
+                    //設定過期日 當天晚上23:59:59
+                    cookie.Expires = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd") + " 23:59:59");
+                    //寫到用戶端
+                    Response.Cookies.Add(cookie);
+                }
+
             }
 
         }

@@ -1,5 +1,8 @@
 ﻿//doucment ready event
 $(document).ready(function () {
+
+    let cookieall = document.cookie;
+    console.log(cookieall);
     //拜訪cookie 個人資料
     if (getCookie("person_name") != "") {
         //更換姓名資訊
@@ -45,11 +48,11 @@ $(document).ready(function () {
         const now = new Date();
         // 創建一個表示今晚 6 點的時間
         const targetTime = new Date(now);
-        // Cooie
-        if (getCookie("attendance_information") != '') {
+
+        if (getCookie("attendance_days") != '') {
             const d = new Date();
             let text = d.toLocaleString().split(' ')[0].replace('/', '-').replace('/', '-');
-            let temp_dates = getCookie("attendance_information").split(',');
+            let temp_dates = getCookie("attendance_days").split('.');
             let temp_dates_set = new Set(temp_dates);
             if (!temp_dates_set.has(text)) { //休假日
                 //休假日 target不動，使最後的cookie['overtimein'] = 當下時間
@@ -66,11 +69,12 @@ $(document).ready(function () {
         if (timeDifferenceHours >= 0) {
             // 計算今天晚上 23:59:59 的時間
             const expires = new Date();
+            let d = expires.toLocaleString('sv',1)
             expires.setHours(23, 59, 59, 999);  // 設置為 23:59:59.999
             // 設置 cookie 的過期時間
             const expiresStr = expires.toUTCString();
             // 設置 cookie
-            document.cookie = `overtimein=` + now.now().toLocaleString('sv',1) +`; expires=${expiresStr}; path=/`;
+            document.cookie = `overtimein=` + d +`; expires=${expiresStr}; path=/`;
         }
     });
     //下班 button
@@ -85,9 +89,11 @@ $(document).ready(function () {
         //獲取當前時間
         const now = new Date();
         // 創建一個表示今晚 6 點的時間
-        const targetTime = new Date(now);
+        let targetTime = new Date(now);
         targetTime.setHours(18, 0, 0, 0); // 設定為18點，分鐘、秒鐘、毫秒都是0
         //如果下班後還登入繼續作業
+        console.log(getCookie('overtimein'));
+
         if (getCookie('overtimein') != '') {
             // 原始字串 2024-09-11 18:59:54
             const dateString = getCookie('overtimein');
@@ -289,6 +295,18 @@ $(document).ready(function () {
                 var userName = getCookie("person_name");
                 var evening6 = new Date();
                 evening6.setHours(18, 0, 0, 0); // 設置到晚上6點
+                if (getCookie('overtimein') != '') {
+                    // 原始字串 2024-09-11 18:59:54
+                    const dateString = getCookie('overtimein');
+                    // 將字串分割為日期和時間部分
+                    const [datePart, timePart] = dateString.split(' ');
+                    // 將日期部分分割為年、月、日
+                    const [year, month, day] = datePart.split('-').map(Number);
+                    // 將時間部分分割為時、分、秒
+                    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+                    // 複寫targetTime: month-1，因 month 從0~11 表示 1~12月...很搞
+                    targetTime = new Date(year, month - 1, day, hours, minutes, seconds);
+                }
                 var diff6 = (Date.now() - evening6) / (1000 * 60 * 60); // 距離晚上6點的差距，單位：小時
                 //檢查數值為整數或浮點數，且不可為負數
                 var isValid = isValidNumber(diff6);
@@ -312,13 +330,6 @@ $(document).ready(function () {
                 var start_DateTime_JS = start_DateTime.toLocaleString('sv', 1).replace(' ', 'T') + 'Z';
 
                 var end_DateTime_JS = end_DateTime.toLocaleString('sv', 1).replace(' ', 'T') + 'Z';
-                console.log(userId);
-                console.log(userName);
-                console.log(count_hours);
-                console.log(start_DateTime_JS);
-                console.log(end_DateTime_JS);
-                console.log(count_hours);
-                console.log(isValid);
                 if (isValid) {
                     // 構建要發送的數據
                     var postData = {
@@ -329,7 +340,6 @@ $(document).ready(function () {
                         endTime: end_DateTime_JS,
                         count_hours: count_hours
                     };
-                    console.log(postData);
                     // 發送 POST 請求
                     $.ajax({
                         url: 'http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record', // API 端點 URL
@@ -373,7 +383,7 @@ $(document).ready(function () {
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split('&'); //小心，這裡可能不同
+    let ca = decodedCookie.split(/&|;/); //小心，這裡可能不同
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') {

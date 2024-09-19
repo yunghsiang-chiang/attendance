@@ -25,12 +25,12 @@
     margin-bottom: 20px;
 }
 
-.attendance_calendar input[type="button"] {
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 16px;
-    cursor: pointer;
-}
+    .attendance_calendar input[type="button"] {
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
 
 #currentMonthLabel {
     font-size: 18px;
@@ -45,21 +45,22 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 16px; /* 添加頂部間距 */
 }
 
 table, th, td {
-    border: 1px solid black;
+    border: 1px solid #ddd; /* 使用淺色邊框 */
 }
 
 th, td {
-    padding: 10px;
+    padding: 12px; /* 增加內邊距 */
     text-align: center;
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #f4f4f4; /* 更柔和的背景顏色 */
+    font-weight: bold;
 }
-
 
 /* PC裝置 */
 @media (min-width: 768px) {
@@ -75,12 +76,12 @@ th {
         margin-bottom: 20px;
     }
 
-    .attendance_calendar input[type="button"] {
-        padding: 10px 20px;
-        margin: 0 10px;
-        font-size: 16px;
-        cursor: pointer;
-    }
+        .attendance_calendar input[type="button"] {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
     #currentMonthLabel {
         margin-top: 10px;
@@ -113,7 +114,7 @@ th {
 }
 
 /* 手機裝置 */
-@media (max-width: 767px) {
+@media (max-width: 700px) {
     .main_attendance_area {
         display: block;
     }
@@ -139,5 +140,15 @@ th {
 
     .attendance_chart {
         background-color: #ffffff; /* 淡色背景 */
+    }
+
+    /* 調整表格的樣式以適應手機 */
+    table {
+        width: 100%;
+        margin: 0; /* 移除外部間距 */
+    }
+
+    th, td {
+        padding: 8px; /* 調整內邊距以適應手機 */
     }
 }

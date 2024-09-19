@@ -4,8 +4,14 @@
     padding: 16px;
 }
 
+.attendance_chart_container {
+    overflow-x: auto; /* 允許水平滾動 */
+    -webkit-overflow-scrolling: touch; /* 支持觸控滾動 */
+    width: 100%; /* 確保容器寬度為100% */
+}
+
 .attendance_chart {
-    width: 80%;
+    width: 100%; /* 確保圖表寬度為容器的100% */
     margin: 0 auto;
 }
 
@@ -39,27 +45,7 @@
 
 .attendance_chart canvas {
     width: 100% !important; /* 保證圖表在容器中佔滿 */
-    height: auto !important; /* 高度自動調整以維持比例 */
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px; /* 添加頂部間距 */
-}
-
-table, th, td {
-    border: 1px solid #ddd; /* 使用淺色邊框 */
-}
-
-th, td {
-    padding: 12px; /* 增加內邊距 */
-    text-align: center;
-}
-
-th {
-    background-color: #f4f4f4; /* 更柔和的背景顏色 */
-    font-weight: bold;
+    height: 400px !important; /* 固定圖表高度 */
 }
 
 /* PC裝置 */
@@ -107,6 +93,10 @@ th {
         padding: 16px;
     }
 
+    .attendance_chart_container {
+        overflow-x: auto; /* 允許水平滾動 */
+    }
+
     .attendance_chart {
         background-color: #e9e9e9; /* 淡色背景 */
         flex: 1; /* 使 attendance_chart 占據剩餘空間 */
@@ -134,15 +124,20 @@ th {
 
     .staff_attendacne,
     .leave_information,
-    .attendance_chart {
+    .attendance_chart_container {
         margin-bottom: 16px;
+    }
+
+    .attendance_chart_container {
+        overflow-x: auto; /* 允許水平滾動 */
     }
 
     .attendance_chart {
         background-color: #ffffff; /* 淡色背景 */
+        height: 300px; /* 調整圖表高度 */
+        min-width: 600px; /* 確保圖表寬度不會壓縮 */
     }
 
-    /* 調整表格的樣式以適應手機 */
     table {
         width: 100%;
         margin: 0; /* 移除外部間距 */

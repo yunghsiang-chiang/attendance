@@ -50,7 +50,6 @@
                         // 建立一個 Set，便於快速查找出勤日期
                         const attendanceSet = new Set();
                         for (var i = 0; i < response.length; i++) {
-                            console.log(response[i].attendanceDates.length);
                             attendanceSet.add(response[i].attendanceDates)
                         }
                         // 先加入空白佔位符，直到對應的星期
@@ -78,6 +77,18 @@
                                 dayElement.append(nameElement);
                                 // 改變出勤日期的背景顏色
                                 dayElement.addClass('present').css('background-color', 'lightgreen');
+                            } else { //非出勤日上班
+                                // 顯示名字，並設置可點擊
+                                const nameElement = $('<br><span>' + username + '</span>').addClass('clickable');
+                                // 點擊名字，彈出詳細資訊視窗
+                                nameElement.on('click', function () {
+                                    // 通過API獲取該日期的詳細出勤資料
+                                    getAttendanceDetails(formattedDate);
+                                });
+                                // 顯示使用者的名字
+                                dayElement.append(nameElement);
+                                // 改變出勤日期的背景顏色
+                                dayElement.addClass('present').css('background-color', 'Cornsilk');
                             }
 
                             // 加入日曆

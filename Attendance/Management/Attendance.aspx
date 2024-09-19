@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="../Content/Management/Attendance.css" rel="stylesheet" />
-    
+
     <script src="../Scripts/Management/Attendance.js"></script>
     <div class="main_attendance_area">
         <div class="attendance_calendar">
@@ -16,7 +16,25 @@
         <div class="attendnace_information">
             <div class="attendance">
                 <div class="staff_attendacne">
-                    <span>員工出勤狀態表</span>
+                    <h1>員工考勤數據</h1>
+                    <table id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>應出勤天數</th>
+                                <th>實際上班天數</th>
+                                <th>加班天數</th>
+                                <th>補修天數</th>
+                                <th>病假天數</th>
+                                <th>事假天數</th>
+                                <th>生理假天數</th>
+                                <th>其他天數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 員工數據將動態填入這裡 -->
+                        </tbody>
+                    </table>
                 </div>
                 <div class="leave_information">
                     <span>請假資訊</span>

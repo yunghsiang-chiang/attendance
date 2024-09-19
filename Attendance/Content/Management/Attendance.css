@@ -42,6 +42,25 @@
     height: auto !important; /* 高度自動調整以維持比例 */
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
 /* PC裝置 */
 @media (min-width: 768px) {
     .main_attendance_area {

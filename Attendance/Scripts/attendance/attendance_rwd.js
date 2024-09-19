@@ -77,6 +77,43 @@
         });
     }
 
+    // 初始化
+    function default_load() {
+        let cookieall = document.cookie;
+        console.log(cookieall);
+        //拜訪cookie 個人資料
+        if (getCookie("person_name") != "") {
+            //更換姓名資訊
+            $('#personal_infor h2').text('姓名:' + getCookie("person_name"));
+            //區屬
+            $('#personal_infor p:nth-child(2)').text('區屬:' + getCookie("person_area"));
+        }
+        //拜訪cookie 最後打卡狀態
+        if (getCookie("last_status") != "") {
+            //最後狀態修正
+            $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + getCookie("last_status"));
+        } else {
+            //最後狀態修正
+            $('#personal_infor p:nth-child(3)').text('目前打卡狀態:無');
+        }
+        //ip位置 決定慈場選項 或 外出公務
+        if (getCookie("person_ipaddress") != "") {
+            if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
+                $('#inside').show();
+                $('#outside').hide();
+                $('#alert').hide();
+            } else {
+                $('#inside').hide();
+                $('#outside').show();
+                $('#alert').hide();
+            }
+        } else {
+            $('#inside').hide();
+            $('#outside').hide();
+            $('#alert').show();
+        }
+    }
+    default_load();
     handleButtonClick('#bt_start', '到班');
     handleButtonClick('#bt_end', '下班');
     handleButtonClick('#bt_going_out_on_business', '外出公務');

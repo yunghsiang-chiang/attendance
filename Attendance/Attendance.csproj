@@ -131,6 +131,7 @@
     <Content Include="attendance\attendance_rwd.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\attendance\Attendance_calendar.css" />
+    <Content Include="Content\attendance\attendance_rwd.css" />
     <Content Include="Content\Management\Apply.css" />
     <Content Include="Content\Management\Attendance.css" />
     <Content Include="Content\Management\Default.css" />

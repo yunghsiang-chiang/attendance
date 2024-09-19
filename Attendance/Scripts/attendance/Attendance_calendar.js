@@ -2,29 +2,25 @@
     let isDragging = false;
     let isSelecting = true; // 是否選取，與取消選取相反
     let selectedDays = new Set();
-    let currentMonth = new Date().getMonth(); // ※ 0~11
-    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth(); // 當前月份 (0~11)
+    let currentYear = new Date().getFullYear(); // 當前年份
     let startDay = null; // 用來記錄拖曳選擇的起始日
 
-    // 產生日曆
+    // 產生日曆的函數
     function generateCalendar(month, year) {
-        $('#calendar').empty(); // 清空日曆
+        $('#calendar').empty(); // 清空日曆容器
 
         // 初始化 jQuery UI dialog（隱藏）
         $("#dialog").dialog({
             autoOpen: false,
             modal: true,
             width: $(window).width() < 600 ? '90%' : 400, // 自動適應手機屏幕
-            position: {
-                my: "center",
-                at: "center",
-                of: window
-            },
+            position: { my: "center", at: "center", of: window },
             open: function () {
                 if ($(window).width() < 600) {
                     $(".ui-dialog").css({
-                        top: 50,  // 避免對話框貼近頂部
-                        left: "5%",  // 保證在手機屏幕上顯示
+                        top: 50, // 避免對話框貼近頂部
+                        left: "5%", // 保證在手機屏幕上顯示
                         width: "90%" // 對話框寬度為手機屏幕的90%
                     });
                 }
@@ -33,26 +29,23 @@
 
         // 計算該月第一天是星期幾
         const firstDayOfMonth = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate(); // 取得該月份的天數
+        // 計算該月的總天數
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        if (getCookie("person_id") != '') { //如果登入!或是已經登入，登出 討取cookie會得到 '' 空字串
-            const userid = getCookie("person_id");
-            // API URL（假設有特定 endpoint 提供出勤資訊）
-            const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=` + userid + `&attendanceyear=` + year + `&attendancemonth=` + (month + 1);
+        const userid = getCookie("person_id");
+        if (userid) { // 如果已登入
+            const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
 
-            // 使用API請求出勤資料
+            // 請求出勤資料
             $.ajax({
                 url: apiUrl,
                 type: 'GET',
                 success: function (response) {
-                    if (response.length > 0) { //有數據
+                    if (response.length > 0) { // 有出勤數據
+                        // 建立一個 Set 來快速查找出勤日期
+                        const attendanceSet = new Set(response.map(r => r.attendanceDates));
 
-                        // 建立一個 Set，便於快速查找出勤日期
-                        const attendanceSet = new Set();
-                        for (var i = 0; i < response.length; i++) {
-                            attendanceSet.add(response[i].attendanceDates)
-                        }
-                        // 先加入空白佔位符，直到對應的星期
+                        // 加入空白佔位符，直到對應的星期
                         for (let i = 0; i < firstDayOfMonth; i++) {
                             $('#calendar').append('<div class="day empty"></div>'); // 用空白元素佔位
                         }
@@ -60,42 +53,24 @@
                         const username = getCookie('person_name');
                         // 生成日曆的實際日期
                         for (let day = 1; day <= daysInMonth; day++) {
-                            const formattedDate = `${year}-${(month + 1) < 10 ? '0' + (month + 1) : (month + 1)}-${day < 10 ? '0' + day : day}`;
-                            const dayElement = $('<div>').addClass('day').text(day);
-                            dayElement.data('day', formattedDate);
+                            const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                            const dayElement = $('<div>').addClass('day').text(day).data('day', formattedDate);
 
                             // 檢查是否是出勤日期
                             if (attendanceSet.has(formattedDate)) {
                                 // 顯示名字，並設置可點擊
-                                const nameElement = $('<br><span>' + username + '</span>').addClass('clickable');
-                                // 點擊名字，彈出詳細資訊視窗
-                                nameElement.on('click', function () {
+                                const nameElement = $('<br><span>').text(username).addClass('clickable').on('click', function () {
                                     // 通過API獲取該日期的詳細出勤資料
                                     getAttendanceDetails(formattedDate);
                                 });
-                                // 顯示使用者的名字
                                 dayElement.append(nameElement);
-                                // 改變出勤日期的背景顏色
-                                dayElement.addClass('present').css('background-color', 'lightgreen');
-                            } else { //非出勤日上班
-                                // 顯示名字，並設置可點擊
-                                const nameElement = $('<br><span>' + username + '</span>').addClass('clickable');
-                                // 點擊名字，彈出詳細資訊視窗
-                                nameElement.on('click', function () {
-                                    // 通過API獲取該日期的詳細出勤資料
-                                    getAttendanceDetails(formattedDate);
-                                });
-                                // 顯示使用者的名字
-                                dayElement.append(nameElement);
-                                // 改變出勤日期的背景顏色
-                                dayElement.addClass('present').css('background-color', 'Cornsilk');
+                                dayElement.addClass('present').css('background-color', 'lightgreen'); // 改變出勤日期的背景顏色
                             }
 
                             // 加入日曆
                             $('#calendar').append(dayElement);
                         }
                     }
-
                 },
                 error: function (error) {
                     console.error('Error fetching attendance data:', error);
@@ -106,40 +81,39 @@
 
     // 函數：通過API獲取出勤詳細資料
     function getAttendanceDetails(date) {
-        $('#dialog').empty(); // 出勤資訊
-        var userid = getCookie('person_id');
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record_by_date?userid=` + userid + `&attendanceDate=` + date;
+        $('#dialog').empty(); // 清空對話框內容
+        const userid = getCookie('person_id');
+        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record_by_date?userid=${userid}&attendanceDate=${date}`;
 
-        // 使用API請求取得詳細資料
+        // 請求取得詳細資料
         $.ajax({
             url: apiUrl,
             type: 'GET',
             success: function (detailResponse) {
-                // 動態填充 dialog 的內容
+                // 動態填充對話框內容
                 let html_infor = `<p><strong>日期：</strong> ${date}</p>`;
                 html_infor += `<table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>出勤狀態</th>
-                        <th>打卡時間</th>
-                        <th>下班時間</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-                if (detailResponse.length>0) {
-                    for (var i = 0; i < detailResponse.length;i++) {
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>出勤狀態</th>
+                            <th>打卡時間</th>
+                            <th>下班時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                if (detailResponse.length > 0) {
+                    detailResponse.forEach(record => {
                         html_infor += `<tr>
-                                        <td>${detailResponse[i].user_name}</td>
-                                        <td>${detailResponse[i].attendance_status}</td>
-                                        <td>${detailResponse[i].create_time}</td>
-                                    </tr>`;
-                    }
+                            <td>${record.user_name}</td>
+                            <td>${record.attendance_status}</td>
+                            <td>${record.create_time}</td>
+                        </tr>`;
+                    });
                 }
                 html_infor += `</tbody>
-                            </table>`;
-                $('#dialog').append(html_infor);
-                // 打開對話框
-                $('#dialog').dialog('open');
+                </table>`;
+                $('#dialog').html(html_infor); // 設置對話框內容
+                $('#dialog').dialog('open'); // 打開對話框
             },
             error: function (error) {
                 console.error('Error fetching attendance details:', error);
@@ -154,8 +128,7 @@
         $('#monthLabel').text(`${monthNames} ${currentYear}`);
     }
 
-
-    // 月份切換邏輯
+    // 上一個月份按鈕事件處理
     $('#prevMonth').on('click', function () {
         if (currentMonth === 0) {
             currentMonth = 11;
@@ -167,6 +140,7 @@
         generateCalendar(currentMonth, currentYear); // 產生日曆
     });
 
+    // 下一個月份按鈕事件處理
     $('#nextMonth').on('click', function () {
         if (currentMonth === 11) {
             currentMonth = 0;
@@ -178,9 +152,8 @@
         generateCalendar(currentMonth, currentYear); // 產生日曆
     });
 
-    // 初始化日曆
+    // 初始化
     updateMonthLabel();
-    // 產生日曆
     generateCalendar(currentMonth, currentYear);
 });
 

@@ -1,0 +1,109 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#today_status {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+#personal_pucture, #personal_infor {
+    flex: 1;
+    min-width: 300px; /* Ensures that each section has a minimum width */
+    margin: 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#personal_pucture {
+    text-align: center; /* Centers the image */
+}
+
+.image-container img {
+    width: 150px; /* Fixed width for better control */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
+
+#personal_infor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#Attendance_status_switch {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#inside, #outside {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#attended_inside_meetings, #attended_outside_meetings {
+    margin-bottom: 20px;
+}
+
+input[type="button"] {
+    margin: 5px 0;
+    width: 100%;
+}
+
+#alert {
+    text-align: center;
+    color: #ff0000; /* Alert color */
+    margin-top: 20px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    #today_status {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #personal_pucture, #personal_infor {
+        margin: 10px 0;
+    }
+
+    #Attendance_status_switch {
+        flex-direction: column;
+    }
+
+    input[type="button"] {
+        width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-container img {
+        width: 100px;
+        height: 100px;
+    }
+
+    #personal_pucture, #personal_infor {
+        padding: 10px;
+    }
+
+    #inside, #outside {
+        padding: 10px;
+    }
+
+    input[type="button"] {
+        width: 100%; /* Ensures buttons are full width on smaller screens */
+        padding: 15px; /* Adds more padding for better touch targets */
+    }
+}

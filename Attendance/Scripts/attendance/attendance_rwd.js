@@ -40,135 +40,136 @@
         return localISOTime;
     }
 
-    // 發送 API 請求
-    function postapidata(user_id, user_name, attendance_status) {
+    // 使用 async/await 發送 API 請求
+    async function postApiData(user_id, user_name, attendance_status) {
         const localDate = new Date();
         const localISOString = toLocalISOString(localDate);
-        $.ajax({
-            type: "POST",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
-            data: JSON.stringify({
-                "user_id": user_id,
-                "user_name": user_name,
-                "attendance_status": attendance_status,
-                "create_time": localISOString
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            success: function (data) {
-                alert('狀態' + attendance_status + '上傳成功!');
-            },
-            error: function (data) {
-                console.log(data);
-            }
-        });
+        try {
+            let response = await $.ajax({
+                type: "POST",
+                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
+                data: JSON.stringify({
+                    "user_id": user_id,
+                    "user_name": user_name,
+                    "attendance_status": attendance_status,
+                    "create_time": localISOString
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            alert('狀態 ' + attendance_status + ' 上傳成功!');
+        } catch (error) {
+            console.log(error);
+        }
     }
-    function postapidata_meetting() {
+    // 使用 async/await 發送 API 請求
+    async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours) {
+        try {
+            let response = await $.ajax({
+                type: "POST",
+                url: "http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
+                data: JSON.stringify({
+                    "userID": userID,
+                    "userName": userName,
+                    "overtimeType": overtimeType,
+                    "startTime": startTime,
+                    "endTime": endTime,
+                    "count_hours": count_hours
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            alert('加班 上傳成功!');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // 發送會議數據的 API 請求
+    async function postApiDataMeeting() {
         const localDate = new Date();
         const localISOString = toLocalISOString(localDate);
         const user_id = getCookie("person_id");
         const user_name = getCookie("person_name");
-        let morning_light_up = 0;
-        let morning_light_down = 0;
-        let morning_meeting = 0;
-        if (document.querySelector("#cb_morning_up_in_hochi").checked) {
-            morning_light_up = 1;
-        }
-        if (document.querySelector("#cb_morning_down_in_hochi").checked) {
-            morning_light_down = 1;
-        }
-        if (document.querySelector("#cb_morning_meetnig_in_hochi").checked) {
-            morning_meeting = 1;
-        }
-        $.ajax({
-            type: "POST",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
-            data: JSON.stringify({
-                "user_id": user_id,
-                "user_name": user_name,
-                "attendance_day": localISOString,
-                "morning_light_up": morning_light_up,
-                "morning_light_down": morning_light_down,
-                "morning_meeting": morning_meeting
+        let morning_light_up = document.querySelector("#cb_morning_up_in_hochi").checked ? 1 : 0;
+        let morning_light_down = document.querySelector("#cb_morning_down_in_hochi").checked ? 1 : 0;
+        let morning_meeting = document.querySelector("#cb_morning_meetnig_in_hochi").checked ? 1 : 0;
 
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            success: function (data) {
-                console.log('會議參與 上傳成功!');
-            },
-            error: function (data) {
-                alert(data);
-            }
-        });
+        try {
+            await $.ajax({
+                type: "POST",
+                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                data: JSON.stringify({
+                    "user_id": user_id,
+                    "user_name": user_name,
+                    "attendance_day": localISOString,
+                    "morning_light_up": morning_light_up,
+                    "morning_light_down": morning_light_down,
+                    "morning_meeting": morning_meeting
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('會議參與 上傳成功!');
+        } catch (error) {
+            alert(error);
+        }
     }
 
     // 取得 API 最後打卡狀態
-    function get_last_status(user_id) {
-        const userid = getCookie('person_id');
+    async function getLastStatus(user_id) {
         const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendannce_last_status?userid=${user_id}`;
-        // 請求取得詳細資料
-        $.ajax({
-            url: apiUrl,
-            type: 'GET',
-            success: function (detailResponse) {
-                if (detailResponse.attendance_status != "string") {
-                    //最後狀態修正
-                    $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + detailResponse.attendance_status);
-                } else {
-                    //最後狀態修正
-                    $('#personal_infor p:nth-child(3)').text('目前打卡狀態:無');
-                }
-            },
-            error: function (error) {
-                console.error('Error fetching attendance details:', error);
+        try {
+            let detailResponse = await $.ajax({
+                url: apiUrl,
+                type: 'GET',
+            });
+            if (detailResponse.attendance_status != "string") {
+                $('#personal_infor p:nth-child(3)').text('目前打卡狀態: ' + detailResponse.attendance_status);
+            } else {
+                $('#personal_infor p:nth-child(3)').text('目前打卡狀態: 無');
             }
-        });
+        } catch (error) {
+            console.error('Error fetching attendance details:', error);
+        }
     }
 
     // 處理按鈕點擊事件
     function handleButtonClick(selector, status) {
-        $(selector).click(function () {
+        $(selector).click(async function () {
             setCookie('last_status', status, 1);
             setCookie('attendance_state', status, 1);
             setCookie('start', new Date().toLocaleString('sv'), 1);
             $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + status);
-            postapidata(getCookie("person_id"), getCookie("person_name"), status);
-            //若checkbox 有選擇則提供數據給WEB API
+
+            await postApiData(getCookie("person_id"), getCookie("person_name"), status);
+
             const checkboxes = document.querySelectorAll('#attended_inside_meetings input[type="checkbox"]');
-            let selectedCheckboxes = false;
-            // 檢查所有的 checkbox，將勾選的加入 selectedCheckboxes 陣列
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    selectedCheckboxes = true;
-                }
-            });
+            let selectedCheckboxes = Array.from(checkboxes).some(checkbox => checkbox.checked);
             if (selectedCheckboxes) {
-                postapidata_meetting();
+                await postApiDataMeeting();
             }
         });
     }
 
-    // 初始化
-    function default_load() {
+    // 初始化函數
+    async function defaultLoad() {
         let cookieall = document.cookie;
         console.log(cookieall);
-        //拜訪cookie 個人資料
-        if (getCookie("person_name") != "") {
-            //更換姓名資訊
-            $('#personal_infor h2').text('姓名:' + getCookie("person_name"));
-            //區屬
-            $('#personal_infor p:nth-child(2)').text('區屬:' + getCookie("person_area"));
-            //最後打卡狀態
-            get_last_status(getCookie("person_id"));
+
+        if (getCookie("person_name") !== "") {
+            $('#personal_infor h2').text('姓名: ' + getCookie("person_name"));
+            $('#personal_infor p:nth-child(2)').text('區屬: ' + getCookie("person_area"));
+            await getLastStatus(getCookie("person_id"));
         }
-        
-        //ip位置 決定慈場選項 或 外出公務
-        if (getCookie("person_ipaddress") != "") {
+
+        if (getCookie("person_ipaddress") !== "") {
             if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
                 $('#inside').show();
                 $('#outside').hide();
@@ -185,7 +186,8 @@
         }
     }
 
-    default_load();
+    // 頁面加載時初始化
+    defaultLoad();
     handleButtonClick('#bt_start', '到班');
     handleButtonClick('#bt_end', '下班');
     handleButtonClick('#bt_going_out_on_business', '外出公務');
@@ -197,39 +199,34 @@
     handleButtonClick('#bt_compensatory_leave', '補休');
     handleButtonClick('#bt_specaial_leave', '特休');
 
-    // 請假對話框初始化
+    // 初始化請假對話框
     $("#dialog-form").dialog({
         autoOpen: false,
         modal: true,
         buttons: {
-            "確認": function () {
-                var isValid = true;
-                var leaveType = $("#leave-type").val();
-                var start_Date = $("#start-date").val();
-                var start_Time = $("#start-time").val();
-                var end_Date = $("#end-date").val();
-                var end_Time = $("#end-time").val();
-                var userId = getCookie("person_id");
-                var userName = getCookie("person_name");
+            "確認": async function () {
+                let isValid = true;
+                let leaveType = $("#leave-type").val();
+                let start_Date = $("#start-date").val();
+                let start_Time = $("#start-time").val();
+                let end_Date = $("#end-date").val();
+                let end_Time = $("#end-time").val();
+                let userId = getCookie("person_id");
+                let userName = getCookie("person_name");
 
-                // 計算時間差（毫秒）
                 const timeDifference = new Date(end_Date + 'T' + end_Time + ':00') - new Date(start_Date + 'T' + start_Time + ':00');
                 let hoursDifference = timeDifference / (1000 * 60 * 60);
-
-                // 超過8小時則鎖定8小時
                 if (hoursDifference > 8) {
                     hoursDifference = 8;
                 }
 
-                // 檢查請假類型是否選擇
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                const timeRegex = /^\d{2}:\d{2}$/;
+
                 if (!leaveType) {
                     alert("請選擇請假類型");
                     isValid = false;
                 }
-
-                // 檢查日期和時間格式
-                const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD 格式
-                const timeRegex = /^\d{2}:\d{2}$/; // HH:mm 格式
 
                 if (!dateRegex.test(start_Date)) {
                     alert("開始日期格式不正確，請使用 YYYY-MM-DD 格式");
@@ -252,34 +249,43 @@
                 }
 
                 if (isValid) {
-                    var postData = {
+                    const postData = {
                         userId: userId,
                         userName: userName,
                         leaveType: leaveType,
-                        startTime: start_Date + 'T' + start_Time + ':00.000Z',
+                        startTime: start_Date + 'T' + start_Time+':00.000Z',
                         endTime: end_Date + 'T' + end_Time + ':00.000Z',
-                        count_hours: hoursDifference
+                        leaveHours: hoursDifference
                     };
-
-                    $.ajax({
-                        url: 'http://internal.hochi.org.tw:8082/api/attendance/appendleave_record',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(postData),
-                        success: function (response) {
-                            alert("請假申請已成功提交！");
-                            $("#dialog-form").dialog("close");
-                        },
-                        error: function (xhr, status, error) {
-                            alert("提交失敗: " + xhr.responseText);
-                        }
-                    });
+                    console.log(postData);
+                    try {
+                        let response = await $.ajax({
+                            type: "POST",
+                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
+                            data: JSON.stringify(postData),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        console.log(response);
+                        alert('請假申請成功');
+                        $(this).dialog("close");
+                    } catch (error) {
+                        console.error("Error submitting leave request:", error);
+                        alert("請假申請失敗");
+                    }
                 }
             },
             "取消": function () {
                 $(this).dialog("close");
             }
         }
+    });
+
+    // 打開請假對話框
+    $("#bt_dayoff").click(function () {
+        $("#dialog-form").dialog("open");
     });
 
     // 加班對話框初始化
@@ -306,8 +312,9 @@
                     alert("請選擇超過 0.5 小時的加班時間!");
                     return;
                 }
+                let end_DateTime = new Date(start_DateTime.getTime() + hours * 60 * 60 * 1000);  // 增加小时 (转换为毫秒)
 
-                postapidata(userId, userName, '加班');
+                postApiData_overtime(userId, userName, '加班', start_DateTime, end_DateTime, hours);
                 $(this).dialog("close");
             },
             "取消": function () {

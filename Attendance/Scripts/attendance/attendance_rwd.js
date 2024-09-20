@@ -66,6 +66,29 @@
         });
     }
 
+    // 取得 API 最後打卡狀態
+    function get_last_status(user_id) {
+        const userid = getCookie('person_id');
+        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendannce_last_status?userid=${user_id}`;
+        // 請求取得詳細資料
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function (detailResponse) {
+                if (detailResponse.attendance_status != "string") {
+                    //最後狀態修正
+                    $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + detailResponse.attendance_status);
+                } else {
+                    //最後狀態修正
+                    $('#personal_infor p:nth-child(3)').text('目前打卡狀態:無');
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching attendance details:', error);
+            }
+        });
+    }
+
     // 處理按鈕點擊事件
     function handleButtonClick(selector, status) {
         $(selector).click(function () {
@@ -88,14 +111,9 @@
             //區屬
             $('#personal_infor p:nth-child(2)').text('區屬:' + getCookie("person_area"));
         }
-        //拜訪cookie 最後打卡狀態
-        if (getCookie("last_status") != "") {
-            //最後狀態修正
-            $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + getCookie("last_status"));
-        } else {
-            //最後狀態修正
-            $('#personal_infor p:nth-child(3)').text('目前打卡狀態:無');
-        }
+
+        //最後打卡狀態
+        get_last_status(getCookie("person_id"));
         //ip位置 決定慈場選項 或 外出公務
         if (getCookie("person_ipaddress") != "") {
             if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
@@ -113,6 +131,7 @@
             $('#alert').show();
         }
     }
+
     default_load();
     handleButtonClick('#bt_start', '到班');
     handleButtonClick('#bt_end', '下班');

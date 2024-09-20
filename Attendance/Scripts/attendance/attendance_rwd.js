@@ -65,6 +65,47 @@
             }
         });
     }
+    function postapidata_meetting() {
+        const localDate = new Date();
+        const localISOString = toLocalISOString(localDate);
+        const user_id = getCookie("person_id");
+        const user_name = getCookie("person_name");
+        let morning_light_up = 0;
+        let morning_light_down = 0;
+        let morning_meeting = 0;
+        if (document.querySelector("#cb_morning_up_in_hochi").checked) {
+            morning_light_up = 1;
+        }
+        if (document.querySelector("#cb_morning_down_in_hochi").checked) {
+            morning_light_down = 1;
+        }
+        if (document.querySelector("#cb_morning_meetnig_in_hochi").checked) {
+            morning_meeting = 1;
+        }
+        $.ajax({
+            type: "POST",
+            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+            data: JSON.stringify({
+                "user_id": user_id,
+                "user_name": user_name,
+                "attendance_day": localISOString,
+                "morning_light_up": morning_light_up,
+                "morning_light_down": morning_light_down,
+                "morning_meeting": morning_meeting
+
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                console.log('會議參與 上傳成功!');
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
 
     // 取得 API 最後打卡狀態
     function get_last_status(user_id) {
@@ -97,6 +138,18 @@
             setCookie('start', new Date().toLocaleString('sv'), 1);
             $('#personal_infor p:nth-child(3)').text('目前打卡狀態:' + status);
             postapidata(getCookie("person_id"), getCookie("person_name"), status);
+            //若checkbox 有選擇則提供數據給WEB API
+            const checkboxes = document.querySelectorAll('#attended_inside_meetings input[type="checkbox"]');
+            let selectedCheckboxes = false;
+            // 檢查所有的 checkbox，將勾選的加入 selectedCheckboxes 陣列
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedCheckboxes = true;
+                }
+            });
+            if (selectedCheckboxes) {
+                postapidata_meetting();
+            }
         });
     }
 
@@ -110,10 +163,10 @@
             $('#personal_infor h2').text('姓名:' + getCookie("person_name"));
             //區屬
             $('#personal_infor p:nth-child(2)').text('區屬:' + getCookie("person_area"));
+            //最後打卡狀態
+            get_last_status(getCookie("person_id"));
         }
-
-        //最後打卡狀態
-        get_last_status(getCookie("person_id"));
+        
         //ip位置 決定慈場選項 或 外出公務
         if (getCookie("person_ipaddress") != "") {
             if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {

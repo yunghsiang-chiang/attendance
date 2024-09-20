@@ -65,38 +65,36 @@
                         <!-- 使用後端語言或 JavaScript 填充數據 -->
                     </tbody>
                 </table>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>狀態</th>
+                            <th>起始</th>
+                            <th>結束</th>
+                            <th>小時數</th>
+                        </tr>
+                    </thead>
+                    <tbody id="overtime-records-tbody">
+                        <!-- 使用後端語言或 JavaScript 填充數據 -->
+                    </tbody>
+                </table>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>狀態</th>
+                            <th>起始</th>
+                            <th>結束</th>
+                            <th>小時數</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leave-records-tbody">
+                        <!-- 使用後端語言或 JavaScript 填充數據 -->
+                    </tbody>
+                </table>
+
             </section>
-
-
-            <%--<div class="col-md-6">
-            <asp:GridView ID="gv_byMon" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical">
-                <AlternatingRowStyle BackColor="White" />
-                <FooterStyle BackColor="#CCCC99" />
-                <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
-                <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
-                <RowStyle BackColor="#F7F7DE" />
-                <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" />
-                <SortedAscendingCellStyle BackColor="#FBFBF2" />
-                <SortedAscendingHeaderStyle BackColor="#848384" />
-                <SortedDescendingCellStyle BackColor="#EAEAD3" />
-                <SortedDescendingHeaderStyle BackColor="#575357" />
-            </asp:GridView>
-        </div>
-        <div class="col-md-6">
-            <asp:GridView ID="gv_byDate" runat="server" CellPadding="4" ForeColor="#333333" GridLines="None">
-                <AlternatingRowStyle BackColor="White" />
-                <EditRowStyle BackColor="#7C6F57" />
-                <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
-                <HeaderStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
-                <PagerStyle BackColor="#666666" ForeColor="White" HorizontalAlign="Center" />
-                <RowStyle BackColor="#E3EAEB" />
-                <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
-                <SortedAscendingCellStyle BackColor="#F8FAFA" />
-                <SortedAscendingHeaderStyle BackColor="#246B61" />
-                <SortedDescendingCellStyle BackColor="#D4DFE1" />
-                <SortedDescendingHeaderStyle BackColor="#15524A" />
-            </asp:GridView>
-        </div>--%>
         </section>
     </main>
 </asp:Content>

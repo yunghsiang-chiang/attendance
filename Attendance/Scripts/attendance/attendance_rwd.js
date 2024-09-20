@@ -156,6 +156,30 @@
                 await postApiDataMeeting();
             }
         });
+        // 額外考慮，加班，透過下班按鈕觸發
+        if (status =='下班') {
+            //先拜訪API，確認當天是否為應出勤日
+            const year = currentDate.getFullYear(); //年份
+            const month = currentDate.getMonth() + 1; // 月份從0開始，因此需要加1
+            const workingDays = []; // 出勤日 array
+            const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
+            const daysData = await $.getJSON(api_url);
+            if (daysData.length > 0) {
+                let attendance_days = daysData[0].attendance_days.split(',');
+                workingDays.push(...attendance_days);
+            }
+            // 取得當天日期 (格式: YYYY-MM-DD)
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            // 取得當前時間
+            const currentTime = today.getHours() * 60 + today.getMinutes(); // 轉換為分鐘
+            const sixThirtyPM = 18 * 60 + 30; // 晚上 6:30 的分鐘表示
+            // 判斷條件
+            if (!workingDays.includes(todayString) || currentTime > sixThirtyPM) {
+                // 提供加班視窗
+                $("#dialog").dialog("open");
+            }
+        }
     }
 
     // 初始化函數
@@ -287,6 +311,8 @@
     $("#bt_dayoff").click(function () {
         $("#dialog-form").dialog("open");
     });
+
+
 
     // 加班對話框初始化
     $('#dialog').dialog({

@@ -1,20 +1,22 @@
 ﻿$(document).ready(async function () {
     let attendanceChart; // 定義圖表變數
     let currentDate = new Date();
-
+    //更新顯示的月份資訊
     function updateMonthLabel() {
         const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
         const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
+        const month = currentDate.getMonth(); // 月份從0開始，因此需要加1
         $("#currentMonthLabel").text(`${year}年 ${monthNames[month]}`);
+        // 调用函数获取并展示请假记录
+        fetchLeaveRecords(year, month+1);
     }
-
+    //上一月
     $("#prevMonthBtn").on("click", function () {
         currentDate.setMonth(currentDate.getMonth() - 1);
         updateMonthLabel();
         showchart();
     });
-
+    //下一月
     $("#nextMonthBtn").on("click", function () {
         currentDate.setMonth(currentDate.getMonth() + 1);
         updateMonthLabel();
@@ -193,8 +195,34 @@
         });
     }
 
+
+    async function fetchLeaveRecords(year, month) {
+        const url = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_by_year_month?year=${year}&month=${month}`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const leaveRecords = await response.json();
+            displayLeaveRecords(leaveRecords);
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
+    function displayLeaveRecords(records) {
+        const leaveRecordsContainer = document.getElementById('leave_records');
+        leaveRecordsContainer.innerHTML = ''; // 清空之前的记录
+
+        records.forEach(record => {
+            const li = document.createElement('li');
+            li.textContent = `${record.userName} - ${record.leaveType} (從 ${new Date(record.startTime).toLocaleString()} 到 ${new Date(record.endTime).toLocaleString()} - ${record.count_hours} 小時)`;
+            leaveRecordsContainer.appendChild(li);
+        });
+    }
+
     // 初始化
     updateMonthLabel();
     await showchart();
-
+    
 });

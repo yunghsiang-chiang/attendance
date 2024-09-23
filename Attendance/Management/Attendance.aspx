@@ -38,6 +38,7 @@
                 </div>
                 <div class="leave_information">
                     <span>請假資訊</span>
+                    <ul id="leave_records"></ul> <!-- 用于展示请假记录 -->
                 </div>
             </div>
             <div class="attendance_chart">

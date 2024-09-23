@@ -18,8 +18,42 @@
     margin-bottom: 16px;
 }
 
+/* 調整表格的基本樣式 */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 移除邊框之間的間距 */
+    margin-top: 10px;
+}
+
+/* 表格標頭樣式 */
+table th {
+    background-color: #4CAF50; /* 綠色背景 */
+    color: white; /* 白色文字 */
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* 表格行樣式 */
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* 行間分隔線 */
+    text-align: left;
+}
+
+/* 奇數和偶數行的不同顏色區分 */
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶數行淺灰色背景 */
+}
+
+/* 滑鼠懸停時的行高亮顯示 */
+table tr:hover {
+    background-color: #ddd; /* 懸停時背景顏色變亮 */
+}
+
+
 /* PC裝置 */
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .main_leave_area {
         display: flex;
         flex-direction: column;
@@ -56,7 +90,7 @@
 }
 
 /* 手機裝置 */
-@media (max-width: 767px) {
+@media (max-width: 600px) {
     .main_leave_area {
         display: block;
     }
@@ -82,5 +116,26 @@
 
     .leave_chart {
         background-color: #ffffff; /* 淡色背景 */
+    }
+
+    table th, table td {
+        display: block;
+        width: 100%;
+        text-align: right; /* 文字靠右對齊 */
+    }
+
+        table th::after, table td::after {
+            content: ':'; /* 加上冒號作為標籤和內容的區隔 */
+            padding-left: 5px;
+        }
+
+    table tr {
+        margin-bottom: 15px; /* 調整行之間的間距 */
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: transparent; /* 移除背景顏色 */
+        color: #333; /* 標頭文字顏色改為黑色 */
     }
 }

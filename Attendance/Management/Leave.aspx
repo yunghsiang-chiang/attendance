@@ -8,7 +8,9 @@
     <script src="../Scripts/Management/Leave.js"></script>
     <div class="main_leave_area">
         <div class="leave_calendar">
-            <span>切換休假月份區域</span>
+            <input type="button" id="prevMonthBtn" value="上個月">
+            <span id="currentMonthLabel"></span>
+            <input type="button" id="nextMonthBtn" value="下個月">
         </div>
         <div class="leave_information">
             <div class="leave">

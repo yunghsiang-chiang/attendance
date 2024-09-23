@@ -138,6 +138,41 @@
                 </tr>
             </tbody>
         </table>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>服務期間</th>
+                    <th>特別休假天數</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>六個月以上一年未滿</td>
+                    <td>3 日</td>
+                </tr>
+                <tr>
+                    <td>一年以上二年未滿</td>
+                    <td>7 日</td>
+                </tr>
+                <tr>
+                    <td>二年以上三年未滿</td>
+                    <td>10 日</td>
+                </tr>
+                <tr>
+                    <td>三年以上五年未滿</td>
+                    <td>14 日</td>
+                </tr>
+                <tr>
+                    <td>五年以上十年未滿</td>
+                    <td>15 日</td>
+                </tr>
+                <tr>
+                    <td>十年以上</td>
+                    <td>每一年加 1 日，加至 30 日為止</td>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 
 </asp:Content>

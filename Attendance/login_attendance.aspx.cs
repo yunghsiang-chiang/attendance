@@ -24,18 +24,7 @@ namespace Attendance
         /// <param name="e"></param>
         protected void bt_submit_Click(object sender, EventArgs e)
         {
-            //TextBox tb_account = (TextBox)this.Page.FindControl("tb_account");
-            //string str_accound="";
-            //if (tb_account != null)
-            //{
-            //    str_accound = tb_account.Text;
-            //}
-            //TextBox tb_password = (TextBox)this.Page.FindControl("tb_password");
-            //string str_password="";
-            //if (tb_account != null)
-            //{
-            //    str_password = tb_password.Text;
-            //}
+
 
             String str_accound = Request.Form["tb_account"].ToString();
             String str_password = Request.Form["tb_password"].ToString();

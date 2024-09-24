@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="../Content/Management/Schedule.css" rel="stylesheet" />
-    head 位置
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <script src="../Scripts/Management/Schedule.js"></script>
@@ -14,6 +14,6 @@
         </div>
 
         <div class="calendar" id="calendar"></div>
-        <input type="button" class="btn btn-success mt-4" id="saveButton" value="Save"/>
+        <input type="button" class="btn btn-success mt-4" id="saveButton" value="Save" />
     </div>
 </asp:Content>

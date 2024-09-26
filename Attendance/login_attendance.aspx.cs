@@ -45,10 +45,14 @@ namespace Attendance
                 cookie["person_subinv"] = Server.UrlEncode(logindt.Rows[0]["person_subinv"].ToString());
                 cookie["person_calendar"] = Server.UrlEncode(logindt.Rows[0]["person_calendar"].ToString());
                 cookie["person_ipaddress"] = Server.UrlEncode(temp_ip_str);
+                //cookie.Path = "/";
+                //cookie.Secure = true;  // 在 HTTPS 上設置
+                //cookie.SameSite = SameSiteMode.None;  // 或者是 Lax，視應用場景而定
                 //設定過期日
                 cookie.Expires = DateTime.Now.AddDays(365);
                 //寫到用戶端
                 Response.Cookies.Add(cookie);
+
                 //套轉回原本網址
                 Response.Redirect(Request.QueryString["beforeUrls"]);
             }

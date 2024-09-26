@@ -1,6 +1,6 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     // 功能：根據窗口寬度檢查並設置菜單顯示狀態
-    function checkWindowWidth() {
+    async function checkWindowWidth() {
         if ($(window).width() > 768) {
             $('#navbar-menu').show();  // 如果寬度大於768，顯示菜單
         } else {
@@ -9,7 +9,7 @@
     }
 
     // 初始化：檢查窗口寬度
-    checkWindowWidth();
+    await checkWindowWidth();
 
     // 功能：點擊按鈕切換菜單顯示狀態
     $('.navbar-toggle').click(function () {
@@ -21,28 +21,34 @@
         checkWindowWidth();
     });
 
-    // 功能：取得cookie中的Person_id
-    function getCookieValue(cookieName) {
-        const name = cookieName + "=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const cookieArray = decodedCookie.split(';');
-
-        for (let i = 0; i < cookieArray.length; i++) {
-            let cookie = cookieArray[i].trim();
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
+    // 取得 cookie 值
+    async function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(/&|;/);
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
             }
         }
-        return null;  // 若找不到cookie則回傳null
+        return '';
     }
     // 功能：拜訪API並檢查Person_id是否有權限
     async function checkPermission() {
-        const personId = getCookieValue('Person_id');  // 從cookie取得Person_id
+        const allcookie = document.cookie;
+        console.log('Cookie 數據:', allcookie);
+        const personId = await getCookie('person_id');  // 從 cookie 取得 Person_id
+        console.log('取得的 person_id:', personId);  // 調試輸出
 
-        if (!personId) {
-            alert('無法取得Person_id，請重新登入');
-            window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
-            return;
+        if (!personId || personId.trim() === '') {
+            console.log('無法取得Person_id，請重新登入');
+            //alert('無法取得Person_id，請重新登入');
+            //window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
+            //return;
         }
 
         try {
@@ -64,8 +70,9 @@
             const hasPermission = data.some(item => item.permissions === personId);
 
             if (!hasPermission) {
-                alert('您沒有權限進入此頁面');
-                window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
+                console.log('您沒有權限進入此頁面');
+                //alert('您沒有權限進入此頁面');
+                //window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
             }
         } catch (error) {
             console.error('發生錯誤:', error);
@@ -74,5 +81,5 @@
     }
 
     // 網頁加載時執行權限檢查
-    checkPermission();
+    await checkPermission();
 });

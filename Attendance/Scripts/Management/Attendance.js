@@ -96,19 +96,20 @@
         const employeeA = await fetchAttendanceData('1206307', year, month);
         const employeeB = await fetchAttendanceData('chungchen.yang', year, month);
         const employeeC = await fetchAttendanceData('yuwei.chang', year, month);
+        const employeeD = await fetchAttendanceData('xiaosam001', year, month);
 
         // 獲取請假和加班數據
         const leaveData = await fetchLeaveData(year, month);
         const overtimeData = await fetchOvertimeData(year, month);
 
         // 計算各員工的出勤數據
-        const employeeAttendance = [employeeA, employeeB, employeeC].map(employeeDates => {
+        const employeeAttendance = [employeeA, employeeB, employeeC, employeeD].map(employeeDates => {
             return workingDays.map(day => employeeDates.includes(day) ? 1 : 0);
         });
 
         // 動態生成表格數據
-        const employeeNames = ["江永祥", "楊崇真", "張育維"];
-        const employeeIds = ["1206307", "chungchen.yang", "yuwei.chang"];
+        const employeeNames = ["江永祥", "楊崇真", "張育維","廖哲儒"];
+        const employeeIds = ["1206307", "chungchen.yang", "yuwei.chang","xiaosam001"];
 
         $("#attendanceTable tbody").empty(); // 清空表格內容
 
@@ -155,7 +156,7 @@
                     {
                         type: 'line',
                         label: '應到人數',
-                        data: workingDays.map(() => 3), // 應到人數固定3
+                        data: workingDays.map(() => 4), // 應到人數固定3
                         borderColor: 'blue',
                         fill: false,
                         tension: 0.1
@@ -176,6 +177,12 @@
                         label: '張育維報到',
                         data: employeeAttendance[2],
                         backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        stack: 'Stack 0'
+                    },
+                    {
+                        label: '廖哲儒報到',
+                        data: employeeAttendance[3],
+                    backgroundColor: 'rgba(184, 134, 11, 0.6)',
                         stack: 'Stack 0'
                     }
                 ]

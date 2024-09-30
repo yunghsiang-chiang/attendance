@@ -66,42 +66,58 @@
     }
     // 休假圖表
     async function leavechart() {
-        const ctx = document.getElementById('attendanceChart').getContext('2d');
-        const attendanceChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['江永祥', '廖哲儒', '張育維'], // 員工姓名
-                datasets: [
-                    {
-                        label: '特休時數',
-                        data: [24, 0, 120], // 特休時數數據
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    },
-                    {
-                        label: '事假時數',
-                        data: [112, 112, 112], // 事假時數數據
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    },
-                    {
-                        label: '補休時數',
-                        data: [0, 0, 0], // 補休時數數據
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true,
+        try {
+            // 從 API 取得休假資料
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+            const data = await response.json();
+
+            // 從資料中提取圖表需要的資訊
+            const labels = data.map(person => person.person_name); // 員工姓名
+            const specialVacationHours = data.map(person => person.special_vacation_hours); // 特休時數
+            const personalLeaveHours = data.map(person => person.personal_leave_hours); // 事假時數
+            const compensatoryLeaveHours = data.map(person => person.compensatory_leave_hours); // 補休時數
+
+            // 建立圖表
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            const attendanceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels, // 動態設置員工姓名
+                    datasets: [
+                        {
+                            label: '特休時數',
+                            data: specialVacationHours, // 從 API 取得的特休時數
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        },
+                        {
+                            label: '事假時數',
+                            data: personalLeaveHours, // 從 API 取得的事假時數
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        },
+                        {
+                            label: '補休時數',
+                            data: compensatoryLeaveHours, // 從 API 取得的補休時數
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true, // X 軸堆疊顯示
+                        },
+                        y: {
+                            stacked: true, // Y 軸堆疊顯示
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch (error) {
+            console.error('取得或處理資料時發生錯誤:', error); // 錯誤處理
+        }
     }
+
 
     // 呼叫 fetchAttendanceData 函式以載入資料
     await fetchAttendanceData();

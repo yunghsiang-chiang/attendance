@@ -51,7 +51,6 @@ table {
         background-color: #ddd; /* 懸停時背景顏色變亮 */
     }
 
-
 /* PC裝置 */
 @media (min-width: 600px) {
     .main_leave_area {
@@ -118,31 +117,12 @@ table {
         background-color: #ffffff; /* 淡色背景 */
     }
 
+    /* 只調整字體大小以確保在手機上顯示合適 */
     table {
-        width: 100%;
-        border-collapse: collapse; /* 合併邊框 */
-        margin: 0; /* 移除外部間距 */
+        font-size: 14px; /* 調整字體大小 */
     }
 
         table th, table td {
             padding: 8px; /* 調整內邊距以適應手機 */
-            display: block;
-            width: 100%;
-            text-align: center; /* 文字置中 */
-        }
-
-            table th::after, table td::after {
-                content: ':'; /* 加上冒號作為標籤和內容的區隔 */
-                padding-left: 5px;
-            }
-
-        table tr {
-            margin-bottom: 15px; /* 調整行之間的間距 */
-            border-bottom: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: transparent; /* 移除背景顏色 */
-            color: #333; /* 標頭文字顏色改為黑色 */
         }
 }

@@ -66,6 +66,8 @@
     }
     // 使用 async/await 發送 API 請求
     async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours) {
+        const localDate = new Date();
+        const localISOString = toLocalISOString(localDate);
         try {
             let response = await $.ajax({
                 type: "POST",
@@ -76,7 +78,8 @@
                     "overtimeType": overtimeType,
                     "startTime": startTime,
                     "endTime": endTime,
-                    "count_hours": count_hours
+                    "count_hours": count_hours,
+                    "submitted_at": localISOString
                 }),
                 headers: {
                     'Accept': 'application/json',
@@ -324,31 +327,68 @@
             "確認": function () {
                 const userId = getCookie("person_id");
                 const userName = getCookie("person_name");
-                const evening6 = new Date();
-                evening6.setHours(18, 0, 0, 0);
-                let start_DateTime = new Date();
-                if (getCookie('overtimein') !== '') {
-                    const dateString = getCookie('overtimein');
-                    const [datePart, timePart] = dateString.split(' ');
-                    const [year, month, day] = datePart.split('-').map(Number);
-                    const [hours, minutes, seconds] = timePart.split(':').map(Number);
-                    start_DateTime = new Date(year, month - 1, day, hours, minutes, seconds);
-                }
-                const diff6 = (Date.now() - evening6) / (1000 * 60 * 60);
-                const hours = parseFloat($('#overtime-hours').val());
-                if (hours < 0.5) {
-                    alert("請選擇超過 0.5 小時的加班時間!");
-                    return;
-                }
-                let end_DateTime = new Date(start_DateTime.getTime() + hours * 60 * 60 * 1000);  // 增加小时 (转换为毫秒)
+                const overtimeEntries = $('.overtime-entry');
 
-                postApiData_overtime(userId, userName, '加班', start_DateTime, end_DateTime, hours);
-                $(this).dialog("close");
+                let totalHours = 0;
+                let validEntries = true;
+
+                overtimeEntries.each(function (index) {
+                    const startTimeString = $(this).find('input[type="time"]').eq(0).val();
+                    const endTimeString = $(this).find('input[type="time"]').eq(1).val();
+
+                    if (!startTimeString || !endTimeString) {
+                        alert("請選擇加班的起始時間和結束時間!");
+                        validEntries = false;
+                        return false; // 跳出 .each
+                    }
+
+                    // 解析起始時間和結束時間
+                    const start_DateTime = new Date();
+                    const [startHours, startMinutes] = startTimeString.split(':').map(Number);
+                    start_DateTime.setHours(startHours, startMinutes, 0, 0);
+
+                    const end_DateTime = new Date();
+                    const [endHours, endMinutes] = endTimeString.split(':').map(Number);
+                    end_DateTime.setHours(endHours, endMinutes, 0, 0);
+
+                    // 計算加班小時數
+                    const hours = (end_DateTime - start_DateTime) / (1000 * 60 * 60); // 轉換為小時
+
+                    if (hours < 0.5) {
+                        alert("每筆加班時間必須超過 0.5 小時!");
+                        validEntries = false;
+                        return false; // 跳出 .each
+                    }
+
+                    totalHours += hours;
+
+                    // POST 請求
+                    postApiData_overtime(userId, userName, '加班', start_DateTime, end_DateTime, hours);
+                });
+
+                if (validEntries) {
+                    alert(`成功申報 ${overtimeEntries.length} 筆加班時段，共計 ${totalHours} 小時`);
+                    $(this).dialog("close");
+                }
             },
             "取消": function () {
                 $(this).dialog("close");
             }
         }
+    });
+
+    // 新增加班時段
+    $('#add-overtime').on('click', function () {
+        const index = $('.overtime-entry').length; // 當前已有的加班時段數量
+        const newEntry = `
+        <div class="overtime-entry">
+            <label for="overtime-start-${index}">請選擇申報加班的起始時間：</label>
+            <input type="time" id="overtime-start-${index}" required>
+            <label for="overtime-end-${index}">請選擇申報加班的結束時間：</label>
+            <input type="time" id="overtime-end-${index}" required>
+        </div>
+    `;
+        $('#overtime-times').append(newEntry); // 在指定區域新增新的加班時段
     });
 
 });

@@ -126,13 +126,19 @@
         </form>
     </div>
 
-    <!-- Dialog 的 HTML 內容 -->
     <div id="dialog" title="申報加班">
         <form id="overtime-form">
             <fieldset>
                 <p id="message"></p>
-                <label for="overtime-hours">請選擇申報加班的小時數：</label>
-                <input type="number" id="overtime-hours" min="0" step="0.5">
+                <div id="overtime-times">
+                    <div class="overtime-entry">
+                        <label for="overtime-start-0">請選擇申報加班的起始時間：</label>
+                        <input type="time" id="overtime-start-0" required>
+                        <label for="overtime-end-0">請選擇申報加班的結束時間：</label>
+                        <input type="time" id="overtime-end-0" required>
+                    </div>
+                </div>
+                <input type="button" id="add-overtime" value="新增加班時段">
             </fieldset>
         </form>
     </div>

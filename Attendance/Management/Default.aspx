@@ -10,6 +10,7 @@
     <div class="homepage">
         <div class="status-overview">
             <p>員工狀態總覽：<label class="status-item" id="staff_qty"></label></p>
+            <p>同修狀態總攬：<label class="status-item" id="disciples_qty"></label></p>
             <!-- 員工狀態總覽以 label 呈現 -->
             <div class="status-container">
                 <div class="form-group">

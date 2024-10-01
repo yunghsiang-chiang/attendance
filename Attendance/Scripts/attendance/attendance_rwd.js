@@ -204,7 +204,7 @@
                 /*$('#outside').hide();*/
                 $('#alert').hide();
             } else {
-                $('#inside').hide();
+                $('#inside').show();
                 /*$('#outside').show();*/
                 $('#alert').hide();
             }

@@ -35,7 +35,7 @@ $(document).ready(async function () {
                 if (data.length > 0) {
                     let attendance_name_set = new Set(); // 不重複，承接人名
                     for (var i = 0; i < data.length; i++) {
-                        if (!attendance_name_set.has(data[i].user_name) && data[i].attendance_status == '到班') {
+                        if (!attendance_name_set.has(data[i].user_name) && (data[i].attendance_status == '到班' || data[i].attendance_status == '外出公務')) {
                             attendance_name_set.add(data[i].user_name);
                         }
                     }

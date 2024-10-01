@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\egrou\\source\\repos\\Attendance\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\attendance\\attendance_rwd.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\attendance\\attendance_rwd.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\schedule.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\schedule.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\default.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\default.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "attendance_rwd.js",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "RelativeDocumentMoniker": "Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "RelativeToolTip": "Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAAANMAAAAgAAAAAAAAAA==",
+              "Title": "Default.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Default.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Default.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Default.js",
+              "RelativeToolTip": "Attendance\\Scripts\\Management\\Default.js",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-01T01:43:31.821Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "attendance_rwd.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeDocumentMoniker": "Attendance\\attendance\\attendance_rwd.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeToolTip": "Attendance\\attendance\\attendance_rwd.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-10-01T01:43:09.107Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Schedule.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Schedule.aspx",
-              "RelativeDocumentMoniker": "Attendance\\Management\\Schedule.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Schedule.aspx",
-              "RelativeToolTip": "Attendance\\Management\\Schedule.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-09-30T08:08:34.763Z",
+              "WhenOpened": "2024-10-01T02:13:48.504Z",
               "EditorCaption": ""
             }
           ]

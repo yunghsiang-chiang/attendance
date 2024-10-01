@@ -14,6 +14,10 @@ $(document).ready(async function () {
     let staff_qty = new Number();
     // 同修人數
     let disciples_qty = new Number();
+    // 請假人數
+    let leave_qty = 0;
+    // 請假詳細資料
+    let leave_details = [];
 
     // 確認出勤狀態，將今日報到情況透過 API 確認數據
     await get_today_attendance_records();
@@ -21,6 +25,8 @@ $(document).ready(async function () {
     await get_staff_qty();
     // 取得同修人數
     await get_disciples_qty();
+    // 取得今日請假數據
+    await get_today_leave_records();
 
     // 取得今日出勤數據
     // 將 get_today_attendance_records() 和 get_staff_qty() 包裝在 Promise 裡，並使用 resolve() 和 reject() 來處理成功和失敗的情況
@@ -87,4 +93,42 @@ $(document).ready(async function () {
             });
         });
     }
+
+    // 取得今日請假人數
+    async function get_today_leave_records() {
+        var api_url = "http://internal.hochi.org.tw:8082/api/attendance/get_today_leave_record";
+        var myAPI = api_url;
+
+        return new Promise((resolve, reject) => {
+            $.getJSON(myAPI, {
+                format: "json"
+            }).done(function (data) {
+                if (data.length > 0) {
+                    leave_qty = data.length; // 請假人數
+                    leave_details = data; // 保存請假詳細資料
+                    $('#leave_qty').text(leave_qty); // 更新請假人數顯示
+                }
+                resolve();
+            }).fail(function (error) {
+                reject(error);
+            });
+        });
+    }
+
+    // 當滑鼠移到請假數字上時，顯示詳細的請假資料
+    $('#leave_qty').hover(
+        function () {
+            if (leave_details.length > 0) {
+                let tooltipText = leave_details.map(detail => {
+                    return `姓名: ${detail.userName} (${detail.userId})\n類型: ${detail.leaveType}\n時間: ${new Date(detail.startTime).toLocaleString()} - ${new Date(detail.endTime).toLocaleString()}\n時數: ${detail.count_hours} 小時`;
+                }).join("\n\n");
+
+                $(this).attr('title', tooltipText); // 使用 HTML title 屬性來顯示 tooltip
+            }
+        },
+        function () {
+            $(this).removeAttr('title'); // 移除 tooltip
+        }
+    );
+
 });

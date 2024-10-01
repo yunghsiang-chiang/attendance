@@ -14,27 +14,27 @@
             <!-- 員工狀態總覽以 label 呈現 -->
             <div class="status-container">
                 <div class="form-group">
-                    <label class="status-item">上班打卡次數</label>
+                    <label class="status-item">上班打卡人數</label>
                     <label class="status-count" id="attendance_qty">0</label>
                 </div>
 
                 <div class="form-group">
-                    <label class="status-item">遲到次數</label>
+                    <label class="status-item">遲到人數</label>
                     <label class="status-count" id="arrive_late_qty">0</label>
                 </div>
 
                 <div class="form-group">
-                    <label class="status-item">未打卡次數</label>
+                    <label class="status-item">未打卡人數</label>
                     <label class="status-count" id="no_attendance_qty">0</label>
                 </div>
 
                 <div class="form-group">
-                    <label class="status-item">早退次數</label>
+                    <label class="status-item">早退人數</label>
                     <label class="status-count" id="leave_early_qty">0</label>
                 </div>
 
                 <div class="form-group">
-                    <label class="status-item">休假次數</label>
+                    <label class="status-item">休假人數</label>
                     <label class="status-count" id="leave_qty">0</label>
                 </div>
             </div>

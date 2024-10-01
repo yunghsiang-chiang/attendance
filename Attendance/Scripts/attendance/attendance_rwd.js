@@ -230,87 +230,97 @@
 
     // 初始化請假對話框
     $("#dialog-form").dialog({
-        autoOpen: false,
-        modal: true,
+        autoOpen: false, // 預設不自動開啟
+        modal: true,     // 使用模態對話框
         buttons: {
+            // 確認按鈕的動作
             "確認": async function () {
-                let isValid = true;
-                let leaveType = $("#leave-type").val();
-                let start_Date = $("#start-date").val();
-                let start_Time = $("#start-time").val();
-                let end_Date = $("#end-date").val();
-                let end_Time = $("#end-time").val();
-                let userId = getCookie("person_id");
-                let userName = getCookie("person_name");
+                let isValid = true; // 用於檢查表單是否有效
+                let leaveType = $("#leave-type").val(); // 取得請假類型
+                let start_Date = $("#start-date").val(); // 取得開始日期
+                let start_Time = $("#start-time").val(); // 取得開始時間
+                let end_Date = $("#end-date").val();     // 取得結束日期
+                let end_Time = $("#end-time").val();     // 取得結束時間
+                let userId = getCookie("person_id");     // 取得使用者ID（從Cookie中）
+                let userName = getCookie("person_name"); // 取得使用者名稱（從Cookie中）
+                const localISOString = toLocalISOString(new Date()); // 取得當前時間的 ISO 字串格式
 
-                const timeDifference = new Date(end_Date + 'T' + end_Time + ':00') - new Date(start_Date + 'T' + start_Time + ':00');
-                let hoursDifference = timeDifference / (1000 * 60 * 60);
+                // 建立開始和結束的日期時間物件
+                let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
+                let endDateTime = new Date(`${end_Date}T${end_Time}:00`);
+                const timeDifference = endDateTime - startDateTime; // 計算時間差（毫秒）
+
+                // 計算小時差
+                let hoursDifference = timeDifference / (1000 * 60 * 60); // 將毫秒轉為小時
                 if (hoursDifference > 8) {
-                    hoursDifference = 8;
+                    hoursDifference = 8; // 若超過8小時，限制為8小時
                 }
 
-                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-                const timeRegex = /^\d{2}:\d{2}$/;
+                // 日期和時間的正則表達式檢查
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // 檢查 YYYY-MM-DD 格式
+                const timeRegex = /^\d{2}:\d{2}$/;      // 檢查 HH:mm 格式
 
+                // 表單驗證部分
                 if (!leaveType) {
                     alert("請選擇請假類型");
                     isValid = false;
                 }
-
                 if (!dateRegex.test(start_Date)) {
                     alert("開始日期格式不正確，請使用 YYYY-MM-DD 格式");
                     isValid = false;
                 }
-
                 if (!timeRegex.test(start_Time)) {
                     alert("開始時間格式不正確，請使用 HH:mm 格式");
                     isValid = false;
                 }
-
                 if (!dateRegex.test(end_Date)) {
                     alert("結束日期格式不正確，請使用 YYYY-MM-DD 格式");
                     isValid = false;
                 }
-
                 if (!timeRegex.test(end_Time)) {
                     alert("結束時間格式不正確，請使用 HH:mm 格式");
                     isValid = false;
                 }
 
+                // 若表單驗證通過，發送請假數據到後端
                 if (isValid) {
                     const postData = {
-                        userId: userId,
-                        userName: userName,
-                        leaveType: leaveType,
-                        startTime: start_Date + 'T' + start_Time+':00.000Z',
-                        endTime: end_Date + 'T' + end_Time + ':00.000Z',
-                        leaveHours: hoursDifference
+                        userId: userId, // 使用者ID
+                        userName: userName, // 使用者名稱
+                        leaveType: leaveType, // 請假類型
+                        startTime: `${start_Date}T${start_Time}:00.000Z`, // 開始時間
+                        endTime: `${end_Date}T${end_Time}:00.000Z`, // 結束時間
+                        count_hours: hoursDifference, // 請假時數
+                        submitted_at: localISOString // 提交時間
                     };
-                    console.log(postData);
+
                     try {
+                        // 發送POST請求，提交數據到伺服器
                         let response = await $.ajax({
                             type: "POST",
                             url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
-                            data: JSON.stringify(postData),
+                            data: JSON.stringify(postData), // 將資料轉為JSON格式
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             }
                         });
                         console.log(response);
-                        alert('請假申請成功');
-                        $(this).dialog("close");
+                        alert('請假申請成功'); // 提交成功提示
+                        $(this).dialog("close"); // 關閉對話框
                     } catch (error) {
-                        console.error("Error submitting leave request:", error);
-                        alert("請假申請失敗");
+                        console.error("Error submitting leave request:", error); // 輸出錯誤訊息
+                        alert("請假申請失敗"); // 提交失敗提示
                     }
                 }
             },
+            // 取消按鈕的動作
             "取消": function () {
-                $(this).dialog("close");
+                $(this).dialog("close"); // 關閉對話框
             }
         }
     });
+
 
     // 打開請假對話框
     $("#bt_dayoff").click(function () {

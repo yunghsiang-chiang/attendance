@@ -95,9 +95,9 @@
                 html_infor += `<table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
+                            <th>姓名</th>
                             <th>出勤狀態</th>
                             <th>打卡時間</th>
-                            <th>下班時間</th>
                         </tr>
                     </thead>
                     <tbody>`;

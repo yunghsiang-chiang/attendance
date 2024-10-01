@@ -201,16 +201,16 @@
         if (getCookie("person_ipaddress") !== "") {
             if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
                 $('#inside').show();
-                $('#outside').hide();
+                /*$('#outside').hide();*/
                 $('#alert').hide();
             } else {
                 $('#inside').hide();
-                $('#outside').show();
+                /*$('#outside').show();*/
                 $('#alert').hide();
             }
         } else {
             $('#inside').hide();
-            $('#outside').hide();
+            /*$('#outside').hide();*/
             $('#alert').show();
         }
     }

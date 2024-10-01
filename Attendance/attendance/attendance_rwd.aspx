@@ -53,7 +53,7 @@
                         <input type="button" id="bt_dayoff" class="btn btn-warning" value="請假" />
                     </div>
                 </div>
-                <div class="container" id="outside">
+<%--                <div class="container" id="outside">
                     <div class="container" id="attended_outside_meetings">
                         <div>
                             <input type="checkbox" id="cb_morning_up_out_hochi" name="cb_morning_up_out_hochi" />
@@ -86,7 +86,7 @@
                     <div class="row align-items-start">
                         <input type="button" id="bt_specaial_leave" class="btn btn-success" value="特休" />
                     </div>
-                </div>
+                </div>--%>
                 <div class="container" id="alert">
                     <string>請先登入，謝謝!😄</string>
                 </div>

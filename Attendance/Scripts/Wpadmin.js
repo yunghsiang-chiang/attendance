@@ -43,7 +43,7 @@
         if (!personId) {
             // 沒有person_id，則跳轉至登入頁面
             let currentUrl = window.location.href;  // 獲取當前頁面 URL
-            let loginUrl = `http://10.10.3.75:8083/login_attendance?beforeUrls=${encodeURIComponent(currentUrl)}`;
+            let loginUrl = `http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=${encodeURIComponent(currentUrl)}`;
             window.location.href = loginUrl;  // 跳轉到登入頁面
         }
         let userName = await getCookie("person_name");

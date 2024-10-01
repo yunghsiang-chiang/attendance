@@ -31,6 +31,8 @@
                 <li><a href="Reports.aspx">報表</a></li>
                 <li><a href="Management.aspx">管理</a></li>
                 <li><a href="CompanySettings.aspx">公司設定</a></li>
+                <!-- 在此處添加用戶名稱的顯示 -->
+                <li><label id="user_name">用戶名稱</label></li>
             </ul>
         </div>
         <asp:ContentPlaceHolder ID="head" runat="server">

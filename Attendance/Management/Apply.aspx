@@ -8,10 +8,8 @@
     <div class="mainapply">
         <div class="attendance_apply">
             <div class="overtime_apply">
-                <span>申請加班</span>
             </div>
             <div class="after_apply">
-                <sapn>事後申請</sapn>
             </div>
             <div class="before_apply">
                 <span>事先申請</span>

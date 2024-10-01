@@ -37,49 +37,19 @@
         }
         return '';
     }
-    // 功能：拜訪API並檢查Person_id是否有權限
-    async function checkPermission() {
-        const allcookie = document.cookie;
-        console.log('Cookie 數據:', allcookie);
-        const personId = await getCookie('person_id');  // 從 cookie 取得 Person_id
-        console.log('取得的 person_id:', personId);  // 調試輸出
-
-        if (!personId || personId.trim() === '') {
-            console.log('無法取得Person_id，請重新登入');
-            //alert('無法取得Person_id，請重新登入');
-            //window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
-            //return;
+    // 功能：檢查是否有person cookie和person_id
+    async function checkPersonId() {
+        let personId = await getCookie("person_id");
+        if (!personId) {
+            // 沒有person_id，則跳轉至登入頁面
+            let currentUrl = window.location.href;  // 獲取當前頁面 URL
+            let loginUrl = `http://10.10.3.75:8083/login_attendance?beforeUrls=${encodeURIComponent(currentUrl)}`;
+            window.location.href = loginUrl;  // 跳轉到登入頁面
         }
-
-        try {
-            // 拜訪API取得權限資料
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_permissions_infor', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('API回應錯誤');
-            }
-
-            const data = await response.json();
-
-            // 檢查Person_id是否存在於permissions欄位中
-            const hasPermission = data.some(item => item.permissions === personId);
-
-            if (!hasPermission) {
-                console.log('您沒有權限進入此頁面');
-                //alert('您沒有權限進入此頁面');
-                //window.location.href = 'http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=' + encodeURIComponent(window.location.href);
-            }
-        } catch (error) {
-            console.error('發生錯誤:', error);
-            alert('系統錯誤，請稍後再試');
-        }
+        let userName = await getCookie("person_name");
+        if (userName)  $('#user_name').text(decodeURIComponent(userName));  // 使用 jQuery 更新顯示使用者名稱
     }
 
-    // 網頁加載時執行權限檢查
-    await checkPermission();
+    // 檢查 person_id 是否存在
+    await checkPersonId();
 });

@@ -47,6 +47,8 @@ namespace Attendance
                 cookie["person_ipaddress"] = Server.UrlEncode(temp_ip_str);
                 //設定過期日
                 cookie.Expires = DateTime.Now.AddDays(365);
+                // 設定 Cookie 的路徑，使其在整個網站可用
+                cookie.Path = "/"; // 這行確保 Cookie 在整個網站可用
                 //寫到用戶端
                 Response.Cookies.Add(cookie);
 

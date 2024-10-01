@@ -41,6 +41,23 @@
         margin-bottom: 0; /* 移除最後一個元素的底部間距 */
     }
 
+/* 表格樣式 */
+table {
+    width: 100%; /* 表格寬度 100% */
+    border-collapse: collapse; /* 去除表格單元格間距 */
+    margin-top: 20px; /* 表格上方間距 */
+}
+
+th, td {
+    padding: 10px; /* 單元格內部間距 */
+    text-align: left; /* 文字左對齊 */
+    border-bottom: 1px solid #ddd; /* 單元格底部邊框 */
+}
+
+th {
+    background-color: #f2f2f2; /* 標題行背景色 */
+}
+
 /* 手機裝置的響應式設計 */
 @media (max-width: 768px) {
     .mainapply {
@@ -64,4 +81,12 @@
         .overtime_apply:last-child, .after_apply:last-child, .before_apply:last-child {
             margin-bottom: 0; /* 移除最後一個元素的底部間距 */
         }
+
+    table {
+        font-size: 14px; /* 調整表格字體大小 */
+    }
+
+    th, td {
+        padding: 8px; /* 調整單元格內部間距 */
+    }
 }

@@ -43,7 +43,7 @@
         if (!personId) {
             // 沒有person_id，則跳轉至登入頁面
             let currentUrl = window.location.href;  // 獲取當前頁面 URL
-            let loginUrl = `http://10.10.3.75:8083/login_attendance?beforeUrls=${encodeURIComponent(currentUrl)}`;
+            let loginUrl = `http://internal.hochi.org.tw:8083/login_attendance?beforeUrls=${encodeURIComponent(currentUrl)}`;
             window.location.href = loginUrl;  // 跳轉到登入頁面
         }
         let userName = await getCookie("person_name");
@@ -54,14 +54,14 @@
     // 功能：檢查使用者的權限
     async function checkUserPermissions(personId) {
         try {
-            const response = await fetch('http://10.10.3.75:8082/api/attendance/get_permissions_infor');
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_permissions_infor');
             const permissionsData = await response.json();
 
             // 檢查 personId 是否在 permissions 中
             const hasPermission = permissionsData.some(permission => permission.permissions === personId);
             if (!hasPermission) {
                 // 若沒有權限，則跳轉至指定頁面
-                window.location.href = 'http://10.10.3.75:8083/';
+                window.location.href = 'http://internal.hochi.org.tw:8083/';
             }
         } catch (error) {
             console.error('獲取權限資料時發生錯誤:', error);

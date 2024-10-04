@@ -9,8 +9,12 @@
     <script src="../Scripts/Management/Default.js"></script>
     <div class="homepage">
         <div class="status-overview">
-            <p>員工狀態總覽：<label class="status-item" id="staff_qty"></label></p>
-            <p>同修狀態總攬：<label class="status-item" id="disciples_qty"></label></p>
+            <div class="status-container">
+                <div class="form-group">員工：<label class="status-item" id="staff_qty"></label></div>
+                <div class="form-group">同修：<label class="status-item" id="disciples_qty"></label></div>
+                <div class="form-group">機要：<label class="status-item" id="secretary_qty"></label></div>
+                <div class="form-group">IT：<label class="status-item" id="IT_qty"></label></div>
+            </div>
             <!-- 員工狀態總覽以 label 呈現 -->
             <div class="status-container">
                 <div class="form-group">

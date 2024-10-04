@@ -14,7 +14,7 @@
     <div class="container" id="today_status">
         <div class="container col-sm-10" id="personal_pucture">
             <div class="inner-container image-container">
-                <img src="http://10.10.3.75:8083/images/男性.png" alt="Profile Picture">
+                <img src="http://internal.hochi.org.tw:8083/images/男性.png" alt="Profile Picture">
             </div>
         </div>
         <div class="container col-sm-10" id="personal_infor">

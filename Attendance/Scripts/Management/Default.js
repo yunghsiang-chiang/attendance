@@ -24,11 +24,12 @@ $(document).ready(async function () {
     let leave_details = [];
     let no_attendance_details = []; // 未出勤人員清單
 
-    // 同時獲取人員屬性及出勤數據
+    // 獲取 API 資料的 promise 組合
     await Promise.all([
         get_person_types(),
         get_today_attendance_records(),
-        get_today_leave_records()
+        get_today_leave_records(),
+        updatePendingRequests()
     ]);
 
     // 計算並顯示未出勤人數
@@ -149,8 +150,8 @@ $(document).ready(async function () {
                         <tr>
                             <td>${detail.userName}<br/> (${detail.userId})</td>
                             <td>${detail.leaveType}</td>
-                            <td>${new Date(detail.startTime).toLocaleString('sv', 1).replace(' ', '<br/>') }</td>
-                            <td>${new Date(detail.endTime).toLocaleString('sv',1).replace(' ','<br/>') }</td>
+                            <td>${new Date(detail.startTime).toLocaleString('sv', 1).replace(' ', '<br/>')}</td>
+                            <td>${new Date(detail.endTime).toLocaleString('sv', 1).replace(' ', '<br/>')}</td>
                             <td>${detail.count_hours} </td>
                         </tr>
                     `).join('')}
@@ -160,6 +161,25 @@ $(document).ready(async function () {
         $('.leave-records').html(leaveTable); // 將表格插入到 .leave-records 區域
     }
 
+    // 更新請求審核和休假審批的待簽核數量
+    async function updatePendingRequests() {
+        const overtimeApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record';
+        const leaveApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record';
+
+        // 取得加班待審核數據
+        const overtimePendingCount = await $.getJSON(overtimeApiUrl).then(data => {
+            return data.filter(item => item.approved_by === null).length;
+        });
+
+        // 取得請假待審核數據
+        const leavePendingCount = await $.getJSON(leaveApiUrl).then(data => {
+            return data.filter(item => item.approved_by === null).length;
+        });
+
+        // 更新HTML顯示
+        $('#request-review').text(`請求1: 請求審核 (尚有${leavePendingCount}筆待簽核)`);
+        $('#leave-approval').text(`請求3: 休假審批 (尚有${overtimePendingCount}筆待簽核)`);
+    }
 
     // 顯示各類別的詳細人員資訊
     function showPersonDetails(details) {

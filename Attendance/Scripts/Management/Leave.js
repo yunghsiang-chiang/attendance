@@ -64,7 +64,7 @@
 
                 // 遍歷每條請假記錄，根據到職週年日週期進行數據扣除
                 leaveData.forEach(leave => {
-                    if (leave.userId === person.userId) {
+                    if (leave.userId === person.person_id) { // 匹配person_id
                         const leaveStartTime = new Date(leave.startTime);
 
                         // 確保請假記錄在過去一年內
@@ -133,8 +133,8 @@
             row.innerHTML = `
                 <td>${person.person_name}</td>
                 <td>${new Date(person.start_work).toLocaleDateString()}</td>
-                <td class="vacation-cell special-vacation" data-id="${person.userId}">${person.special_vacation_hours}</td>
-                <td class="vacation-cell personal-leave" data-id="${person.userId}">${person.personal_leave_hours}</td>
+                <td class="vacation-cell special-vacation" data-id="${person.person_id}">${person.special_vacation_hours}</td>
+                <td class="vacation-cell personal-leave" data-id="${person.person_id}">${person.personal_leave_hours}</td>
                 <td>${person.compensatory_leave_hours}</td>
             `;
             table.appendChild(row);
@@ -152,7 +152,7 @@
         document.querySelectorAll('.special-vacation').forEach(cell => {
             cell.addEventListener('mouseover', function () {
                 const userId = this.getAttribute('data-id');
-                const person = data.find(p => p.userId === userId);
+                const person = data.find(p => p.person_id === userId);
                 if (person) {
                     showLeaveTooltip(this, person.leaveRecords.specialVacation, '特休');
                 }
@@ -167,7 +167,7 @@
         document.querySelectorAll('.personal-leave').forEach(cell => {
             cell.addEventListener('mouseover', function () {
                 const userId = this.getAttribute('data-id');
-                const person = data.find(p => p.userId === userId);
+                const person = data.find(p => p.person_id === userId);
                 if (person) {
                     showLeaveTooltip(this, person.leaveRecords.personalLeave, '事假');
                 }

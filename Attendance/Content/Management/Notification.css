@@ -1,55 +1,67 @@
-﻿/* PC 裝置樣式 */
-.notification_area {
-    display: flex;
-    flex-direction: column; /* 垂直排列 */
-    height: 100vh; /* 高度佔據整個視窗 */
+﻿/* 公告編輯區的樣式 */
+.announcement_form {
     padding: 20px;
-    box-sizing: border-box;
-}
-
-.create_message_box {
-    background-color: #f5f7fa; /* 淡藍色背景 */
-    height: 30%; /* 占整個高度的30% */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
     margin-bottom: 20px;
-    padding: 15px;
-}
-
-.notification_list {
-    background-color: #f0f0f0; /* 淡灰色背景 */
-    height: 65%; /* 占整個高度的65% */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 20px;
     box-sizing: border-box;
-    border-radius: 8px;
-    overflow-y: auto; /* 若內容超過範圍，允許滾動 */
 }
 
-    .notification_list h3 {
-        margin: 0 0 10px 0;
+    .announcement_form h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
     }
 
-    .notification_list span {
-        font-size: 1em;
+    .announcement_form label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
     }
 
-/* 手機裝置的響應式設計 */
-@media (max-width: 768px) {
-    .notification_area {
-        height: auto; /* 取消固定高度，自適應內容 */
+    .announcement_form input[type="text"],
+    .announcement_form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
     }
 
-    .create_message_box {
-        height: auto; /* 根據內容自適應高度 */
-        margin-bottom: 15px; /* 增加底部間距 */
+    .announcement_form button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-sizing: border-box;
     }
 
-    .notification_list {
-        height: auto; /* 根據內容自適應高度 */
-    }
+        .announcement_form button:hover {
+            background-color: #0056b3;
+        }
+
+/* 公告清單的樣式 */
+.notification_list h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
 }
+
+.notification_list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+    .notification_list ul li {
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        margin-bottom: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .notification_list ul li:hover {
+            background-color: #f1f1f1;
+        }

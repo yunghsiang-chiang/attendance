@@ -60,9 +60,9 @@
         <div class="pending-tasks">
             <h3>待處理</h3>
             <ul>
-                <li>請求1: 請求審核</li>
+                <li id="request-review">請求1: 請求審核</li>
                 <li>請求2: 文件簽署</li>
-                <li>請求3: 休假審批</li>
+                <li id="leave-approval">請求3: 休假審批</li>
             </ul>
         </div>
 

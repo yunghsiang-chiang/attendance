@@ -23,7 +23,7 @@
 
     // 定義函式以從新的 Web API 獲取休假紀錄，並更新員工的假期數據
     async function updateLeaveHours(data) {
-        const leaveApiUrl = 'http://localhost:7908/api/attendance/get_leave_record_last_year';
+        const leaveApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year';
 
         try {
             const leaveResponse = await fetch(leaveApiUrl);

@@ -8,11 +8,6 @@
     <link href="../Content/Management/Leave.css" rel="stylesheet" />
     
     <div class="main_leave_area">
-        <div class="leave_calendar">
-            <input type="button" id="prevMonthBtn" value="上個月">
-            <span id="currentMonthLabel"></span>
-            <input type="button" id="nextMonthBtn" value="下個月">
-        </div>
         <div class="leave_information">
             <div class="leave">
                 <div class="staff_leave">

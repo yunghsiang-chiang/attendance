@@ -148,7 +148,18 @@
 
         // 繪製圖表
         const ctx = document.getElementById('attendanceChart').getContext('2d');
-        attendanceChart = new Chart(ctx, {
+
+        // 獲取當前日期
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // 格式化為 YYYY-MM-DD
+
+        // 生成應到人數，考量當前日期
+        const attendanceData = workingDays.map(day => {
+            return day <= todayString ? 4 : 0; // 如果日期早於或等於今天，應到人數為 4，否則為 0
+        });
+
+        // 繪製圖表
+        const attendanceChart = new Chart(ctx, {
             type: 'bar', // 直條圖
             data: {
                 labels: workingDays,
@@ -156,7 +167,7 @@
                     {
                         type: 'line',
                         label: '應到人數',
-                        data: workingDays.map(() => 4), // 應到人數固定3
+                        data: attendanceData, // 使用考量日期的應到人數
                         borderColor: 'blue',
                         fill: false,
                         tension: 0.1
@@ -182,7 +193,7 @@
                     {
                         label: '廖哲儒報到',
                         data: employeeAttendance[3],
-                    backgroundColor: 'rgba(184, 134, 11, 0.6)',
+                        backgroundColor: 'rgba(184, 134, 11, 0.6)',
                         stack: 'Stack 0'
                     }
                 ]
@@ -200,6 +211,7 @@
                 }
             }
         });
+
     }
 
 

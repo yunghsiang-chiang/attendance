@@ -1,27 +1,103 @@
 ﻿$(document).ready(async function () {
-
-
-    // 定義函式以從 Web API 獲取資料
+    // 定義函式以從 Web API 獲取出勤資料
     async function fetchAttendanceData() {
         const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
 
         try {
-            // 從 API 獲取資料
             const response = await fetch(apiUrl);
-
-            // 檢查回應是否正常
             if (!response.ok) {
                 throw new Error(`HTTP 錯誤！狀態: ${response.status}`);
             }
-
-            // 將回應資料轉換為 JSON 格式
             const data = await response.json();
 
-            // 呼叫函式以將獲取的資料更新到 HTML
-            populateAttendanceTable(data);
+            // 在載入數據後，更新休假時數
+            const updatedData = await updateLeaveHours(data);
 
+            // 呼叫函式以將更新後的資料更新到 HTML
+            populateAttendanceTable(updatedData);
+            return updatedData; // 返回更新後的數據
         } catch (error) {
             console.error('獲取出勤資料時出錯:', error);
+        }
+    }
+
+    // 定義函式以從新的 Web API 獲取休假紀錄，並更新員工的假期數據
+    async function updateLeaveHours(data) {
+        const leaveApiUrl = 'http://localhost:7908/api/attendance/get_leave_record_last_year';
+
+        try {
+            const leaveResponse = await fetch(leaveApiUrl);
+            if (!leaveResponse.ok) {
+                throw new Error(`HTTP 錯誤！狀態: ${leaveResponse.status}`);
+            }
+            const leaveData = await leaveResponse.json();
+
+            // 當前月份，用於檢查補休只扣除當月的紀錄
+            const currentMonth = new Date().getMonth() + 1;
+            const currentDate = new Date();
+
+            // 針對每位員工進行數據更新
+            data.forEach(person => {
+                let totalSpecialVacation = person.special_vacation_hours;
+                let totalPersonalLeave = person.personal_leave_hours;
+                let totalCompensatoryLeave = person.compensatory_leave_hours;
+
+                // 計算到職週年日的重置週期
+                const startWorkDate = new Date(person.start_work);
+                const startWorkAnniversary = new Date(startWorkDate);
+                startWorkAnniversary.setFullYear(currentDate.getFullYear());
+
+                // 若當前日期已經過了今年的到職週年日，則將重置時間設定為下一年
+                if (currentDate < startWorkAnniversary) {
+                    startWorkAnniversary.setFullYear(currentDate.getFullYear() - 1);
+                }
+
+                // 計算過去一年的範圍（從到職日週年後計算）
+                const oneYearAgo = new Date(startWorkAnniversary);
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+                // 將該員工的請假紀錄儲存在 person 對象中，用於後續的滑鼠互動顯示
+                person.leaveRecords = {
+                    specialVacation: [],
+                    personalLeave: [],
+                };
+
+                // 遍歷每條請假記錄，根據到職週年日週期進行數據扣除
+                leaveData.forEach(leave => {
+                    if (leave.userId === person.userId) {
+                        const leaveStartTime = new Date(leave.startTime);
+
+                        // 確保請假記錄在過去一年內
+                        if (leaveStartTime >= oneYearAgo && leaveStartTime <= currentDate) {
+                            const leaveStartMonth = leaveStartTime.getMonth() + 1;
+
+                            // 根據請假類型進行相應的扣除
+                            if (leave.leaveType === '特休') {
+                                totalSpecialVacation -= leave.count_hours;
+                                person.leaveRecords.specialVacation.push(leave); // 存儲特休紀錄
+                            }
+                            if (leave.leaveType === '事假') {
+                                totalPersonalLeave -= leave.count_hours;
+                                person.leaveRecords.personalLeave.push(leave); // 存儲事假紀錄
+                            }
+                            // 補休只扣除當月的紀錄
+                            if (leave.leaveType === '補休' && leaveStartMonth === currentMonth) {
+                                totalCompensatoryLeave -= leave.count_hours;
+                            }
+                        }
+                    }
+                });
+
+                // 更新數據
+                person.special_vacation_hours = totalSpecialVacation;
+                person.personal_leave_hours = totalPersonalLeave;
+                person.compensatory_leave_hours = totalCompensatoryLeave;
+            });
+
+            return data; // 返回更新後的數據
+        } catch (error) {
+            console.error('更新休假時數時出錯:', error);
+            return data; // 若發生錯誤，返回原始數據
         }
     }
 
@@ -33,7 +109,6 @@
         const table = document.createElement('table');
         table.setAttribute('border', '1');
 
-        // 添加表格標頭
         const headerRow = document.createElement('tr');
         const headers = [
             { title: '員工姓名', key: 'person_name' },
@@ -46,80 +121,93 @@
         headers.forEach(header => {
             const th = document.createElement('th');
             th.textContent = header.title;
-            th.style.cursor = 'pointer'; // 顯示指標手勢
-            th.onclick = () => sortTable(data, header.key); // 點擊排序
+            th.style.cursor = 'pointer';
+            th.onclick = () => sortTable(data, header.key);
             headerRow.appendChild(th);
         });
 
         table.appendChild(headerRow);
 
-        // 遍歷資料並填充表格行
         data.forEach(person => {
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td>${person.person_name}</td>
-            <td>${new Date(person.start_work).toLocaleDateString()}</td>
-            <td>${person.special_vacation_hours}</td>
-            <td>${person.personal_leave_hours}</td>
-            <td>${person.compensatory_leave_hours}</td>
-        `;
+                <td>${person.person_name}</td>
+                <td>${new Date(person.start_work).toLocaleDateString()}</td>
+                <td class="vacation-cell special-vacation" data-id="${person.userId}">${person.special_vacation_hours}</td>
+                <td class="vacation-cell personal-leave" data-id="${person.userId}">${person.personal_leave_hours}</td>
+                <td>${person.compensatory_leave_hours}</td>
+            `;
             table.appendChild(row);
         });
 
-        // 將表格添加到 staff_leave div
         staffLeaveElement.appendChild(table);
+
+        // 為特休和事假單元格添加滑鼠懸停事件
+        addHoverEffect(data);
     }
-    // 休假圖表
-    async function leavechart() {
-        try {
-            // 從 API 取得休假資料
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
-            const data = await response.json();
 
-            // 從資料中提取圖表需要的資訊
-            const labels = data.map(person => person.person_name); // 員工姓名
-            const specialVacationHours = data.map(person => person.special_vacation_hours); // 特休時數
-            const personalLeaveHours = data.map(person => person.personal_leave_hours); // 事假時數
-            const compensatoryLeaveHours = data.map(person => person.compensatory_leave_hours); // 補休時數
-
-            // 建立圖表
-            const ctx = document.getElementById('attendanceChart').getContext('2d');
-            const attendanceChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels, // 動態設置員工姓名
-                    datasets: [
-                        {
-                            label: '特休時數',
-                            data: specialVacationHours, // 從 API 取得的特休時數
-                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        },
-                        {
-                            label: '事假時數',
-                            data: personalLeaveHours, // 從 API 取得的事假時數
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        },
-                        {
-                            label: '補休時數',
-                            data: compensatoryLeaveHours, // 從 API 取得的補休時數
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            stacked: true, // X 軸堆疊顯示
-                        },
-                        y: {
-                            stacked: true, // Y 軸堆疊顯示
-                        }
-                    }
+    // 定義函式以添加滑鼠懸停效果
+    function addHoverEffect(data) {
+        // 處理特休時數的懸停事件
+        document.querySelectorAll('.special-vacation').forEach(cell => {
+            cell.addEventListener('mouseover', function () {
+                const userId = this.getAttribute('data-id');
+                const person = data.find(p => p.userId === userId);
+                if (person) {
+                    showLeaveTooltip(this, person.leaveRecords.specialVacation, '特休');
                 }
             });
-        } catch (error) {
-            console.error('取得或處理資料時發生錯誤:', error); // 錯誤處理
+
+            cell.addEventListener('mouseout', function () {
+                hideLeaveTooltip();
+            });
+        });
+
+        // 處理事假時數的懸停事件
+        document.querySelectorAll('.personal-leave').forEach(cell => {
+            cell.addEventListener('mouseover', function () {
+                const userId = this.getAttribute('data-id');
+                const person = data.find(p => p.userId === userId);
+                if (person) {
+                    showLeaveTooltip(this, person.leaveRecords.personalLeave, '事假');
+                }
+            });
+
+            cell.addEventListener('mouseout', function () {
+                hideLeaveTooltip();
+            });
+        });
+    }
+
+    // 顯示請假紀錄的工具提示
+    function showLeaveTooltip(element, records, leaveType) {
+        let tooltip = document.createElement('div');
+        tooltip.classList.add('leave-tooltip');
+        tooltip.style.position = 'absolute';
+        tooltip.style.backgroundColor = '#fff';
+        tooltip.style.border = '1px solid #ccc';
+        tooltip.style.padding = '10px';
+        tooltip.style.zIndex = '1000';
+
+        let content = `<strong>${leaveType}紀錄:</strong><ul>`;
+        records.forEach(record => {
+            content += `<li>${new Date(record.startTime).toLocaleDateString()} - ${record.count_hours} 小時</li>`;
+        });
+        content += '</ul>';
+
+        tooltip.innerHTML = content;
+        document.body.appendChild(tooltip);
+
+        const rect = element.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + window.scrollX}px`;
+        tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+    }
+
+    // 隱藏工具提示
+    function hideLeaveTooltip() {
+        const tooltip = document.querySelector('.leave-tooltip');
+        if (tooltip) {
+            tooltip.remove();
         }
     }
 
@@ -128,7 +216,6 @@
         const table = document.querySelector('table');
         const isAscending = table.getAttribute('data-sort-order') === 'asc';
 
-        // 根據指定的 key 排序資料
         const sortedData = data.sort((a, b) => {
             if (key === 'start_work') {
                 return isAscending ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
@@ -137,16 +224,58 @@
             }
         });
 
-        // 清空表格並重新填充資料
         table.innerHTML = '';
         populateAttendanceTable(sortedData);
 
-        // 切換排序順序
         table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
     }
 
+    // 呼叫 fetchAttendanceData 函式以載入和更新資料
+    const updatedData = await fetchAttendanceData();
 
-    // 呼叫 fetchAttendanceData 函式以載入資料
-    await fetchAttendanceData();
+    // 休假圖表
+    async function leavechart() {
+        const labels = updatedData.map(person => person.person_name);
+        const specialVacationHours = updatedData.map(person => person.special_vacation_hours);
+        const personalLeaveHours = updatedData.map(person => person.personal_leave_hours);
+        const compensatoryLeaveHours = updatedData.map(person => person.compensatory_leave_hours);
+
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '特休時數',
+                        data: specialVacationHours,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    },
+                    {
+                        label: '事假時數',
+                        data: personalLeaveHours,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    },
+                    {
+                        label: '補休時數',
+                        data: compensatoryLeaveHours,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                    }
+                }
+            }
+        });
+    }
+
     await leavechart();
-})
+});

@@ -155,7 +155,8 @@
 
         // 生成應到人數，考量當前日期
         const attendanceData = workingDays.map(day => {
-            return day <= todayString ? 4 : 0; // 如果日期早於或等於今天，應到人數為 4，否則為 0
+            const dayDate = new Date(day); // 將 workingDays 的每個日期字串轉為 Date 物件
+            return dayDate <= today ? 4 : 0; // 如果日期早於或等於今天，應到人數為 4，否則為 0
         });
 
         // 繪製圖表

@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\attendance.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Attendance.js",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Attendance.js",
               "RelativeToolTip": "Attendance\\Scripts\\Management\\Attendance.js",
-              "ViewState": "AgIAANQAAAAAAAAAAAAcwOgAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAAAKIAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-10-07T07:09:53.387Z",
               "EditorCaption": ""
@@ -47,8 +47,7 @@
               "RelativeToolTip": "Attendance\\Scripts\\Management\\Leave.js",
               "ViewState": "AgIAAIMAAAAAAAAAAAAQwBMAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-07T06:17:10.714Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-07T06:17:10.714Z"
             },
             {
               "$type": "Document",

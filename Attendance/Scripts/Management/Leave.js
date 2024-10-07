@@ -27,25 +27,30 @@
 
     // 定義函式以填充 "員工休假狀態表" 區域
     function populateAttendanceTable(data) {
-        // 取得將插入資料的 staff_leave div
         const staffLeaveElement = document.querySelector('.staff_leave');
-
-        // 清除當前內容
         staffLeaveElement.innerHTML = '<span>員工休假狀態表</span>';
 
-        // 建立表格元素以顯示資料
         const table = document.createElement('table');
         table.setAttribute('border', '1');
 
         // 添加表格標頭
         const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `
-        <th>員工姓名</th>
-        <th>起始日期</th>
-        <th>特休時數</th>
-        <th>事假時數</th>
-        <th>補休時數</th>
-    `;
+        const headers = [
+            { title: '員工姓名', key: 'person_name' },
+            { title: '起始日期', key: 'start_work' },
+            { title: '特休時數', key: 'special_vacation_hours' },
+            { title: '事假時數', key: 'personal_leave_hours' },
+            { title: '補休時數', key: 'compensatory_leave_hours' }
+        ];
+
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header.title;
+            th.style.cursor = 'pointer'; // 顯示指標手勢
+            th.onclick = () => sortTable(data, header.key); // 點擊排序
+            headerRow.appendChild(th);
+        });
+
         table.appendChild(headerRow);
 
         // 遍歷資料並填充表格行
@@ -116,6 +121,28 @@
         } catch (error) {
             console.error('取得或處理資料時發生錯誤:', error); // 錯誤處理
         }
+    }
+
+    // 定義排序函式
+    function sortTable(data, key) {
+        const table = document.querySelector('table');
+        const isAscending = table.getAttribute('data-sort-order') === 'asc';
+
+        // 根據指定的 key 排序資料
+        const sortedData = data.sort((a, b) => {
+            if (key === 'start_work') {
+                return isAscending ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
+            } else {
+                return isAscending ? a[key] - b[key] : b[key] - a[key];
+            }
+        });
+
+        // 清空表格並重新填充資料
+        table.innerHTML = '';
+        populateAttendanceTable(sortedData);
+
+        // 切換排序順序
+        table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
     }
 
 

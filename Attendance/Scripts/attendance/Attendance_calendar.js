@@ -1,10 +1,32 @@
 ﻿$(document).ready(function () {
     let isDragging = false;
-    let isSelecting = true; // 是否選取，與取消選取相反
+    let isSelecting = true;
     let selectedDays = new Set();
     let currentMonth = new Date().getMonth(); // 當前月份 (0~11)
     let currentYear = new Date().getFullYear(); // 當前年份
-    let startDay = null; // 用來記錄拖曳選擇的起始日
+
+    // 更新累積數據函數
+    function updateMonthlySummary(user_id, year, month) {
+        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendanceSummary?user_id=${user_id}&year=${year}&month=${month}`;
+
+        // 請求取得當月累積數據
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function (response) {
+                // 更新累積數據顯示
+                $('#morningLightUpTotal').text(response.TotalMorningLightUp || 0);
+                $('#morningLightDownTotal').text(response.TotalMorningLightDown || 0);
+                $('#morningMeetingTotal').text(response.TotalMorningMeeting || 0);
+            },
+            error: function (error) {
+                console.error('Error fetching monthly summary:', error);
+                $('#morningLightUpTotal').text(0);
+                $('#morningLightDownTotal').text(0);
+                $('#morningMeetingTotal').text(0);
+            }
+        });
+    }
 
     // 產生日曆的函數
     function generateCalendar(month, year) {
@@ -76,6 +98,9 @@
                     console.error('Error fetching attendance data:', error);
                 }
             });
+
+            // 請求更新當月的累積數據
+            updateMonthlySummary(userid, year, month + 1); // month 以 0 基準，所以加 1
         }
     }
 
@@ -161,7 +186,7 @@
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split('&'); //小心，這裡可能不同
+    let ca = decodedCookie.split(/&|;/);
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') {
@@ -172,7 +197,7 @@ function getCookie(cname) {
         }
     }
     return "";
-};
+}
 
 // 創建或修改 cookie
 function setCookie(name, value, days) {

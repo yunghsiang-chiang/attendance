@@ -131,8 +131,8 @@
                 <td>${employeeNames[index]}</td>
                 <td>${workingDays.length}</td>
                 <td>${actualAttendance}</td>
-                <td>${overtimeCount}</td>
-                <td>${leaveCount}</td>
+                <td>${overtimeCount.toFixed(2) }</td>
+                <td>${leaveCount.toFixed(2) }</td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>

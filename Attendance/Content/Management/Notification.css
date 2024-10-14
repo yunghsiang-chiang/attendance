@@ -1,48 +1,42 @@
 ﻿/* 公告編輯區的樣式 */
-.announcement_form {
-    padding: 20px;
+.create_message_box {
     background-color: #f9f9f9;
+    padding: 20px;
     border: 1px solid #ccc;
-    margin-bottom: 20px;
-    box-sizing: border-box;
+    border-radius: 8px;
 }
 
-    .announcement_form h3 {
+    .create_message_box h3 {
         font-size: 1.5rem;
         margin-bottom: 15px;
     }
 
-    .announcement_form label {
-        display: block;
-        margin: 10px 0 5px;
-        font-weight: bold;
+#create_message_box label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#create_message_box input[type="text"],
+#create_message_box textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+}
+
+#create_message_box button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+    #create_message_box button:hover {
+        background-color: #0056b3;
     }
 
-    .announcement_form input[type="text"],
-    .announcement_form textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .announcement_form button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        box-sizing: border-box;
-    }
-
-        .announcement_form button:hover {
-            background-color: #0056b3;
-        }
-
-/* 公告清單的樣式 */
+/* 公告清單區 */
 .notification_list h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
@@ -58,10 +52,13 @@
         background-color: #fff;
         border: 1px solid #ccc;
         margin-bottom: 5px;
-        cursor: pointer;
         transition: background-color 0.3s ease;
     }
 
         .notification_list ul li:hover {
             background-color: #f1f1f1;
         }
+
+#pagination {
+    text-align: center;
+}

@@ -80,65 +80,66 @@
         });
     }
 
-    // 繪製圖表並填充表格
+    // 獲取員工數據並動態生成員工出勤數據
     async function showchart() {
-        const year = currentDate.getFullYear(); // 取得年份
-        const month = currentDate.getMonth() + 1; // 取得月份 (加1使其對應實際月份)
-        const workingDays = []; // 定義一個存放工作日的陣列
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+        const workingDays = [];
         const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
-        const daysData = await $.getJSON(api_url); // 請求出勤日數據
+        const daysData = await $.getJSON(api_url);
+
         if (daysData.length > 0) {
-            let attendance_days = daysData[0].attendance_days.split(','); // 取得出勤日
-            workingDays.push(...attendance_days); // 存入工作日陣列
+            let attendance_days = daysData[0].attendance_days.split(',');
+            workingDays.push(...attendance_days);
         }
 
-        // 獲取員工出勤數據
-        const employeeA = await fetchAttendanceData('1206307', year, month); // 員工A數據
-        const employeeB = await fetchAttendanceData('chungchen.yang', year, month); // 員工B數據
-        const employeeC = await fetchAttendanceData('yuwei.chang', year, month); // 員工C數據
-        const employeeD = await fetchAttendanceData('xiaosam001', year, month); // 員工D數據
+        // 獲取所有員工的ID和姓名
+        const personData = await $.getJSON('http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType');
 
-        // 獲取請假和加班數據
-        const leaveData = await fetchLeaveData(year, month); // 請假數據
-        const overtimeData = await fetchOvertimeData(year, month); // 加班數據
+        // 過濾掉 person_type 為 'group' 的資料
+        const filteredPersonData = personData.filter(person => person.person_type !== 'group');
 
-        // 計算各員工的出勤數據
-        const employeeAttendance = [employeeA, employeeB, employeeC, employeeD].map(employeeDates => {
-            return workingDays.map(day => employeeDates.includes(day) ? 1 : 0); // 逐一對比工作日與實際出勤日
-        });
+        const employeeNames = filteredPersonData.map(person => person.person_name);
+        const employeeIds = filteredPersonData.map(person => person.person_id);
 
-        // 動態生成表格數據
-        const employeeNames = ["江永祥", "楊崇真", "張育維", "廖哲儒"]; // 員工姓名
-        const employeeIds = ["1206307", "chungchen.yang", "yuwei.chang", "xiaosam001"]; // 員工ID
+        const employeeAttendance = [];
 
-        $("#attendanceTable tbody").empty(); // 清空表格內容
+        // 獲取每位員工的出勤數據
+        for (let i = 0; i < employeeIds.length; i++) {
+            const employeeData = await fetchAttendanceData(employeeIds[i], year, month);
+            employeeAttendance.push(workingDays.map(day => employeeData.includes(day) ? 1 : 0));
+        }
+
+        const leaveData = await fetchLeaveData(year, month);
+        const overtimeData = await fetchOvertimeData(year, month);
+
+        $("#attendanceTable tbody").empty();
 
         employeeAttendance.forEach((attendanceData, index) => {
-            const actualAttendance = attendanceData.reduce((sum, value) => sum + value, 0); // 計算實際出勤天數
-            const userId = employeeIds[index]; // 員工ID
+            const actualAttendance = attendanceData.reduce((sum, value) => sum + value, 0);
+            const userId = employeeIds[index];
 
-            // 計算請假與加班數據
             const leaveCount = leaveData
                 .filter(record => record.userId === userId)
-                .reduce((sum, record) => sum + (record.count_hours / 8), 0); // 請假天數
+                .reduce((sum, record) => sum + (record.count_hours / 8), 0);
             const overtimeCount = overtimeData
                 .filter(record => record.userID === userId)
-                .reduce((sum, record) => sum + (record.count_hours / 8), 0); // 加班天數
+                .reduce((sum, record) => sum + (record.count_hours / 8), 0);
 
             const row = `
-                <tr>
-                    <td>${employeeNames[index]}</td>
-                    <td>${workingDays.length}</td> <!-- 應出勤天數 -->
-                    <td>${actualAttendance}</td> <!-- 實際出勤天數 -->
-                    <td>${overtimeCount}</td> <!-- 加班天數 -->
-                    <td>${leaveCount}</td> <!-- 補修天數 -->
-                    <td>0</td> <!-- 病假天數 -->
-                    <td>0</td> <!-- 事假天數 -->
-                    <td>0</td> <!-- 生理假天數 -->
-                    <td>0</td> <!-- 其他天數 -->
-                </tr>
-            `;
-            $('#attendanceTable tbody').append(row); // 動態插入表格行
+            <tr>
+                <td>${employeeNames[index]}</td>
+                <td>${workingDays.length}</td>
+                <td>${actualAttendance}</td>
+                <td>${overtimeCount}</td>
+                <td>${leaveCount}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        `;
+            $('#attendanceTable tbody').append(row);
         });
 
         // 清空舊的圖表
@@ -156,7 +157,7 @@
         // 生成應到人數，考量當前日期
         const attendanceData = workingDays.map(day => {
             const dayDate = new Date(day); // 將 workingDays 的每個日期字串轉為 Date 物件
-            return dayDate <= today ? 4 : 0; // 如果日期早於或等於今天，應到人數為 4，否則為 0
+            return dayDate <= today ? employeeIds.length : 0; // 如果日期早於或等於今天，應到人數為員工總數，否則為 0
         });
 
         // 繪製圖表
@@ -173,30 +174,12 @@
                         fill: false,
                         tension: 0.1 // 線條張力
                     },
-                    {
-                        label: '江永祥報到',
-                        data: employeeAttendance[0], // 員工A的報到數據
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)', // 顏色
+                    ...filteredPersonData.map((person, index) => ({
+                        label: `${person.person_name}報到`,
+                        data: employeeAttendance[index], // 員工的報到數據
+                        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`, // 隨機顏色
                         stack: 'Stack 0' // 堆疊
-                    },
-                    {
-                        label: '楊崇真報到',
-                        data: employeeAttendance[1], // 員工B的報到數據
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)', // 顏色
-                        stack: 'Stack 0'
-                    },
-                    {
-                        label: '張育維報到',
-                        data: employeeAttendance[2], // 員工C的報到數據
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)', // 顏色
-                        stack: 'Stack 0'
-                    },
-                    {
-                        label: '廖哲儒報到',
-                        data: employeeAttendance[3], // 員工D的報到數據
-                        backgroundColor: 'rgba(184, 134, 11, 0.6)', // 顏色
-                        stack: 'Stack 0'
-                    }
+                    }))
                 ]
             },
             options: {
@@ -212,7 +195,6 @@
                 }
             }
         });
-
     }
 
     // 獲取並展示請假記錄

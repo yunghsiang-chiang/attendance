@@ -92,8 +92,8 @@ async function searchAttendanceRecord(userid, startdate, enddate) {
             attendanceData.forEach(record => {
                 attendanceRows += `<tr><td>${record.user_name}</td><td>${record.attendance_status}</td><td>${record.create_time.replace('T', ' ')}</td></tr>`;
 
-                // 如果狀態是 "到班"，將日期加入到 Set 中
-                if (record.attendance_status === '到班') {
+                // 如果狀態是 "到班"、"外出公務"，將日期加入到 Set 中
+                if (record.attendance_status === '到班' || record.attendance_status === '外出公務') {
                     attendancedaysarray.add(record.create_time.split('T')[0]);
                 }
             });

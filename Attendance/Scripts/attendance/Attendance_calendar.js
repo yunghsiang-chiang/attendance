@@ -14,10 +14,10 @@
             url: apiUrl,
             type: 'GET',
             success: function (response) {
-                // 更新累積數據顯示
-                $('#morningLightUpTotal').text(response.TotalMorningLightUp || 0);
-                $('#morningLightDownTotal').text(response.TotalMorningLightDown || 0);
-                $('#morningMeetingTotal').text(response.TotalMorningMeeting || 0);
+                // 更新累積數據顯示，使用小寫的屬性名
+                $('#morningLightUpTotal').text(response.totalMorningLightUp || 0);
+                $('#morningLightDownTotal').text(response.totalMorningLightDown || 0);
+                $('#morningMeetingTotal').text(response.totalMorningMeeting || 0);
             },
             error: function (error) {
                 console.error('Error fetching monthly summary:', error);

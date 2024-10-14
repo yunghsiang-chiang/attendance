@@ -64,7 +64,8 @@
             console.log(error);
         }
     }
-    // 使用 async/await 發送 API 請求
+
+    // 使用 async/await 發送加班 API 請求
     async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours) {
         const localDate = new Date();
         const localISOString = toLocalISOString(localDate);
@@ -184,10 +185,9 @@
                 }
             }
         });
-        
     }
 
-    // 初始化函數
+    // 頁面加載時初始化
     async function defaultLoad() {
         let cookieall = document.cookie;
         console.log(cookieall);
@@ -201,16 +201,13 @@
         if (getCookie("person_ipaddress") !== "") {
             if (getCookie("person_ipaddress").startsWith("10.10.") || getCookie("person_ipaddress").startsWith("192.168.")) {
                 $('#inside').show();
-                /*$('#outside').hide();*/
                 $('#alert').hide();
             } else {
                 $('#inside').show();
-                /*$('#outside').show();*/
                 $('#alert').hide();
             }
         } else {
             $('#inside').hide();
-            /*$('#outside').hide();*/
             $('#alert').show();
         }
     }
@@ -228,22 +225,28 @@
     handleButtonClick('#bt_compensatory_leave', '補休');
     handleButtonClick('#bt_specaial_leave', '特休');
 
+    // 根據當前時間限制每個時間選擇器
+    function updateTimeLimit() {
+        let currentHour = new Date().getHours(); // 獲取當前小時
+        let maxTime = (currentHour < 10 ? "0" : "") + currentHour + ":59"; // 設置當天的最大時間
+        $('input[type="time"]').attr("max", maxTime);
+    }
+
     // 初始化請假對話框
     $("#dialog-form").dialog({
         autoOpen: false, // 預設不自動開啟
         modal: true,     // 使用模態對話框
         buttons: {
-            // 確認按鈕的動作
             "確認": async function () {
-                let isValid = true; // 用於檢查表單是否有效
-                let leaveType = $("#leave-type").val(); // 取得請假類型
-                let start_Date = $("#start-date").val(); // 取得開始日期
-                let start_Time = $("#start-time").val(); // 取得開始時間
-                let end_Date = $("#end-date").val();     // 取得結束日期
-                let end_Time = $("#end-time").val();     // 取得結束時間
-                let userId = getCookie("person_id");     // 取得使用者ID（從Cookie中）
-                let userName = getCookie("person_name"); // 取得使用者名稱（從Cookie中）
-                const localISOString = toLocalISOString(new Date()); // 取得當前時間的 ISO 字串格式
+                let isValid = true;
+                let leaveType = $("#leave-type").val();
+                let start_Date = $("#start-date").val();
+                let start_Time = $("#start-time").val();
+                let end_Date = $("#end-date").val();
+                let end_Time = $("#end-time").val();
+                let userId = getCookie("person_id");
+                let userName = getCookie("person_name");
+                const localISOString = toLocalISOString(new Date());
 
                 // 建立開始和結束的日期時間物件
                 let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
@@ -251,16 +254,15 @@
                 const timeDifference = endDateTime - startDateTime; // 計算時間差（毫秒）
 
                 // 計算小時差
-                let hoursDifference = timeDifference / (1000 * 60 * 60); // 將毫秒轉為小時
+                let hoursDifference = timeDifference / (1000 * 60 * 60);
                 if (hoursDifference > 8) {
                     hoursDifference = 8; // 若超過8小時，限制為8小時
                 }
 
                 // 日期和時間的正則表達式檢查
-                const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // 檢查 YYYY-MM-DD 格式
-                const timeRegex = /^\d{2}:\d{2}$/;      // 檢查 HH:mm 格式
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                const timeRegex = /^\d{2}:\d{2}$/;
 
-                // 表單驗證部分
                 if (!leaveType) {
                     alert("請選擇請假類型");
                     isValid = false;
@@ -282,52 +284,46 @@
                     isValid = false;
                 }
 
-                // 若表單驗證通過，發送請假數據到後端
                 if (isValid) {
                     const postData = {
-                        userId: userId, // 使用者ID
-                        userName: userName, // 使用者名稱
-                        leaveType: leaveType, // 請假類型
-                        startTime: `${start_Date}T${start_Time}:00.000Z`, // 開始時間
-                        endTime: `${end_Date}T${end_Time}:00.000Z`, // 結束時間
-                        count_hours: hoursDifference, // 請假時數
-                        submitted_at: localISOString // 提交時間
+                        userId: userId,
+                        userName: userName,
+                        leaveType: leaveType,
+                        startTime: `${start_Date}T${start_Time}:00.000Z`,
+                        endTime: `${end_Date}T${end_Time}:00.000Z`,
+                        count_hours: hoursDifference,
+                        submitted_at: localISOString
                     };
 
                     try {
-                        // 發送POST請求，提交數據到伺服器
                         let response = await $.ajax({
                             type: "POST",
                             url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
-                            data: JSON.stringify(postData), // 將資料轉為JSON格式
+                            data: JSON.stringify(postData),
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             }
                         });
                         console.log(response);
-                        alert('請假申請成功'); // 提交成功提示
-                        $(this).dialog("close"); // 關閉對話框
+                        alert('請假申請成功');
+                        $(this).dialog("close");
                     } catch (error) {
-                        console.error("Error submitting leave request:", error); // 輸出錯誤訊息
-                        alert("請假申請失敗"); // 提交失敗提示
+                        console.error("Error submitting leave request:", error);
+                        alert("請假申請失敗");
                     }
                 }
             },
-            // 取消按鈕的動作
             "取消": function () {
-                $(this).dialog("close"); // 關閉對話框
+                $(this).dialog("close");
             }
         }
     });
-
 
     // 打開請假對話框
     $("#bt_dayoff").click(function () {
         $("#dialog-form").dialog("open");
     });
-
-
 
     // 加班對話框初始化
     $('#dialog').dialog({
@@ -349,7 +345,7 @@
                     if (!startTimeString || !endTimeString) {
                         alert("請選擇加班的起始時間和結束時間!");
                         validEntries = false;
-                        return false; // 跳出 .each
+                        return false;
                     }
 
                     // 解析起始時間和結束時間
@@ -367,7 +363,7 @@
                     if (hours < 0.5) {
                         alert("每筆加班時間必須超過 0.5 小時!");
                         validEntries = false;
-                        return false; // 跳出 .each
+                        return false;
                     }
 
                     totalHours += hours;
@@ -397,8 +393,16 @@
             <label for="overtime-end-${index}">請選擇申報加班的結束時間：</label>
             <input type="time" id="overtime-end-${index}" required>
         </div>
-    `;
-        $('#overtime-times').append(newEntry); // 在指定區域新增新的加班時段
+        `;
+        $('#overtime-times').append(newEntry);
+    });
+
+    // 初始調用限制時間
+    updateTimeLimit();
+
+    // 每次新增加班或請假時段時，為其設置時間限制
+    $(document).on('change', 'input[type="time"]', function () {
+        updateTimeLimit();
     });
 
 });

@@ -8,8 +8,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="../Content/Management/Default.css" rel="stylesheet" />
     <script src="../Scripts/Management/Default.js"></script>
-    
-<%--    <!-- 引入 Bootstrap -->
+
+    <%--    <!-- 引入 Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>--%>
@@ -35,29 +35,29 @@
                     </div>
                 </div>
 
-                <!-- 員工狀態總覽以 label 呈現 -->
-                <div class="status-container">
-                    <div class="form-group">
+                <!-- 員工狀態總覽以 label 呈現，兩行水平排列 -->
+                <div class="row status-container">
+                    <div class="col-sm-6 form-group">
                         <label class="status-item">上班打卡人數</label>
                         <label class="status-count" id="attendance_qty">0</label>
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-sm-6 form-group">
                         <label class="status-item">遲到人數</label>
                         <label class="status-count" id="arrive_late_qty">0</label>
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-sm-6 form-group">
                         <label class="status-item">未打卡人數</label>
                         <label class="status-count" id="no_attendance_qty">0</label>
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-sm-6 form-group">
                         <label class="status-item">早退人數</label>
                         <label class="status-count" id="leave_early_qty">0</label>
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-sm-6 form-group">
                         <label class="status-item">休假人數</label>
                         <label class="status-count" id="leave_qty">0</label>
                     </div>

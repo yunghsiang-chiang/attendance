@@ -1,11 +1,11 @@
 ﻿.homepage {
-    /* 使用 Bootstrap 的 container-fluid 或 container 來代替原有的佈局 */
+    /* 仍使用 Bootstrap 的 container 來保持整體佈局 */
 }
 
 .status-overview, .announcement, .pending-tasks, .reports, .leave-records {
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9; /* 可以依需求設定背景色 */
+    background-color: #f9f9f9;
 }
 
 /* 調整員工狀態總覽的內部佈局 */
@@ -13,8 +13,19 @@
     text-align: center;
 }
 
+/* 員工狀態區域，以兩行為基礎排列 */
+.status-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .status-item {
     font-weight: bold;
+}
+
+.status-count {
+    font-size: 1.5em;
+    color: #555;
 }
 
 /* 表格的自定義樣式 */

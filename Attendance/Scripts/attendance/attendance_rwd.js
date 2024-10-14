@@ -161,7 +161,6 @@
             }
             // 額外考慮，加班，透過下班按鈕觸發
             if (status == '下班') {
-                //先拜訪API，確認當天是否為應出勤日
                 let currentDate = new Date();
                 const year = currentDate.getFullYear(); //年份
                 const month = currentDate.getMonth() + 1; // 月份從0開始，因此需要加1
@@ -170,8 +169,18 @@
                 const daysData = await $.getJSON(api_url);
                 if (daysData.length > 0) {
                     let attendance_days = daysData[0].attendance_days.split(',');
+
+                    // 將 API 返回的日期統一格式化成 YYYY-MM-DD
+                    attendance_days = attendance_days.map(day => {
+                        let parts = day.split('-');
+                        let formattedMonth = parts[1].padStart(2, '0'); // 補0
+                        let formattedDay = parts[2].padStart(2, '0'); // 補0
+                        return `${parts[0]}-${formattedMonth}-${formattedDay}`;
+                    });
+
                     workingDays.push(...attendance_days);
                 }
+
                 // 取得當天日期 (格式: YYYY-MM-DD)
                 const today = new Date();
                 const todayString = today.toISOString().split('T')[0];

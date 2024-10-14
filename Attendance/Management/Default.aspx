@@ -73,7 +73,7 @@
                     <li class="list-group-item">公告3: 員工培訓</li>
                     <li class="list-group-item">公告4: 年終晚會</li>
                 </ul>
-                <button class="btn btn-primary mt-2" id="view-all-announcements">查看全部</button>
+                <button class="btn btn-primary mt-2" id="view-all-announcements" type="button">查看全部</button>
             </div>
         </div>
 

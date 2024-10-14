@@ -128,7 +128,7 @@
 
     // 取得 API 最後打卡狀態
     async function getLastStatus(user_id) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendannce_last_status?userid=${user_id}`;
+        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_last_status?userid=${user_id}`;
         try {
             let detailResponse = await $.ajax({
                 url: apiUrl,

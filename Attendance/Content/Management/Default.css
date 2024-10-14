@@ -1,43 +1,129 @@
-﻿.homepage {
-    /* 仍使用 Bootstrap 的 container 來保持整體佈局 */
+﻿/* 整體頁面的背景與排版設置 */
+body {
+    background-color: #f0f8ff; /* 淺藍色背景，使內容更加突出 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* 主要區域的背景色與邊框 */
 .status-overview, .announcement, .pending-tasks, .reports, .leave-records {
-    border: 1px solid #ccc;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* 柔和的陰影讓區塊更具層次 */
+}
+
+/* 標題樣式設置 */
+h3 {
+    color: #4a90e2; /* 柔和的藍色標題 */
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* 系統公告 */
+.announcement ul.list-group-item {
+    background-color: #e7f3fe; /* 淺藍色背景，讓公告更加突出 */
+    color: #2a5d84; /* 較深的藍色文字 */
+    margin-bottom: 10px;
+}
+
+/* 公告按鈕樣式 */
+button#view-all-announcements {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
 }
 
-/* 調整員工狀態總覽的內部佈局 */
-.form-group {
-    text-align: center;
-}
+    button#view-all-announcements:hover {
+        background-color: #357ab8; /* 按鈕的 hover 效果 */
+    }
 
-/* 員工狀態區域，以兩行為基礎排列 */
+/* 員工狀態區域的內部樣式 */
 .status-container {
     display: flex;
     flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-group {
+    text-align: center;
+    padding: 10px;
+    background-color: #fafafa; /* 柔和的灰白背景 */
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* 輕微的陰影讓卡片樣式更具層次 */
 }
 
 .status-item {
     font-weight: bold;
+    color: #4a90e2; /* 與標題一致的藍色 */
 }
 
 .status-count {
     font-size: 1.5em;
-    color: #555;
+    color: #e94e77; /* 柔和的粉紅色，讓數據更加醒目 */
 }
 
-/* 表格的自定義樣式 */
+/* 待處理項目 */
+.pending-tasks ul.list-group-item {
+    background-color: #fff7e6; /* 柔和的淺橙色 */
+    color: #b45f06; /* 深橙色字體 */
+    margin-bottom: 10px;
+}
+
+/* 表格區域樣式設置 */
 .leave-table {
     width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #ffffff;
 }
 
     .leave-table th, .leave-table td {
-        padding: 8px;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
         text-align: left;
     }
 
     .leave-table th {
-        background-color: #f2f2f2;
+        background-color: #f7f7f7;
+        color: #333333;
     }
+
+    .leave-table td {
+        color: #666666;
+    }
+
+/* 報表區域 */
+.reports p {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    color: #4a4a4a;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 休假紀錄區域 */
+.leave-records {
+    background-color: #fefefe;
+    border: 1px solid #dcdcdc;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* 全局的邊距與內距調整 */
+.container {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 20px !important;
+}
+
+.mt-2 {
+    margin-top: 10px !important;
+}

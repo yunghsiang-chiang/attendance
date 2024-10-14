@@ -1,193 +1,81 @@
 ﻿/* 基本樣式 */
 .main_attendance_area {
-    background-color: #f0f0f0; /* 淡色背景 */
+    background-color: #f0f0f0;
     padding: 16px;
 }
 
-.attendance_chart_container {
-    overflow-x: auto; /* 允許水平滾動 */
-    -webkit-overflow-scrolling: touch; /* 支持觸控滾動 */
-    width: 100%; /* 確保容器寬度為100% */
+.attendance_calendar input[type="button"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
 }
-
-.attendance_chart {
-    width: 100%; /* 確保圖表寬度為容器的100% */
-    margin: 0 auto;
-}
-
-.staff_attendacne,
-.leave_information,
-.attendance_chart {
-    background-color: #ffffff; /* 淡色背景 */
-    border: 1px solid #ddd;
-    padding: 8px;
-    margin-bottom: 8px;
-}
-
-.attendance_calendar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-    .attendance_calendar input[type="button"] {
-        padding: 10px 20px;
-        margin: 0 10px;
-        font-size: 16px;
-        cursor: pointer;
-    }
 
 #currentMonthLabel {
     font-size: 18px;
     font-weight: bold;
 }
 
-.attendance_chart canvas {
-    width: 100% !important; /* 保證圖表在容器中佔滿 */
-    height: 400px !important; /* 固定圖表高度 */
+/* 卡片樣式 */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* PC裝置 */
-@media (min-width: 768px) {
-    .main_attendance_area {
-        display: flex;
-        flex-direction: column;
-    }
+/* 表格樣式 */
+table {
+    width: 100%;
+    margin: 0;
+}
 
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 圖表樣式 */
+.attendance_chart canvas {
+    width: 100% !important;
+    height: 400px !important;
+}
+
+/* 調整圖表卡片區域 */
+.card-body {
+    padding: 20px;
+}
+
+/* 手機裝置調整 */
+@media (max-width: 576px) {
     .attendance_calendar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
+        flex-direction: column;
     }
 
         .attendance_calendar input[type="button"] {
-            padding: 10px 20px;
-            margin: 0 10px;
-            font-size: 16px;
-            cursor: pointer;
+            margin-bottom: 10px;
         }
 
     #currentMonthLabel {
-        margin-top: 10px;
-    }
-
-    .attendnace_information {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 16px; /* 添加間距 */
-    }
-
-    .attendance {
-        display: flex;
-        flex-direction: column;
-        flex: 1; /* 使 attendance 占據剩餘空間 */
-        gap: 16px; /* 添加間距 */
-    }
-
-    .staff_attendacne,
-    .leave_information {
-        background-color: #e8e8e8; /* 淡色背景 */
-        padding: 16px;
-    }
-
-    .attendance_chart_container {
-        overflow-x: auto; /* 允許水平滾動 */
+        margin-bottom: 10px;
     }
 
     .attendance_chart {
-        background-color: #e9e9e9; /* 淡色背景 */
-        flex: 1; /* 使 attendance_chart 占據剩餘空間 */
-    }
-
-    /* 美化表格樣式 */
-    table {
-        width: 100%;
-        border-collapse: collapse; /* 合併邊框 */
-        margin: 0; /* 移除外部間距 */
-    }
-
-    th, td {
-        padding: 12px; /* 調整內邊距 */
-        text-align: center;
-        border: 1px solid #ddd; /* 輕微的邊框 */
-    }
-
-    th {
-        background-color: #f4f4f4; /* 淡灰色背景 */
-        color: #333; /* 深色文字 */
-        font-weight: bold; /* 增加字重 */
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9; /* 交替行背景色 */
-    }
-
-    tr:hover {
-        background-color: #f1f1f1; /* 懸停背景色 */
-    }
-}
-
-/* 手機裝置 */
-@media (max-width: 430px) {
-    .main_attendance_area {
-        display: block;
-    }
-
-    .attendance_calendar {
-        margin-bottom: 16px;
-    }
-
-    .attendnace_information {
-        display: block;
-    }
-
-    .attendance {
-        display: block;
-        margin-bottom: 16px;
-    }
-
-    .staff_attendacne,
-    .leave_information,
-    .attendance_chart_container {
-        margin-bottom: 16px;
-    }
-
-    .attendance_chart_container {
-        overflow-x: auto; /* 允許水平滾動 */
-    }
-
-    .attendance_chart {
-        background-color: #ffffff; /* 淡色背景 */
-        height: 300px; /* 調整圖表高度 */
-        min-width: 600px; /* 確保圖表寬度不會壓縮 */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse; /* 合併邊框 */
-        margin: 0; /* 移除外部間距 */
-    }
-
-    th, td {
-        padding: 8px; /* 調整內邊距以適應手機 */
-        text-align: center;
-        border: 1px solid #ddd; /* 輕微的邊框 */
-    }
-
-    th {
-        background-color: #f4f4f4; /* 淡灰色背景 */
-        color: #333; /* 深色文字 */
-        font-weight: bold; /* 增加字重 */
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9; /* 交替行背景色 */
-    }
-
-    tr:hover {
-        background-color: #f1f1f1; /* 懸停背景色 */
+        height: 300px;
     }
 }

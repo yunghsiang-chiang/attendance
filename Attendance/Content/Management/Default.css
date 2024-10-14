@@ -1,79 +1,28 @@
 ﻿.homepage {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    /* 使用 Bootstrap 的 container-fluid 或 container 來代替原有的佈局 */
 }
 
 .status-overview, .announcement, .pending-tasks, .reports, .leave-records {
-    width: 45%;
-    margin-bottom: 20px;
-    padding: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #f9f9f9; /* 可以依需求設定背景色 */
 }
 
-.status-overview {
-    background-color: #f9f9f9;
-}
-
-.announcement {
-    background-color: #eef;
-}
-
-.pending-tasks {
-    background-color: #ffe;
-}
-
-.reports {
-    background-color: #efe;
-}
-
-.leave-records {
-    background-color: #fee;
-}
-
-.navbar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.navbar li {
-    display: inline;
-    margin-right: 10px;
-}
-
-/* 調整員工狀態總覽區域的佈局 */
-.status-container {
-    display: flex;
-    justify-content: space-between; /* 控制間距 */
-    flex-wrap: wrap; /* 使項目在小螢幕上能夠換行 */
-    gap: 20px; /* 控制每個項目之間的間距 */
-}
-
+/* 調整員工狀態總覽的內部佈局 */
 .form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 讓標籤置中 */
+    text-align: center;
 }
 
 .status-item {
     font-weight: bold;
 }
 
-.status-count {
-    font-size: 1.5em;
-    color: #555;
-}
-
+/* 表格的自定義樣式 */
 .leave-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
 }
 
     .leave-table th, .leave-table td {
-        border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
     }

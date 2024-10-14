@@ -4,10 +4,16 @@
     <!-- 左上角：當天日期與員工狀態總覽 -->
     <h3>當天日期: <%= DateTime.Now.ToString("yyyy/MM/dd") %></h3>
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="../Content/Management/Default.css" rel="stylesheet" />
     <script src="../Scripts/Management/Default.js"></script>
     
+<%--    <!-- 引入 Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>--%>
+
     <!-- 使用 Bootstrap 的容器和網格系統 -->
     <div class="container homepage">
         <div class="row">
@@ -26,6 +32,34 @@
                     </div>
                     <div class="col-sm-6 form-group">
                         IT：<label class="status-item" id="IT_qty"></label>
+                    </div>
+                </div>
+
+                <!-- 員工狀態總覽以 label 呈現 -->
+                <div class="status-container">
+                    <div class="form-group">
+                        <label class="status-item">上班打卡人數</label>
+                        <label class="status-count" id="attendance_qty">0</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="status-item">遲到人數</label>
+                        <label class="status-count" id="arrive_late_qty">0</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="status-item">未打卡人數</label>
+                        <label class="status-count" id="no_attendance_qty">0</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="status-item">早退人數</label>
+                        <label class="status-count" id="leave_early_qty">0</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="status-item">休假人數</label>
+                        <label class="status-count" id="leave_qty">0</label>
                     </div>
                 </div>
             </div>
@@ -80,5 +114,17 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <!-- jQuery UI Dialog for Announcements -->
+    <div id="all-announcements-dialog" title="系統公告" style="display: none;">
+        <ul>
+            <li>公告1: 系統維護通知</li>
+            <li>公告2: 新功能上線</li>
+            <li>公告3: 員工培訓</li>
+            <li>公告4: 年終晚會</li>
+            <li>公告5: 新的安全政策</li>
+            <li>公告6: 聖誕假期安排</li>
+        </ul>
     </div>
 </asp:Content>

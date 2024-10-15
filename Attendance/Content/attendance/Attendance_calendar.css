@@ -49,6 +49,18 @@ button {
     text-decoration: underline;
 }
 
+.summary-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .summary-data p {
+        margin-right: 20px; /* 你可以根據需要調整間距 */
+        white-space: nowrap; /* 確保文字不會換行 */
+    }
+
+
+
 /* 設置 dialog 背景為淡藍色 */
 .ui-dialog {
     background-color: #d0e7f9; /* 淡藍色 */

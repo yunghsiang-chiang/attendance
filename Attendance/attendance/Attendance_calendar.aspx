@@ -17,10 +17,13 @@
                 <!-- 新增累積數據區域 -->
                 <div class="summary-area mt-4">
                     <h3>當月累積數據</h3>
-                    <p><strong>晨光上：</strong><span id="morningLightUpTotal">0</span></p>
-                    <p><strong>晨光下：</strong><span id="morningLightDownTotal">0</span></p>
-                    <p><strong>晨會：</strong><span id="morningMeetingTotal">0</span></p>
+                    <div class="summary-data">
+                        <p><strong>晨光上：</strong><span id="morningLightUpTotal">0</span></p>
+                        <p><strong>晨光下：</strong><span id="morningLightDownTotal">0</span></p>
+                        <p><strong>晨會：</strong><span id="morningMeetingTotal">0</span></p>
+                    </div>
                 </div>
+
             </div>
             <div id="dialog" title="出勤詳細資訊"></div>
         </section>

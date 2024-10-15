@@ -40,6 +40,13 @@
         return localISOTime;
     }
 
+    // 將當地時間轉換為 UTC ISO 格式
+    function toUtcISOString(date) {
+        const utcOffset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
+        const utcTime = new Date(date.getTime() + utcOffset); // 加上偏移量來獲取 UTC 時間
+        return utcTime.toISOString().slice(0, -1); // 去掉結尾的 'Z'
+    }
+
     // 使用 async/await 發送 API 請求
     async function postApiData(user_id, user_name, attendance_status) {
         const localDate = new Date();
@@ -159,37 +166,34 @@
             if (selectedCheckboxes) {
                 await postApiDataMeeting();
             }
+
             // 額外考慮，加班，透過下班按鈕觸發
             if (status == '下班') {
                 let currentDate = new Date();
-                const year = currentDate.getFullYear(); //年份
-                const month = currentDate.getMonth() + 1; // 月份從0開始，因此需要加1
-                const workingDays = []; // 出勤日 array
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1;
+                const workingDays = [];
                 const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
                 const daysData = await $.getJSON(api_url);
                 if (daysData.length > 0) {
                     let attendance_days = daysData[0].attendance_days.split(',');
 
-                    // 將 API 返回的日期統一格式化成 YYYY-MM-DD
                     attendance_days = attendance_days.map(day => {
                         let parts = day.split('-');
-                        let formattedMonth = parts[1].padStart(2, '0'); // 補0
-                        let formattedDay = parts[2].padStart(2, '0'); // 補0
+                        let formattedMonth = parts[1].padStart(2, '0');
+                        let formattedDay = parts[2].padStart(2, '0');
                         return `${parts[0]}-${formattedMonth}-${formattedDay}`;
                     });
 
                     workingDays.push(...attendance_days);
                 }
 
-                // 取得當天日期 (格式: YYYY-MM-DD)
                 const today = new Date();
                 const todayString = today.toISOString().split('T')[0];
-                // 取得當前時間
-                const currentTime = today.getHours() * 60 + today.getMinutes(); // 轉換為分鐘
-                const sixThirtyPM = 18 * 60 + 30; // 晚上 6:30 的分鐘表示
-                // 判斷條件
+                const currentTime = today.getHours() * 60 + today.getMinutes();
+                const sixThirtyPM = 18 * 60 + 30;
+
                 if (!workingDays.includes(todayString) || currentTime > sixThirtyPM) {
-                    // 提供加班視窗
                     $("#dialog").dialog("open");
                 }
             }
@@ -236,15 +240,15 @@
 
     // 根據當前時間限制每個時間選擇器
     function updateTimeLimit() {
-        let currentHour = new Date().getHours(); // 獲取當前小時
-        let maxTime = (currentHour < 10 ? "0" : "") + currentHour + ":59"; // 設置當天的最大時間
+        let currentHour = new Date().getHours();
+        let maxTime = (currentHour < 10 ? "0" : "") + currentHour + ":59";
         $('input[type="time"]').attr("max", maxTime);
     }
 
     // 初始化請假對話框
     $("#dialog-form").dialog({
-        autoOpen: false, // 預設不自動開啟
-        modal: true,     // 使用模態對話框
+        autoOpen: false,
+        modal: true,
         buttons: {
             "確認": async function () {
                 let isValid = true;
@@ -257,18 +261,15 @@
                 let userName = getCookie("person_name");
                 const localISOString = toLocalISOString(new Date());
 
-                // 建立開始和結束的日期時間物件
                 let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
                 let endDateTime = new Date(`${end_Date}T${end_Time}:00`);
-                const timeDifference = endDateTime - startDateTime; // 計算時間差（毫秒）
+                const timeDifference = endDateTime - startDateTime;
 
-                // 計算小時差
                 let hoursDifference = timeDifference / (1000 * 60 * 60);
                 if (hoursDifference > 8) {
-                    hoursDifference = 8; // 若超過8小時，限制為8小時
+                    hoursDifference = 8;
                 }
 
-                // 日期和時間的正則表達式檢查
                 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
                 const timeRegex = /^\d{2}:\d{2}$/;
 
@@ -357,7 +358,6 @@
                         return false;
                     }
 
-                    // 解析起始時間和結束時間
                     const start_DateTime = new Date();
                     const [startHours, startMinutes] = startTimeString.split(':').map(Number);
                     start_DateTime.setHours(startHours, startMinutes, 0, 0);
@@ -366,8 +366,7 @@
                     const [endHours, endMinutes] = endTimeString.split(':').map(Number);
                     end_DateTime.setHours(endHours, endMinutes, 0, 0);
 
-                    // 計算加班小時數
-                    const hours = (end_DateTime - start_DateTime) / (1000 * 60 * 60); // 轉換為小時
+                    const hours = (end_DateTime - start_DateTime) / (1000 * 60 * 60);
 
                     if (hours < 0.5) {
                         alert("每筆加班時間必須超過 0.5 小時!");
@@ -377,8 +376,7 @@
 
                     totalHours += hours;
 
-                    // POST 請求
-                    postApiData_overtime(userId, userName, '加班', start_DateTime, end_DateTime, hours);
+                    postApiData_overtime(userId, userName, '加班', toUtcISOString(start_DateTime), toUtcISOString(end_DateTime), hours);
                 });
 
                 if (validEntries) {
@@ -394,7 +392,7 @@
 
     // 新增加班時段
     $('#add-overtime').on('click', function () {
-        const index = $('.overtime-entry').length; // 當前已有的加班時段數量
+        const index = $('.overtime-entry').length;
         const newEntry = `
         <div class="overtime-entry">
             <label for="overtime-start-${index}">請選擇申報加班的起始時間：</label>

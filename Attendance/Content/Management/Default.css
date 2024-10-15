@@ -46,7 +46,6 @@ button#view-all-announcements {
 .status-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
 }
 
 .form-group {

@@ -28,79 +28,111 @@
         });
     }
 
+    // 顯示請假詳情的函數
+    function showLeaveDetails(date, leaveRecords) {
+        $('#dialog').empty(); // 清空對話框內容
+        let html_infor = `<p><strong>日期：</strong> ${date}</p>`;
+        html_infor += `<table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>姓名</th>
+                    <th>請假類型</th>
+                    <th>開始時間</th>
+                    <th>結束時間</th>
+                    <th>批准人</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        leaveRecords.forEach(record => {
+            html_infor += `<tr>
+                <td>${record.userName}</td>
+                <td>${record.leaveType}</td>
+                <td>${record.startTime}</td>
+                <td>${record.endTime}</td>
+                <td>${record.approved_by}</td>
+            </tr>`;
+        });
+        html_infor += `</tbody>
+        </table>`;
+        $('#dialog').html(html_infor);
+        $('#dialog').dialog('open');
+    }
+
     // 產生日曆的函數
     function generateCalendar(month, year) {
         $('#calendar').empty(); // 清空日曆容器
 
-        // 初始化 jQuery UI dialog（隱藏）
-        $("#dialog").dialog({
-            autoOpen: false,
-            modal: true,
-            width: $(window).width() < 600 ? '90%' : 400, // 自動適應手機屏幕
-            position: { my: "center", at: "center", of: window },
-            open: function () {
-                if ($(window).width() < 600) {
-                    $(".ui-dialog").css({
-                        top: 50, // 避免對話框貼近頂部
-                        left: "5%", // 保證在手機屏幕上顯示
-                        width: "90%" // 對話框寬度為手機屏幕的90%
-                    });
-                }
-            }
-        });
-
-        // 計算該月第一天是星期幾
         const firstDayOfMonth = new Date(year, month, 1).getDay();
-        // 計算該月的總天數
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         const userid = getCookie("person_id");
         if (userid) { // 如果已登入
-            const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
+            const attendanceApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
+            const leaveApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}&startdate=${year}-${(month + 1).toString().padStart(2, '0')}-01&enddate=${year}-${(month + 1).toString().padStart(2, '0')}-${daysInMonth}`;
 
             // 請求出勤資料
             $.ajax({
-                url: apiUrl,
+                url: attendanceApiUrl,
                 type: 'GET',
-                success: function (response) {
-                    if (response.length > 0) { // 有出勤數據
-                        // 建立一個 Set 來快速查找出勤日期
-                        const attendanceSet = new Set(response.map(r => r.attendanceDates));
+                success: function (attendanceResponse) {
+                    const attendanceSet = new Set(attendanceResponse.map(r => r.attendanceDates));
 
-                        // 加入空白佔位符，直到對應的星期
-                        for (let i = 0; i < firstDayOfMonth; i++) {
-                            $('#calendar').append('<div class="day empty"></div>'); // 用空白元素佔位
-                        }
+                    // 請求請假資料
+                    $.ajax({
+                        url: leaveApiUrl,
+                        type: 'GET',
+                        success: function (leaveResponse) {
+                            const leaveSet = new Map();
+                            leaveResponse.forEach(leave => {
+                                const leaveDate = leave.startTime.split('T')[0];
+                                if (!leaveSet.has(leaveDate)) {
+                                    leaveSet.set(leaveDate, []);
+                                }
+                                leaveSet.get(leaveDate).push(leave);
+                            });
 
-                        const username = getCookie('person_name');
-                        // 生成日曆的實際日期
-                        for (let day = 1; day <= daysInMonth; day++) {
-                            const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                            const dayElement = $('<div>').addClass('day').text(day).data('day', formattedDate);
-
-                            // 檢查是否是出勤日期
-                            if (attendanceSet.has(formattedDate)) {
-                                // 顯示名字，並設置可點擊
-                                const nameElement = $('<br><span>').text(username).addClass('clickable').on('click', function () {
-                                    // 通過API獲取該日期的詳細出勤資料
-                                    getAttendanceDetails(formattedDate);
-                                });
-                                dayElement.append(nameElement);
-                                dayElement.addClass('present').css('background-color', 'lightgreen'); // 改變出勤日期的背景顏色
+                            // 加入空白佔位符，直到對應的星期
+                            for (let i = 0; i < firstDayOfMonth; i++) {
+                                $('#calendar').append('<div class="day empty"></div>');
                             }
 
-                            // 加入日曆
-                            $('#calendar').append(dayElement);
+                            const username = getCookie('person_name');
+                            for (let day = 1; day <= daysInMonth; day++) {
+                                const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                                const dayElement = $('<div>').addClass('day').text(day).data('day', formattedDate);
+
+                                // 檢查是否有出勤資料
+                                if (attendanceSet.has(formattedDate)) {
+                                    const nameElement = $('<br><span>').text(username).addClass('clickable').on('click', function () {
+                                        getAttendanceDetails(formattedDate);
+                                    });
+                                    dayElement.append(nameElement);
+                                    dayElement.addClass('present').css('background-color', 'lightgreen');
+                                }
+
+                                // 檢查是否有請假資料
+                                if (leaveSet.has(formattedDate)) {
+                                    const leaveElement = $('<br><span>').text('請假').addClass('clickable').on('click', function () {
+                                        showLeaveDetails(formattedDate, leaveSet.get(formattedDate));
+                                    });
+                                    dayElement.append(leaveElement);
+                                    dayElement.addClass('on-leave').css('background-color', 'lightcoral');
+                                }
+
+                                $('#calendar').append(dayElement);
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error fetching leave data:', error);
                         }
-                    }
+                    });
                 },
                 error: function (error) {
                     console.error('Error fetching attendance data:', error);
                 }
             });
 
-            // 請求更新當月的累積數據
-            updateMonthlySummary(userid, year, month + 1); // month 以 0 基準，所以加 1
+            updateMonthlySummary(userid, year, month + 1);
         }
     }
 

@@ -33,11 +33,12 @@
         setCookie(name, "", -1);
     }
 
-    // 將日期轉換為當地 ISO 格式
+
+    // 將當地時間轉換為 ISO 格式 (不轉換為 UTC)
     function toLocalISOString(date) {
-        const offset = date.getTimezoneOffset() * 60000;
-        const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, -1);
-        return localISOTime;
+        const offset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
+        const localTime = new Date(date.getTime() - offset); // 減去偏移量來獲取當地時間
+        return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
     }
 
     // 將當地時間轉換為 UTC ISO 格式
@@ -75,7 +76,7 @@
     // 使用 async/await 發送加班 API 請求
     async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours) {
         const localDate = new Date();
-        const localISOString = toLocalISOString(localDate);
+        const localISOString = toLocalISOString(localDate); // 使用本地時間
         try {
             let response = await $.ajax({
                 type: "POST",
@@ -84,8 +85,8 @@
                     "userID": userID,
                     "userName": userName,
                     "overtimeType": overtimeType,
-                    "startTime": startTime,
-                    "endTime": endTime,
+                    "startTime": startTime, // 使用原始的當地時間
+                    "endTime": endTime, // 使用原始的當地時間
                     "count_hours": count_hours,
                     "submitted_at": localISOString
                 }),
@@ -336,6 +337,7 @@
     });
 
     // 加班對話框初始化
+    // 修正加班邏輯，去掉 UTC 轉換
     $('#dialog').dialog({
         autoOpen: false,
         modal: true,
@@ -376,7 +378,8 @@
 
                     totalHours += hours;
 
-                    postApiData_overtime(userId, userName, '加班', toUtcISOString(start_DateTime), toUtcISOString(end_DateTime), hours);
+                    // 發送 API 請求 (不再轉換為 UTC)
+                    postApiData_overtime(userId, userName, '加班', startDateTime.toISOString(), endDateTime.toISOString(), hours);
                 });
 
                 if (validEntries) {

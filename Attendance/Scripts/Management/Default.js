@@ -121,9 +121,9 @@ $(document).ready(async function () {
         const total_qty = staff_qty + disciples_qty + secretary_qty + IT_qty; // 總人數
         const attendance_qty = parseInt($('#attendance_qty').text()); // 已出勤人數
         const leave_qty = parseInt($('#leave_qty').text()); // 已請假人數
-        const no_attendance_qty = total_qty - attendance_qty - leave_qty; // 未出勤人數 = 總人數 - 已出勤人數 - 已請假人數
+        /*const no_attendance_qty = total_qty - attendance_qty - leave_qty; // 未出勤人數 = 總人數 - 已出勤人數 - 已請假人數*/
 
-        $('#no_attendance_qty').text(no_attendance_qty + '人'); // 顯示未出勤人數
+        
 
         // 計算未出勤人員清單
         const all_persons = [...staff_details, ...disciples_details, ...secretary_details, ...IT_details];
@@ -134,6 +134,8 @@ $(document).ready(async function () {
         no_attendance_details = all_persons.filter(person =>
             !attendance_names.has(person.person_name) && !leave_names.has(person.person_name)
         );
+
+        $('#no_attendance_qty').text(no_attendance_details.length + '人'); // 顯示未出勤人數
     }
 
 

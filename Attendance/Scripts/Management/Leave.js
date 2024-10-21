@@ -1,4 +1,5 @@
 ﻿$(document).ready(async function () {
+
     // 定義函式以從 Web API 獲取出勤資料
     async function fetchAttendanceData() {
         const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
@@ -10,14 +11,22 @@
             }
             const data = await response.json();
 
+            // 確保數據結構正確，提取 $values 屬性中的資料
+            if (!data.$values || !Array.isArray(data.$values)) {
+                throw new Error('出勤資料格式不正確');
+            }
+
+            const extractedData = data.$values;  // 提取 $values 中的數據
+
             // 在載入數據後，更新休假時數
-            const updatedData = await updateLeaveHours(data);
+            const updatedData = await updateLeaveHours(extractedData);
 
             // 呼叫函式以將更新後的資料更新到 HTML
             populateAttendanceTable(updatedData);
             return updatedData; // 返回更新後的數據
         } catch (error) {
             console.error('獲取出勤資料時出錯:', error);
+            return []; // 返回空陣列作為 fallback
         }
     }
 
@@ -31,6 +40,11 @@
                 throw new Error(`HTTP 錯誤！狀態: ${leaveResponse.status}`);
             }
             const leaveData = await leaveResponse.json();
+
+            // 確保請假資料是陣列
+            if (!Array.isArray(leaveData)) {
+                throw new Error('請假紀錄資料不是陣列');
+            }
 
             // 當前月份，用於檢查補休只扣除當月的紀錄
             const currentMonth = new Date().getMonth() + 1;

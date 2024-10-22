@@ -379,7 +379,8 @@
                     totalHours += hours;
 
                     // 發送 API 請求 (不再轉換為 UTC)
-                    postApiData_overtime(userId, userName, '加班', startDateTime.toISOString(), endDateTime.toISOString(), hours);
+                    postApiData_overtime(userId, userName, '加班', start_DateTime.toISOString(), end_DateTime.toISOString(), hours);
+
                 });
 
                 if (validEntries) {

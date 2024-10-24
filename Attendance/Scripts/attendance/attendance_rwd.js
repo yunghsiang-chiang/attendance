@@ -33,19 +33,11 @@
         setCookie(name, "", -1);
     }
 
-
     // 將當地時間轉換為 ISO 格式 (不轉換為 UTC)
     function toLocalISOString(date) {
         const offset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
         const localTime = new Date(date.getTime() - offset); // 減去偏移量來獲取當地時間
         return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
-    }
-
-    // 將當地時間轉換為 UTC ISO 格式
-    function toUtcISOString(date) {
-        const utcOffset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
-        const utcTime = new Date(date.getTime() + utcOffset); // 加上偏移量來獲取 UTC 時間
-        return utcTime.toISOString().slice(0, -1); // 去掉結尾的 'Z'
     }
 
     // 使用 async/await 發送 API 請求

@@ -53,45 +53,9 @@
                         <input type="button" id="bt_dayoff" class="btn btn-warning" value="請假" />
                     </div>
                 </div>
-<%--                <div class="container" id="outside">
-                    <div class="container" id="attended_outside_meetings">
-                        <div>
-                            <input type="checkbox" id="cb_morning_up_out_hochi" name="cb_morning_up_out_hochi" />
-                            <label for="cb_morning_up_out_hochi">晨光上</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="cb_morning_down_out_hochi" name="cb_morning_down_out_hochi" />
-                            <label for="cb_morning_down_out_hochi">晨光下</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="cb_morning_meeting_out_hochi" name="cb_morning_meeting_out_hochi" />
-                            <label for="cb_morning_meeting_out_hochi">晨會</label>
-                        </div>
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_outside_business" class="btn btn-primary" value="外出公務" />
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_sick_leave" class="btn btn-danger" value="請病假" />
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_menstrual_leave" class="btn btn-warning" value="請生理假" />
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_personal_leave" class="btn btn-light" value="請事假" />
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_compensatory_leave" class="btn btn-success" value="補休" />
-                    </div>
-                    <div class="row align-items-start">
-                        <input type="button" id="bt_specaial_leave" class="btn btn-success" value="特休" />
-                    </div>
-                </div>--%>
                 <div class="container" id="alert">
                     <string>請先登入，謝謝!😄</string>
                 </div>
-
-
             </div>
         </div>
     </div>

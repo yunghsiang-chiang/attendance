@@ -54,6 +54,10 @@ async function searchAttendanceRecord(userid, startdate, enddate) {
     let leaveApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
     let overtimeApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
 
+    console.log(attendanceApiUrl);
+    console.log(leaveApiUrl);
+    console.log(overtimeApiUrl);
+
     try {
         // 使用 Promise.all 同時獲取出勤、請假和加班資料，並等待結果
         const [attendanceResponse, leaveResponse,overtimeResponse] = await Promise.all([

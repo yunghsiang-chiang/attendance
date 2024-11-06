@@ -109,26 +109,29 @@ $(document).ready(function () {
             if (recordType === 'attendance') {
                 data.attendance_status = $('#attendanceStatus').val();
                 data.create_time = startTime;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record", data);
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record", JSON.stringify(data));
                 alert("出勤記錄已新增");
+                
             } else if (recordType === 'leave') {
                 data.leaveType = $('#leaveType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendleave_record", data);
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendleave_record", JSON.stringify(data));
                 alert("請假記錄已新增");
             } else if (recordType === 'overtime') {
                 data.overtimeType = $('#overtimeType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record", data);
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record", JSON.stringify(data));
                 alert("加班記錄已新增");
             }
         } catch (error) {
             alert("新增記錄失敗，請檢查資料並重試");
             console.error(error);
+            console.log(data);
+            console.log(JSON.stringify(data));
         }
     });
 

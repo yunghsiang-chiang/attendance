@@ -259,6 +259,7 @@
     <Content Include="Scripts\Management\CompanySettings.js" />
     <Content Include="Scripts\Management\Default.js" />
     <Content Include="Scripts\Management\Leave.js" />
+    <Content Include="Scripts\Management\Management.js" />
     <Content Include="Scripts\Management\Notification.js" />
     <Content Include="Scripts\Management\Reports.js" />
     <Content Include="Scripts\Management\Schedule.js" />

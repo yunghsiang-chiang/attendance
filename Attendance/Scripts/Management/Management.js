@@ -106,22 +106,24 @@ $(document).ready(function () {
         const endTime = toLocalISOString(new Date(endDateVal));
         const countHours = (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60);
 
+        // 根據 API 規範設置不同的字段名稱
         let data = {
-            user_id: userId,
-            user_name: userName,
             submitted_at: toLocalISOString(new Date()),
             approved_by: getCookie("person_id")
         };
 
         try {
             if (recordType === 'attendance') {
+                // 出勤記錄的 API 使用 user_id 和 user_name
+                data.user_id = userId;
+                data.user_name = userName;
                 data.attendance_status = $('#attendanceStatus').val();
                 data.create_time = startTime;
                 await $.ajax({
                     url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
                     type: "POST",
                     data: JSON.stringify(data),
-                    contentType: "application/json", // 設定 Content-Type
+                    contentType: "application/json",
                     success: function () {
                         alert("出勤記錄已新增");
                     },
@@ -131,6 +133,9 @@ $(document).ready(function () {
                     }
                 });
             } else if (recordType === 'leave') {
+                // 請假記錄的 API 使用 userId 和 userName
+                data.userId = userId;
+                data.userName = userName;
                 data.leaveType = $('#leaveType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
@@ -149,6 +154,9 @@ $(document).ready(function () {
                     }
                 });
             } else if (recordType === 'overtime') {
+                // 加班記錄的 API 使用 userID 和 userName
+                data.userID = userId;
+                data.userName = userName;
                 data.overtimeType = $('#overtimeType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
@@ -171,6 +179,7 @@ $(document).ready(function () {
             console.error("發生錯誤：", error);
         }
     });
+
 
 
     // 控制顯示出勤/請假/加班類型選項

@@ -24,7 +24,7 @@
                 <input type="date" class="form-control" id="endDate">
             </div>
             <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-primary w-100" id="queryBtn">查詢出勤記錄</button>
+                <button type="button" class="btn btn-primary w-100" id="queryBtn">查詢出勤記錄</button>
             </div>
         </div>
 
@@ -79,7 +79,7 @@
                 <input type="datetime-local" class="form-control" id="endTime">
             </div>
             <div class="col-md-12 mt-3">
-                <button class="btn btn-success w-100" id="addRecordBtn">新增記錄</button>
+                <button type="button" class="btn btn-success w-100" id="addRecordBtn">新增記錄</button>
             </div>
         </div>
     </div>

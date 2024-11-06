@@ -41,24 +41,53 @@ $(document).ready(function () {
         if (userId && startDate && endDate) {
             $('#attendanceRecords').empty(); // 清空之前的查詢結果
 
-            const attendanceData = await $.get(`http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`);
-            displayRecords(attendanceData, '出勤');
+            const apiConfigs = [
+                {
+                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    type: '出勤',
+                    showEndTime: false
+                },
+                {
+                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    type: '請假',
+                    showEndTime: true
+                },
+                {
+                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    type: '加班',
+                    showEndTime: true
+                }
+            ];
 
-            const leaveData = await $.get(`http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`);
-            displayRecords(leaveData, '請假');
+            try {
+                // 使用 Promise.all 同時發送請求
+                const requests = apiConfigs.map(config => $.get(config.url));
+                const results = await Promise.all(requests);
 
-            const overtimeData = await $.get(`http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`);
-            displayRecords(overtimeData, '加班');
+                // 根據返回的數據和配置顯示記錄
+                results.forEach((data, index) => {
+                    displayRecords(data, apiConfigs[index].type, apiConfigs[index].showEndTime);
+                });
+            } catch (error) {
+                console.error("查詢出勤記錄時出現錯誤：", error);
+                alert("查詢記錄失敗，請稍後重試");
+            }
         }
     });
 
-    function displayRecords(records, recordType) {
+    // 顯示查詢結果
+    function displayRecords(records, recordType, showEndTime) {
         let content = `<h5>${recordType}記錄</h5>`;
         records.forEach(record => {
-            content += `<p>${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 開始時間: ${record.startTime || record.create_time}, 結束時間: ${record.endTime || ''}</p>`;
+            content += `<p>${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 開始時間: ${record.startTime || record.create_time}`;
+            if (showEndTime && record.endTime) {
+                content += `, 結束時間: ${record.endTime}`;
+            }
+            content += `</p>`;
         });
         $('#attendanceRecords').append(content);
     }
+
 
     // 新增出勤、請假或加班記錄
     $('#addRecordBtn').click(async function () {
@@ -80,21 +109,21 @@ $(document).ready(function () {
             if (recordType === 'attendance') {
                 data.attendance_status = $('#attendanceStatus').val();
                 data.create_time = startTime;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record", JSON.stringify(data));
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record", data);
                 alert("出勤記錄已新增");
             } else if (recordType === 'leave') {
                 data.leaveType = $('#leaveType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendleave_record", JSON.stringify(data));
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendleave_record", data);
                 alert("請假記錄已新增");
             } else if (recordType === 'overtime') {
                 data.overtimeType = $('#overtimeType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record", JSON.stringify(data));
+                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record", data);
                 alert("加班記錄已新增");
             }
         } catch (error) {

@@ -94,46 +94,84 @@ $(document).ready(function () {
         const userId = $('#employeeSelect').val();
         const userName = $('#employeeSelect option:selected').text();
         const recordType = $('#recordType').val();
-        const startTime = toLocalISOString(new Date($('#startTime').val()));
-        const endTime = toLocalISOString(new Date($('#endTime').val()));
+        const startDateVal = $('#startTime').val();
+        const endDateVal = $('#endTime').val();
+
+        if (!startDateVal || !endDateVal) {
+            alert("請輸入完整的開始和結束時間");
+            return;
+        }
+
+        const startTime = toLocalISOString(new Date(startDateVal));
+        const endTime = toLocalISOString(new Date(endDateVal));
         const countHours = (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60);
 
         let data = {
             user_id: userId,
             user_name: userName,
-            submitted_at: toLocalISOString(new Date()), // 使用本地 ISO 格式
-            approved_by: getCookie("person_id") // 使用 getCookie 取得 person_id
+            submitted_at: toLocalISOString(new Date()),
+            approved_by: getCookie("person_id")
         };
 
         try {
             if (recordType === 'attendance') {
                 data.attendance_status = $('#attendanceStatus').val();
                 data.create_time = startTime;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record", JSON.stringify(data));
-                alert("出勤記錄已新增");
-                
+                await $.ajax({
+                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json", // 設定 Content-Type
+                    success: function () {
+                        alert("出勤記錄已新增");
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert("新增記錄失敗，請檢查資料並重試");
+                    }
+                });
             } else if (recordType === 'leave') {
                 data.leaveType = $('#leaveType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendleave_record", JSON.stringify(data));
-                alert("請假記錄已新增");
+                await $.ajax({
+                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function () {
+                        alert("請假記錄已新增");
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert("新增記錄失敗，請檢查資料並重試");
+                    }
+                });
             } else if (recordType === 'overtime') {
                 data.overtimeType = $('#overtimeType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
-                await $.post("http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record", JSON.stringify(data));
-                alert("加班記錄已新增");
+                await $.ajax({
+                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function () {
+                        alert("加班記錄已新增");
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert("新增記錄失敗，請檢查資料並重試");
+                    }
+                });
             }
         } catch (error) {
-            alert("新增記錄失敗，請檢查資料並重試");
-            console.error(error);
-            console.log(data);
-            console.log(JSON.stringify(data));
+            console.error("發生錯誤：", error);
         }
     });
+
 
     // 控制顯示出勤/請假/加班類型選項
     $('#recordType').change(function () {

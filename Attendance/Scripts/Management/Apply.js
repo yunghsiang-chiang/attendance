@@ -33,7 +33,7 @@
                     <td>${formatDateTime(record.startTime)}</td>
                     <td>${formatDateTime(record.endTime)}</td>
                     <td>${record.count_hours} 小時</td>
-                    <td><button class="update-overtime" data-userid="${record.userID}" data-username="${record.userName}" data-overtimetype="${record.overtimeType}" data-starttime="${record.startTime}">簽核</button></td>
+                    <td><button type="button" class="update-overtime" data-userid="${record.userID}" data-username="${record.userName}" data-overtimetype="${record.overtimeType}" data-starttime="${record.startTime}">簽核</button></td>
                 </tr>`;
             });
 
@@ -41,12 +41,14 @@
             overtimeApplyDiv.append(overtimeContent); // 將內容添加到加班申請 div 中
 
             // 為每個簽核按鈕綁定點擊事件
-            $('.update-overtime').on('click', function () {
+            $('.update-overtime').on('click', async function () {
                 const userID = $(this).data('userid');
                 const overtimeType = $(this).data('overtimetype');
                 const startTime = $(this).data('starttime');
                 const userName = $(this).data('username');
-                updateOvertimeRecord(userID, userName, overtimeType, startTime); // 調用更新加班記錄的函數
+
+                await updateOvertimeRecord(userID, userName, overtimeType, startTime);
+                alert('加班記錄更新成功！');
             });
         })
         .catch(error => {
@@ -87,7 +89,7 @@
                     <td>${formatDateTime(record.startTime)}</td>
                     <td>${formatDateTime(record.endTime)}</td>
                     <td>${record.count_hours} 小時</td>
-                    <td><button class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
+                    <td><button type="button" class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
                 </tr>`;
             });
 
@@ -95,12 +97,14 @@
             afterApplyDiv.append(leaveContent); // 將內容添加到事後申請 div 中
 
             // 為每個簽核按鈕綁定點擊事件
-            $('.update-leave').on('click', function () {
+            $('.update-leave').on('click', async function () {
                 const userId = $(this).data('userid');
                 const leaveType = $(this).data('leavetype');
                 const startTime = $(this).data('starttime');
                 const userName = $(this).data('username');
-                updateLeaveRecord(userId, userName, leaveType, startTime); // 調用更新請假記錄的函數
+
+                await updateLeaveRecord(userId, userName, leaveType, startTime);
+                alert('請假記錄更新成功！');
             });
         })
         .catch(error => {

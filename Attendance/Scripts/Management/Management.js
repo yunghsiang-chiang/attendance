@@ -15,6 +15,15 @@ $(document).ready(function () {
     }
     initializeEmployeeSelect();
 
+    // 根據選擇的記錄類型顯示或隱藏欄位
+    $('#recordType').change(function () {
+        const type = $(this).val();
+        $('#attendanceStatus').toggle(type === 'attendance');
+        $('#leaveTypeGroup').toggle(type === 'leave');
+        $('#overtimeTypeGroup').toggle(type === 'overtime');
+        $('#endTimeGroup').toggle(type !== 'attendance'); // 如果是出勤則隱藏 endTime
+    }).trigger('change');
+
     // 取得 cookie 值
     function getCookie(cname) {
         let name = cname + "=";
@@ -97,10 +106,12 @@ $(document).ready(function () {
         const startDateVal = $('#startTime').val();
         const endDateVal = $('#endTime').val();
 
-        if (!startDateVal || !endDateVal) {
+        // 檢查必要欄位，只有在非出勤情況下檢查 endTime
+        if (!startDateVal || (recordType !== 'attendance' && !endDateVal)) {
             alert("請輸入完整的開始和結束時間");
             return;
         }
+
 
         const startTime = toLocalISOString(new Date(startDateVal));
         const endTime = toLocalISOString(new Date(endDateVal));
@@ -182,11 +193,5 @@ $(document).ready(function () {
 
 
 
-    // 控制顯示出勤/請假/加班類型選項
-    $('#recordType').change(function () {
-        const type = $(this).val();
-        $('#attendanceStatus').toggle(type === 'attendance');
-        $('#leaveTypeGroup').toggle(type === 'leave');
-        $('#overtimeTypeGroup').toggle(type === 'overtime');
-    }).trigger('change');
+    
 });

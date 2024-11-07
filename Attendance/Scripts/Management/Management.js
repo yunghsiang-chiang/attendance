@@ -1,5 +1,8 @@
 ﻿// 將當地時間轉換為 ISO 格式 (不轉換為 UTC)
 function toLocalISOString(date) {
+    if (!date || isNaN(date.getTime())) {
+        return null; // 當日期無效時返回 null
+    }
     const offset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
     const localTime = new Date(date.getTime() - offset); // 減去偏移量來獲取當地時間
     return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
@@ -114,8 +117,8 @@ $(document).ready(function () {
 
 
         const startTime = toLocalISOString(new Date(startDateVal));
-        const endTime = toLocalISOString(new Date(endDateVal));
-        const countHours = (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60);
+        const endTime = endDateVal ? toLocalISOString(new Date(endDateVal)) : null;
+        const countHours = endTime ? (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60) : null;
 
         // 根據 API 規範設置不同的字段名稱
         let data = {

@@ -30,15 +30,15 @@
                     <tr>
                         <th>員工 ID</th>
                         <th>姓名</th>
-                        <th>出勤</th>
-                        <th>晨會</th>
-                        <th>晨光上</th>
-                        <th>晨光下</th>
-                        <th>病假</th>
-                        <th>事假</th>
-                        <th>特休</th>
-                        <th>補休</th>
-                        <th>加班</th>
+                        <th>出勤(day</th>
+                        <th>晨會(day</th>
+                        <th>晨光上(day</th>
+                        <th>晨光下(day</th>
+                        <th>病假(hr</th>
+                        <th>事假(hr</th>
+                        <th>特休(hr</th>
+                        <th>補休(hr</th>
+                        <th>加班(hr</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -18,14 +18,22 @@ $(document).ready(function () {
     }
     initializeEmployeeSelect();
 
-    // 根據選擇的記錄類型顯示或隱藏欄位
-    $('#recordType').change(function () {
-        const type = $(this).val();
+    // 定義根據選擇的記錄類型顯示或隱藏欄位的函數
+    function updateFormFields() {
+        const type = $('#recordType').val();
         $('#attendanceStatus').toggle(type === 'attendance');
         $('#leaveTypeGroup').toggle(type === 'leave');
         $('#overtimeTypeGroup').toggle(type === 'overtime');
         $('#endTimeGroup').toggle(type !== 'attendance'); // 如果是出勤則隱藏 endTime
-    }).trigger('change');
+    }
+
+    // 當頁面載入時根據預設選項更新欄位顯示
+    updateFormFields();
+
+    // 綁定選擇改變事件以更新顯示
+    $('#recordType').change(function () {
+        updateFormFields();
+    });
 
     // 取得 cookie 值
     function getCookie(cname) {

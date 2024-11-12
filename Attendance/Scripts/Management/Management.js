@@ -106,10 +106,12 @@ $(document).ready(function () {
             ${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 
             開始時間: ${startTime}${endTime} 
             <button type="button" class="btn btn-link update-record" 
-                data-user-id="${record.user_id}" 
-                data-attendance-status="${record.attendance_status}" 
-                data-create-time="${startTime}"
-                data-user-name="${record.user_name}">更新</button>
+                data-user-id="${record.user_id || record.userId || record.userID}" 
+                data-user-name="${record.user_name || record.userName}" 
+                data-record-type="${recordType}" 
+                data-start-time="${startTime}"
+                data-leave-type="${record.leaveType || ''}" 
+                data-overtime-type="${record.overtimeType || ''}">更新</button>
         </p>`;
         });
         $('#attendanceRecords').append(content);
@@ -213,31 +215,51 @@ $(document).ready(function () {
     // 更新按鈕事件綁定
     $(document).on('click', '.update-record', function () {
         const userId = $(this).data('user-id');
-        const attendanceStatus = $(this).data('attendance-status');
-        const createTime = $(this).data('create-time');
-        const userName = $(this).data('user-name'); // 提取 user_name
+        const userName = $(this).data('user-name');
+        const recordType = $(this).data('record-type');
+        const startTime = $(this).data('start-time');
+        const attendanceStatus = $(this).data('attendance-status') || '';
+        const leaveType = $(this).data('leave-type') || '';
+        const overtimeType = $(this).data('overtime-type') || '';
 
-        // 顯示一個表單或對話框以更新數據
-        const newAttendanceStatus = prompt("輸入新的出勤狀態:", attendanceStatus);
-        const newCreateTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", createTime);
+        // 根據不同記錄類型顯示相應的更新欄位
+        if (recordType === '出勤') {
+            const newAttendanceStatus = prompt("輸入新的出勤狀態:", attendanceStatus);
+            const newCreateTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
 
-        if (newAttendanceStatus && newCreateTime) {
-            updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime, userName);
+            if (newAttendanceStatus && newCreateTime) {
+                updateAttendanceRecord(userId, attendanceStatus, startTime, newAttendanceStatus, newCreateTime, userName);
+            }
+        } else if (recordType === '請假') {
+            const newLeaveType = prompt("輸入新的請假類型:", leaveType);
+            const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
+            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):");
+            const countHours = prompt("輸入更新後的總小時數:");
+
+            if (newLeaveType && newStartTime && newEndTime && countHours) {
+                updateLeaveRecord(userId, userName, leaveType, startTime, newLeaveType, newStartTime, newEndTime, countHours);
+            }
+        } else if (recordType === '加班') {
+            const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
+            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):");
+            const countHours = prompt("輸入更新後的總小時數:");
+
+            if (newStartTime && newEndTime && countHours) {
+                updateOvertimeRecord(userId, userName, startTime, overtimeType, newStartTime, newEndTime, countHours);
+            }
         }
     });
+
 
 
     // 更新出勤記錄的函數
     async function updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime, userName) {
         const data = {
-            user_id: userId.toString(), // 確保 user_id 為字串格式,
-            user_name: userName, // 加入 user_name 字段
+            user_id: userId.toString(),
+            user_name: userName,
             attendance_status: newAttendanceStatus,
-            create_time: newCreateTime // 更新的 create_time 格式應包含 "T"
+            create_time: newCreateTime
         };
-        //const tempurl = `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`;
-        //console.log(tempurl);
-        //console.log(data);
         try {
             await $.ajax({
                 url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
@@ -257,5 +279,70 @@ $(document).ready(function () {
             console.error("發生錯誤：", error);
         }
     }
+
+    // 更新請假記錄的函數
+    async function updateLeaveRecord(userId, userName, oldLeaveType, oldStartTime, newLeaveType, newStartTime, newEndTime, countHours) {
+        const data = {
+            userId: userId.toString(),
+            userName: userName,
+            leaveType: newLeaveType,
+            startTime: newStartTime,
+            endTime: newEndTime,
+            count_hours: parseFloat(countHours),
+            submitted_at: toLocalISOString(new Date()),
+            approved_by: getCookie("person_id")
+        };
+        try {
+            await $.ajax({
+                url: `http://internal.hochi.org.tw:8082/api/attendance/replace-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldLeaveType)}/${encodeURIComponent(oldStartTime)}`,
+                type: "PUT",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    alert("請假記錄已更新");
+                    $('#queryBtn').click(); // 刷新顯示
+                },
+                error: function (error) {
+                    console.error("請假記錄更新失敗：", error);
+                    alert("請假記錄更新失敗，請檢查資料並重試");
+                }
+            });
+        } catch (error) {
+            console.error("發生錯誤：", error);
+        }
+    }
+
+    // 更新加班記錄的函數
+    async function updateOvertimeRecord(userId, userName, oldStartTime, overtimeType, newStartTime, newEndTime, countHours) {
+        const data = {
+            userID: userId.toString(),
+            userName: userName,
+            overtimeType: overtimeType,
+            startTime: newStartTime,
+            endTime: newEndTime,
+            count_hours: parseFloat(countHours),
+            submitted_at: toLocalISOString(new Date()),
+            approved_by: getCookie("person_id")
+        };
+        try {
+            await $.ajax({
+                url: `http://internal.hochi.org.tw:8082/api/attendance/replace-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldStartTime)}`,
+                type: "PUT",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    alert("加班記錄已更新");
+                    $('#queryBtn').click(); // 刷新顯示
+                },
+                error: function (error) {
+                    console.error("加班記錄更新失敗：", error);
+                    alert("加班記錄更新失敗，請檢查資料並重試");
+                }
+            });
+        } catch (error) {
+            console.error("發生錯誤：", error);
+        }
+    }
+
 
 });

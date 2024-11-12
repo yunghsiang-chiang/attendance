@@ -111,6 +111,7 @@ $(document).ready(function () {
                 data-attendance-status="${record.attendance_status}" 
                 data-record-type="${recordType}" 
                 data-start-time="${startTime}"
+                data-end-time="${endTime}" 
                 data-leave-type="${record.leaveType || ''}" 
                 data-overtime-type="${record.overtimeType || ''}">更新</button>
         </p>`;
@@ -131,7 +132,6 @@ $(document).ready(function () {
             alert("請輸入完整的開始和結束時間");
             return;
         }
-
 
         const startTime = toLocalISOString(new Date(startDateVal));
         const endTime = endDateVal ? toLocalISOString(new Date(endDateVal)) : null;
@@ -232,7 +232,7 @@ $(document).ready(function () {
         } else if (recordType === '請假') {
             const newLeaveType = prompt("輸入新的請假類型:", leaveType);
             const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
-            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):");
+            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):", endTime);
             const countHours = prompt("輸入更新後的總小時數:");
 
             if (newLeaveType && newStartTime && newEndTime && countHours) {
@@ -240,7 +240,7 @@ $(document).ready(function () {
             }
         } else if (recordType === '加班') {
             const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
-            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):");
+            const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):", endTime);
             const countHours = prompt("輸入更新後的總小時數:");
 
             if (newStartTime && newEndTime && countHours) {

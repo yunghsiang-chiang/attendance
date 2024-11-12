@@ -230,32 +230,32 @@ $(document).ready(function () {
     // 更新出勤記錄的函數
     async function updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime, userName) {
         const data = {
-            user_id: userId,
+            user_id: userId.toString(), // 確保 user_id 為字串格式,
             user_name: userName, // 加入 user_name 字段
             attendance_status: newAttendanceStatus,
             create_time: newCreateTime // 更新的 create_time 格式應包含 "T"
         };
-        const tempurl = `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`;
-        console.log(tempurl);
-        console.log(data);
-        //try {
-        //    await $.ajax({
-        //        url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
-        //        type: "PUT",
-        //        data: JSON.stringify(data),
-        //        contentType: "application/json",
-        //        success: function () {
-        //            alert("出勤記錄已更新");
-        //            $('#queryBtn').click(); // 刷新顯示
-        //        },
-        //        error: function (error) {
-        //            console.error("更新失敗：", error);
-        //            alert("更新記錄失敗，請檢查資料並重試");
-        //        }
-        //    });
-        //} catch (error) {
-        //    console.error("發生錯誤：", error);
-        //}
+        //const tempurl = `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`;
+        //console.log(tempurl);
+        //console.log(data);
+        try {
+            await $.ajax({
+                url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
+                type: "PUT",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    alert("出勤記錄已更新");
+                    $('#queryBtn').click(); // 刷新顯示
+                },
+                error: function (error) {
+                    console.error("更新失敗：", error);
+                    alert("更新記錄失敗，請檢查資料並重試");
+                }
+            });
+        } catch (error) {
+            console.error("發生錯誤：", error);
+        }
     }
 
 });

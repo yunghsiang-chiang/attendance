@@ -108,6 +108,7 @@ $(document).ready(function () {
             <button type="button" class="btn btn-link update-record" 
                 data-user-id="${record.user_id || record.userId || record.userID}" 
                 data-user-name="${record.user_name || record.userName}" 
+                data-attendance-status="${record.attendance_status}" 
                 data-record-type="${recordType}" 
                 data-start-time="${startTime}"
                 data-leave-type="${record.leaveType || ''}" 
@@ -116,8 +117,6 @@ $(document).ready(function () {
         });
         $('#attendanceRecords').append(content);
     }
-
-
 
     // 新增出勤、請假或加班記錄
     $('#addRecordBtn').click(async function () {

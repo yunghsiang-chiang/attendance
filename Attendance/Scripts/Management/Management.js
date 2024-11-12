@@ -108,8 +108,7 @@ $(document).ready(function () {
                 <button type="button"  class="btn btn-link update-record" data-user-id="${record.user_id}" data-attendance-status="${record.attendance_status}" data-create-time="${startTime}">更新</button>
             </p>`;
         });
-        $('#attendanceRecords').html(content);
-        console.log(content);
+        $('#attendanceRecords').append(content);
     }
 
 

@@ -227,7 +227,14 @@ $(document).ready(function () {
             attendance_status: newAttendanceStatus,
             create_time: newCreateTime // 更新的 create_time 格式應包含 "T"
         };
-
+        console.log(userId);
+        console.log(attendanceStatus);
+        console.log(createTime);
+        console.log(newAttendanceStatus);
+        console.log(newCreateTime);
+        console.log(encodeURIComponent(userId));
+        console.log(encodeURIComponent(attendanceStatus));
+        console.log(encodeURIComponent(createTime));
         try {
             await $.ajax({
                 url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,

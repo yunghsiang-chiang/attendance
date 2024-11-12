@@ -105,10 +105,11 @@ $(document).ready(function () {
             <p>
                 ${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 
                 開始時間: ${startTime}${endTime} 
-                <button class="btn btn-link update-record" data-user-id="${record.user_id}" data-attendance-status="${record.attendance_status}" data-create-time="${startTime}">更新</button>
+                <button type="button"  class="btn btn-link update-record" data-user-id="${record.user_id}" data-attendance-status="${record.attendance_status}" data-create-time="${startTime}">更新</button>
             </p>`;
         });
         $('#attendanceRecords').html(content);
+        console.log(content);
     }
 
 

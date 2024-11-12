@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Wpadmin.Master" AutoEventWireup="true" CodeBehind="Management.aspx.cs" Inherits="Attendance.Management.Management" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script src="../Scripts/Management/Management.js"></script>
 </asp:Content>
@@ -33,6 +34,7 @@
             <h4>查詢結果</h4>
             <div id="attendanceRecords"></div>
         </div>
+
 
         <!-- 新增資料表單 -->
         <h4>新增出勤/請假/加班記錄</h4>

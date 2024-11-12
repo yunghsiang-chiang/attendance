@@ -95,17 +95,20 @@ $(document).ready(function () {
         }
     });
 
-    // 顯示查詢結果
+    // 顯示查詢結果並添加更新按鈕
     function displayRecords(records, recordType, showEndTime) {
         let content = `<h5>${recordType}記錄</h5>`;
         records.forEach(record => {
-            content += `<p>${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 開始時間: ${record.startTime || record.create_time}`;
-            if (showEndTime && record.endTime) {
-                content += `, 結束時間: ${record.endTime}`;
-            }
-            content += `</p>`;
+            const startTime = record.startTime || record.create_time;
+            const endTime = record.endTime ? `, 結束時間: ${record.endTime}` : '';
+            content += `
+            <p>
+                ${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 
+                開始時間: ${startTime}${endTime} 
+                <button class="btn btn-link update-record" data-user-id="${record.user_id}" data-attendance-status="${record.attendance_status}" data-create-time="${startTime}">更新</button>
+            </p>`;
         });
-        $('#attendanceRecords').append(content);
+        $('#attendanceRecords').html(content);
     }
 
 
@@ -202,7 +205,47 @@ $(document).ready(function () {
         }
     });
 
+    // 更新按鈕事件綁定
+    $(document).on('click', '.update-record', function () {
+        const userId = $(this).data('user-id');
+        const attendanceStatus = $(this).data('attendance-status');
+        const createTime = $(this).data('create-time');
 
+        // 顯示一個表單或對話框以更新數據
+        const newAttendanceStatus = prompt("輸入新的出勤狀態:", attendanceStatus);
+        const newCreateTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", createTime);
 
-    
+        if (newAttendanceStatus && newCreateTime) {
+            updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime);
+        }
+    });
+
+    // 更新出勤記錄的函數
+    async function updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime) {
+        const data = {
+            user_id: userId,
+            attendance_status: newAttendanceStatus,
+            create_time: newCreateTime // 更新的 create_time 格式應包含 "T"
+        };
+
+        try {
+            await $.ajax({
+                url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
+                type: "PUT",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    alert("出勤記錄已更新");
+                    // 可以在這裡重新查詢出勤記錄以刷新顯示
+                    $('#queryBtn').click();
+                },
+                error: function (error) {
+                    console.error(error);
+                    alert("更新記錄失敗，請檢查資料並重試");
+                }
+            });
+        } catch (error) {
+            console.error("發生錯誤：", error);
+        }
+    }
 });

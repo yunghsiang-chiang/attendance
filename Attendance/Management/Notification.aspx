@@ -2,7 +2,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-    <link href="../Content/Management/Notification.css" rel="stylesheet" />
+    <script src="../Scripts/Management/Notification.js"></script>
+    
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -28,4 +29,5 @@
             </section>
         </div>
     </div>
+    <link href="../Content/Management/Notification.css" rel="stylesheet" />
 </asp:Content>

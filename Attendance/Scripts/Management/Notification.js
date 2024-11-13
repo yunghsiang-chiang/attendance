@@ -27,16 +27,19 @@
         formData.append('content', content);
 
         try {
-            const response = await fetch('/api/save_announcement', {
-                method: 'POST',
-                body: formData
-            });
-            if (response.ok) {
-                alert('公告儲存成功');
-                loadNotifications();
-            } else {
-                alert('儲存失敗: ' + await response.text());
-            }
+            //const response = await fetch('/api/save_announcement', {
+            //    method: 'POST',
+            //    body: formData
+            //});
+            //if (response.ok) {
+            //    alert('公告儲存成功');
+            //    loadNotifications();
+            //} else {
+            //    alert('儲存失敗: ' + await response.text());
+            //}
+            console.log(title);
+            console.log(content);
+            console.log(formData);
         } catch (error) {
             console.error('儲存過程中出錯:', error);
             alert('發生錯誤，無法儲存公告');

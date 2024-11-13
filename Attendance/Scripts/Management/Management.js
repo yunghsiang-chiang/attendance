@@ -221,6 +221,7 @@ $(document).ready(function () {
         const attendanceStatus = $(this).data('attendance-status') || '';
         const leaveType = $(this).data('leave-type') || '';
         const overtimeType = $(this).data('overtime-type') || '';
+        const endTime = $(this).data('end-time');  // 確保這裡直接獲取字符串
 
         // 根據不同記錄類型顯示相應的更新欄位
         if (recordType === '出勤') {

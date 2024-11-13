@@ -24,7 +24,7 @@ $(document).ready(function () {
         $('#attendanceStatus').toggle(type === 'attendance');
         $('#leaveTypeGroup').toggle(type === 'leave');
         $('#overtimeTypeGroup').toggle(type === 'overtime');
-        $('#endTimeGroup').toggle(type !== 'attendance'); // 如果是出勤則隱藏 endTime
+        $('#endTime').closest('.col-md-6').toggle(type !== 'attendance'); // 隱藏結束時間區域
     }
 
     // 當頁面載入時根據預設選項更新欄位顯示

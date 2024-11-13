@@ -100,11 +100,12 @@ $(document).ready(function () {
         let content = `<h5>${recordType}記錄</h5>`;
         records.forEach(record => {
             const startTime = record.startTime || record.create_time;
-            const endTime = record.endTime ? `, 結束時間: ${record.endTime}` : '';
+            const endTime = record.endTime || ''; // 僅在有 endTime 時顯示時間
+            const displayEndTime = showEndTime && endTime ? `, 結束時間: ${endTime}` : '';
             content += `
         <p>
             ${recordType}: ${record.attendance_status || record.leaveType || record.overtimeType}, 
-            開始時間: ${startTime}${endTime} 
+            開始時間: ${startTime}${displayEndTime}
             <button type="button" class="btn btn-link update-record" 
                 data-user-id="${record.user_id || record.userId || record.userID}" 
                 data-user-name="${record.user_name || record.userName}" 

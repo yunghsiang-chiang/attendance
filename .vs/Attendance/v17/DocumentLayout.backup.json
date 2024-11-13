@@ -28,7 +28,7 @@
               "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Management.js",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Management.js",
               "RelativeToolTip": "Attendance\\Scripts\\Management\\Management.js",
-              "ViewState": "AgIAANAAAAAAAAAAAAAMwNsAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAADwvxsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-12T02:22:34.161Z",
               "EditorCaption": ""
@@ -43,7 +43,8 @@
               "RelativeToolTip": "Attendance\\Management\\Management.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-11-12T02:22:26.313Z"
+              "WhenOpened": "2024-11-12T02:22:26.313Z",
+              "EditorCaption": ""
             }
           ]
         }

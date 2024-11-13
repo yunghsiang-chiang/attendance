@@ -115,6 +115,12 @@ $(document).ready(function () {
                 data-end-time="${endTime}" 
                 data-leave-type="${record.leaveType || ''}" 
                 data-overtime-type="${record.overtimeType || ''}">更新</button>
+            <button type="button" class="btn btn-link delete-record"
+                data-user-id="${record.user_id || record.userId || record.userID}" 
+                data-record-type="${recordType}" 
+                data-start-time="${startTime}"
+                data-attendance-status="${record.attendance_status || ''}"
+                data-leave-type="${record.leaveType || ''}">刪除</button>
         </p>`;
         });
         $('#attendanceRecords').append(content);
@@ -251,7 +257,40 @@ $(document).ready(function () {
         }
     });
 
+    // 刪除按鈕事件綁定
+    $(document).on('click', '.delete-record', function () {
+        const userId = $(this).data('user-id');
+        const recordType = $(this).data('record-type');
+        const startTime = $(this).data('start-time');
+        const attendanceStatus = $(this).data('attendance-status');
+        const leaveType = $(this).data('leave-type');
 
+        // 根據不同記錄類型選擇對應的刪除 API
+        let deleteUrl;
+        if (recordType === '出勤') {
+            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-attendance-record/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(startTime)}`;
+        } else if (recordType === '請假') {
+            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`;
+        } else if (recordType === '加班') {
+            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(startTime)}`;
+        }
+
+        if (deleteUrl) {
+            // 發送 AJAX DELETE 請求
+            $.ajax({
+                url: deleteUrl,
+                type: "DELETE",
+                success: function () {
+                    alert(`${recordType}記錄已刪除`);
+                    $('#queryBtn').click(); // 刷新顯示
+                },
+                error: function (error) {
+                    console.error("刪除記錄失敗：", error);
+                    alert("刪除記錄失敗，請檢查資料並重試");
+                }
+            });
+        }
+    });
 
     // 更新出勤記錄的函數
     async function updateAttendanceRecord(userId, attendanceStatus, createTime, newAttendanceStatus, newCreateTime, userName) {

@@ -39,7 +39,9 @@
             //}
             console.log(title);
             console.log(content);
-            console.log(formData);
+            for (const [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
         } catch (error) {
             console.error('儲存過程中出錯:', error);
             alert('發生錯誤，無法儲存公告');

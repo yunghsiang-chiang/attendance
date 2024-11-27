@@ -66,7 +66,7 @@
     }
 
     // 使用 async/await 發送加班 API 請求
-    async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours) {
+    async function postApiData_overtime(userID, userName, overtimeType, startTime, endTime, count_hours, remark) {
         const localDate = new Date();
         const localISOString = toLocalISOString(localDate); // 使用本地時間
         try {
@@ -80,6 +80,7 @@
                     "startTime": startTime, // 使用原始的當地時間
                     "endTime": endTime, // 使用原始的當地時間
                     "count_hours": count_hours,
+                    "remark": remark, // 傳遞備註
                     "submitted_at": localISOString
                 }),
                 headers: {
@@ -345,6 +346,7 @@
                 overtimeEntries.each(function (index) {
                     const startTimeString = $(this).find('input[type="time"]').eq(0).val();
                     const endTimeString = $(this).find('input[type="time"]').eq(1).val();
+                    const remark = $(this).find('textarea').val(); // 獲取備註內容
 
                     if (!startTimeString || !endTimeString) {
                         alert("請選擇加班的起始時間和結束時間!");
@@ -371,7 +373,7 @@
                     totalHours += hours;
 
                     // 發送 API 請求 (不再轉換為 UTC)
-                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours);
+                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours,remark // 將備註一併發送);
 
                 });
 
@@ -395,6 +397,8 @@
             <input type="time" id="overtime-start-${index}" required>
             <label for="overtime-end-${index}">請選擇申報加班的結束時間：</label>
             <input type="time" id="overtime-end-${index}" required>
+            <label for="overtime-remark-${index}">備註：</label>
+            <textarea id="overtime-remark-${index}" class="form-control" rows="2" placeholder="加班原因或說明"></textarea>
         </div>
         `;
         $('#overtime-times').append(newEntry);

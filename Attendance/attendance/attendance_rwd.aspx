@@ -61,7 +61,7 @@
     </div>
 
     <div id="dialog-form" title="請假申請">
-        <form id="leave-form">
+        <div id="leave-form">
             <fieldset>
                 <p><strong>注意：</strong> 單日請假開始-結束時間超過8小時則扣除8小時對應假期時數。</p>
                 <p>不足8小時其12:30~13:30為午餐時間，不會計算請假工時。</p>
@@ -87,11 +87,11 @@
                 <label for="end-time">結束時間</label>
                 <input type="time" name="end-time" id="end-time" class="text ui-widget-content ui-corner-all" required>
             </fieldset>
-        </form>
+        </div>
     </div>
 
     <div id="dialog" title="申報加班">
-        <form id="overtime-form">
+        <div id="overtime-form">
             <fieldset>
                 <p id="message"></p>
                 <div id="overtime-times">
@@ -100,11 +100,13 @@
                         <input type="time" id="overtime-start-0" required>
                         <label for="overtime-end-0">請選擇申報加班的結束時間：</label>
                         <input type="time" id="overtime-end-0" required>
+                        <label for="overtime-remark-0">備註：</label>
+                        <textarea id="overtime-remark-0" class="form-control" rows="2" placeholder="加班原因或說明"></textarea>
                     </div>
                 </div>
                 <input type="button" id="add-overtime" value="新增加班時段">
             </fieldset>
-        </form>
+        </div>
     </div>
 
 </asp:Content>

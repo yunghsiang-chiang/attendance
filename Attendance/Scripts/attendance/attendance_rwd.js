@@ -373,7 +373,7 @@
                     totalHours += hours;
 
                     // 發送 API 請求 (不再轉換為 UTC)
-                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours,remark // 將備註一併發送);
+                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours,remark);
 
                 });
 

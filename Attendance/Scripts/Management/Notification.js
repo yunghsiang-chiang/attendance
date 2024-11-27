@@ -53,7 +53,6 @@
         try {
             const response = await fetch('/api/get_notifications');
             if (!response.ok) throw new Error('加載公告清單失敗');
-
             const notifications = await response.json();
             $('#notificationList').empty();
             notifications.forEach(notification => {

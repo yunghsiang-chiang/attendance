@@ -44,5 +44,5 @@
             </section>
         </div>
     </div>
-    <script src="../Sscripts/Management/Notification.js"></script>
+    <script src="../Scripts/Management/Notification.js"></script>
 </asp:Content>

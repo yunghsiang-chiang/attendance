@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     let editor;
 
-    // Initialize CKEditor with custom configuration
+    // 初始化 CKEditor
     async function initializeEditor() {
         try {
             editor = await ClassicEditor.create(document.querySelector('#content'), {
@@ -12,35 +12,52 @@
         }
     }
 
-    // Save announcement
+    // 儲存公告
     async function saveAnnouncement() {
         const title = $('#title').val();
+        const author = $('#author').val();
+        const issueTime = $('#issue_time').val();
+        const startTime = $('#start_time').val();
+        const endTime = $('#end_time').val();
+        const status = $('#status').val();
         const content = editor.getData();
 
-        if (!title || !content) {
-            alert("請填寫標題和內容");
+        // 檢查必填欄位
+        if (!title || !author || !issueTime || !startTime || !endTime || !status || !content) {
+            alert("請完整填寫所有欄位");
             return;
         }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
+        // 構建 API 請求數據
+        const announcementData = {
+            announcement_id: null, // 後端自動生成 ID
+            title: title,
+            content: content,
+            author: author,
+            issue_time: new Date(issueTime).toISOString(),
+            start_time: new Date(startTime).toISOString(),
+            end_time: new Date(endTime).toISOString(),
+            status: status,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
 
         try {
-            //const response = await fetch('/api/save_announcement', {
-            //    method: 'POST',
-            //    body: formData
-            //});
-            //if (response.ok) {
-            //    alert('公告儲存成功');
-            //    loadNotifications();
-            //} else {
-            //    alert('儲存失敗: ' + await response.text());
-            //}
-            console.log(title);
-            console.log(content);
-            for (const [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(announcementData)
+            });
+
+            if (response.ok) {
+                alert('公告儲存成功');
+                loadNotifications(); // 重新加載公告清單
+            } else {
+                const errorText = await response.text();
+                alert('儲存失敗: ' + errorText);
             }
         } catch (error) {
             console.error('儲存過程中出錯:', error);
@@ -48,11 +65,12 @@
         }
     }
 
-    // Load announcements list
+    // 加載公告清單
     async function loadNotifications() {
         try {
             const response = await fetch('/api/get_notifications');
             if (!response.ok) throw new Error('加載公告清單失敗');
+
             const notifications = await response.json();
             $('#notificationList').empty();
             notifications.forEach(notification => {
@@ -63,7 +81,7 @@
         }
     }
 
-    // Bind events
+    // 綁定事件
     $('#saveButton').on('click', saveAnnouncement);
     initializeEditor();
     loadNotifications();

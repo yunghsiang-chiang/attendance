@@ -107,6 +107,17 @@
         return "";
     }
 
+    // 清空表單
+    function resetForm() {
+        currentAnnouncementId = null; // 清空當前公告 ID
+        $('#title').val('');
+        $('#issue_time').val('');
+        $('#start_time').val('');
+        $('#end_time').val('');
+        $('#status').val('draft');
+        editor.setData('');
+    }
+
     // 儲存公告
     async function saveAnnouncement() {
         const title = $('#title').val();
@@ -149,9 +160,7 @@
 
             if (response.ok) {
                 alert(currentAnnouncementId ? '公告更新成功' : '公告新增成功');
-                currentAnnouncementId = null; // 清空當前公告 ID
-                $('#announcementFormPanel')[0].reset(); // 清空表單
-                editor.setData('');
+                resetForm(); // 清空表單
                 loadNotifications(); // 重新加載公告清單
             } else {
                 alert('儲存失敗: ' + await response.text());

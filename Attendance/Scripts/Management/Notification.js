@@ -1,5 +1,8 @@
 ﻿$(document).ready(function () {
     let editor;
+    let currentPage = 1; // 當前頁碼
+    const itemsPerPage = 10; // 每頁顯示 10 筆公告
+    let currentAnnouncementId = null; // 用於跟蹤目前正在編輯的公告 ID
 
     // 初始化 CKEditor
     async function initializeEditor() {
@@ -9,6 +12,85 @@
             });
         } catch (error) {
             console.error('CKEditor 初始化失敗:', error);
+        }
+    }
+
+    // 動態設置狀態底色
+    function getStatusClass(status) {
+        switch (status) {
+            case 'draft': return 'list-group-item-warning'; // 草稿 (淡黃色)
+            case 'published': return 'list-group-item-success'; // 已發佈 (淡綠色)
+            case 'archived': return 'list-group-item-danger'; // 已存檔 (淡紅色)
+            default: return '';
+        }
+    }
+
+    // 分頁處理
+    function renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const pagination = $('#pagination');
+        pagination.empty();
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = $(`<li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#">${i}</a>
+            </li>`);
+            pageItem.on('click', function (e) {
+                e.preventDefault();
+                currentPage = i;
+                loadNotifications();
+            });
+            pagination.append(pageItem);
+        }
+    }
+
+    // 加載公告清單
+    async function loadNotifications() {
+        try {
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/GetAnnouncements');
+            if (!response.ok) throw new Error('加載公告清單失敗');
+
+            const announcements = (await response.json()).$values || [];
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedData = announcements.slice(startIndex, startIndex + itemsPerPage);
+
+            $('#notificationList').empty();
+
+            paginatedData.forEach(announcement => {
+                const listItem = $(`
+                    <li class="list-group-item ${getStatusClass(announcement.status)}" 
+                        data-id="${announcement.announcement_id}" 
+                        data-status="${announcement.status}">
+                        <strong>${announcement.title}</strong>
+                        <br>
+                        <small>狀態: ${announcement.status}, 創立日期: ${new Date(announcement.created_at).toLocaleString()}</small>
+                    </li>
+                `);
+
+                listItem.on('click', function () {
+                    if (announcement.status === 'archived') {
+                        // 彈出模態框
+                        $('#modalTitle').text(announcement.title);
+                        $('#modalContent').html(announcement.content);
+                        $('#announcementModal').modal('show');
+                    } else {
+                        // 回填表單
+                        currentAnnouncementId = announcement.announcement_id; // 設置當前公告 ID
+                        $('#title').val(announcement.title);
+                        $('#issue_time').val(new Date(announcement.issue_time).toISOString().slice(0, 16));
+                        $('#start_time').val(new Date(announcement.start_time).toISOString().slice(0, 16));
+                        $('#end_time').val(new Date(announcement.end_time).toISOString().slice(0, 16));
+                        $('#status').val(announcement.status);
+                        editor.setData(announcement.content);
+                    }
+                });
+
+                $('#notificationList').append(listItem);
+            });
+
+            renderPagination(announcements.length);
+        } catch (error) {
+            console.error('公告清單加載錯誤:', error);
         }
     }
 
@@ -25,17 +107,6 @@
         return "";
     }
 
-    // 清理 CKEditor HTML 輸出
-    function sanitizeContent(content) {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = content;
-
-        // 移除不必要的屬性
-        tempDiv.querySelectorAll('[data-placeholder]').forEach(node => node.removeAttribute('data-placeholder'));
-
-        return tempDiv.innerHTML;
-    }
-
     // 儲存公告
     async function saveAnnouncement() {
         const title = $('#title').val();
@@ -44,9 +115,6 @@
         const endTime = $('#end_time').val();
         const status = $('#status').val();
         let content = editor.getData();
-
-        // 清理內容
-        content = sanitizeContent(content);
 
         // 獲取 author 和 created_at
         const author = getCookie("person_name");
@@ -60,55 +128,37 @@
 
         // 構建 API 請求數據
         const announcementData = {
-            title: title,
-            content: content,
-            author: author, // 從 Cookie 獲取
+            announcement_id: currentAnnouncementId || null, // 如果 ID 為 null，表示新增
+            title,
+            content,
+            author,
             issue_time: new Date(issueTime).toISOString(),
             start_time: new Date(startTime).toISOString(),
             end_time: new Date(endTime).toISOString(),
-            status: status,
-            created_at: createdAt, // 當下系統時間
-            updated_at: createdAt // 當下系統時間
+            status,
+            created_at: currentAnnouncementId ? undefined : createdAt, // 新增時設置，修改時保留
+            updated_at: createdAt,
         };
-
-        const requestData = { newAnnouncement: announcementData }; // 包裹在 newAnnouncement 屬性內
 
         try {
             const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(requestData)
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(announcementData),
             });
 
             if (response.ok) {
-                alert('公告儲存成功');
+                alert(currentAnnouncementId ? '公告更新成功' : '公告新增成功');
+                currentAnnouncementId = null; // 清空當前公告 ID
+                $('#announcementFormPanel')[0].reset(); // 清空表單
+                editor.setData('');
                 loadNotifications(); // 重新加載公告清單
             } else {
-                const errorText = await response.text();
-                alert('儲存失敗: ' + errorText);
+                alert('儲存失敗: ' + await response.text());
             }
         } catch (error) {
             console.error('儲存過程中出錯:', error);
             alert('發生錯誤，無法儲存公告');
-        }
-    }
-
-    // 加載公告清單
-    async function loadNotifications() {
-        try {
-            const response = await fetch('/api/get_notifications');
-            if (!response.ok) throw new Error('加載公告清單失敗');
-
-            const notifications = await response.json();
-            $('#notificationList').empty();
-            notifications.forEach(notification => {
-                $('#notificationList').append(`<li class="list-group-item">${notification.title}</li>`);
-            });
-        } catch (error) {
-            console.error('公告清單加載錯誤:', error);
         }
     }
 

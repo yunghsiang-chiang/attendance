@@ -36,6 +36,7 @@
                         <li class="nav-item"><a class="nav-link" href="Restriction.aspx">禁止異動期間</a></li>
                         <li class="nav-item"><a class="nav-link" href="Reports.aspx">報表</a></li>
                         <li class="nav-item"><a class="nav-link" href="Management.aspx">管理</a></li>
+                        <li class="nav-item"><a class="nav-link" href="OvertimePayCalculation.aspx">加班費計算</a></li>
                         <li class="nav-item"><a class="nav-link" href="CompanySettings.aspx">公司設定</a></li>
                     </ul>
                     <span class="navbar-text" id="user_name">用戶名稱</span> <!-- Updated for Bootstrap alignment -->

@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\egrou\\source\\repos\\Attendance\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\overtimepaycalculation.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\overtimepaycalculation.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\notification.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\notification.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\overtimepaycalculation.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\overtimepaycalculation.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,28 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "attendance_rwd.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeDocumentMoniker": "Attendance\\attendance\\attendance_rwd.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeToolTip": "Attendance\\attendance\\attendance_rwd.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-11-29T07:26:34.351Z",
+              "DocumentIndex": 1,
+              "Title": "OvertimePayCalculation.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\OvertimePayCalculation.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\OvertimePayCalculation.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\OvertimePayCalculation.js",
+              "RelativeToolTip": "Attendance\\Scripts\\Management\\OvertimePayCalculation.js",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAcwHkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-11-29T08:14:16.7Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Notification.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Notification.aspx",
-              "RelativeDocumentMoniker": "Attendance\\Management\\Notification.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Notification.aspx",
-              "RelativeToolTip": "Attendance\\Management\\Notification.aspx",
+              "DocumentIndex": 2,
+              "Title": "Wpadmin.Master",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Wpadmin.Master",
+              "RelativeDocumentMoniker": "Attendance\\Wpadmin.Master",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Wpadmin.Master",
+              "RelativeToolTip": "Attendance\\Wpadmin.Master",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-11-29T07:21:09.896Z",
+              "WhenOpened": "2024-11-29T08:13:44.575Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OvertimePayCalculation.aspx",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\OvertimePayCalculation.aspx",
+              "RelativeDocumentMoniker": "Attendance\\Management\\OvertimePayCalculation.aspx",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\OvertimePayCalculation.aspx",
+              "RelativeToolTip": "Attendance\\Management\\OvertimePayCalculation.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-11-29T08:11:13.956Z",
               "EditorCaption": ""
             }
           ]

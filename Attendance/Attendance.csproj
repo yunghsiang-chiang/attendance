@@ -188,6 +188,7 @@
     <Content Include="Management\Leave.aspx" />
     <Content Include="Management\Management.aspx" />
     <Content Include="Management\Notification.aspx" />
+    <Content Include="Management\OvertimePayCalculation.aspx" />
     <Content Include="Management\Reports.aspx" />
     <Content Include="Management\Restriction.aspx" />
     <Content Include="Management\Schedule.aspx" />
@@ -261,6 +262,7 @@
     <Content Include="Scripts\Management\Leave.js" />
     <Content Include="Scripts\Management\Management.js" />
     <Content Include="Scripts\Management\Notification.js" />
+    <Content Include="Scripts\Management\OvertimePayCalculation.js" />
     <Content Include="Scripts\Management\Reports.js" />
     <Content Include="Scripts\Management\Schedule.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -406,6 +408,13 @@
     </Compile>
     <Compile Include="Management\Notification.aspx.designer.cs">
       <DependentUpon>Notification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Management\OvertimePayCalculation.aspx.cs">
+      <DependentUpon>OvertimePayCalculation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Management\OvertimePayCalculation.aspx.designer.cs">
+      <DependentUpon>OvertimePayCalculation.aspx</DependentUpon>
     </Compile>
     <Compile Include="Management\Reports.aspx.cs">
       <DependentUpon>Reports.aspx</DependentUpon>

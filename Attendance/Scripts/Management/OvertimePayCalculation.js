@@ -18,6 +18,11 @@
         }
     }
 
+    // 取得月最後日期
+    function getLastDayOfMonth(year, month) {
+        return new Date(year, month, 0).getDate(); // month 不需要 -1，因為設定 0 已經會返回上月的最後一天
+    }
+
     // 計算按鈕點擊事件
     $("#calculateButton").on("click", async function () {
         const userId = $("#userSelect").val();
@@ -30,16 +35,24 @@
         }
 
         try {
+            // 動態計算該月的最後一天
+            const lastDay = getLastDayOfMonth(year, month);
+
+            const startDate = `${year}-${month.padStart(2, "0")}-01`;
+            const endDate = `${year}-${month.padStart(2, "0")}-${lastDay}`;
+
             // 獲取上班日資料
             const attendanceDaysResponse = await fetch(`${API_ATTENDANCE_DAYS}?calendaryear=${year}&calendarmonth=${month}`);
             const attendanceDaysData = await attendanceDaysResponse.json();
             const workDays = attendanceDaysData[0]?.attendance_days?.split(",") || [];
 
             // 獲取加班記錄
-            const startDate = `${year}-${month.padStart(2, "0")}-01`;
-            const endDate = `${year}-${month.padStart(2, "0")}-30`;
             const overtimeResponse = await fetch(`${API_OVERTIME_RECORDS}?userid=${userId}&startdate=${startDate}&enddate=${endDate}`);
             const overtimeRecords = await overtimeResponse.json();
+
+            if (!Array.isArray(overtimeRecords)) {
+                throw new Error("加班記錄格式錯誤，請檢查 API 回傳資料。");
+            }
 
             // 計算加班費
             const overtimeSummary = calculateOvertime(workDays, overtimeRecords);

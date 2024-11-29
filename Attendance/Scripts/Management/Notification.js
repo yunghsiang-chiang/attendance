@@ -139,7 +139,7 @@
 
         // 構建 API 請求數據
         const announcementData = {
-            announcement_id: currentAnnouncementId || null, // 如果 ID 為 null，表示新增
+            announcement_id: currentAnnouncementId || 0, // 新增時設為 0
             title,
             content,
             author,
@@ -150,6 +150,8 @@
             created_at: currentAnnouncementId ? undefined : createdAt, // 新增時設置，修改時保留
             updated_at: createdAt,
         };
+
+        console.log(announcementData);
 
         try {
             const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {

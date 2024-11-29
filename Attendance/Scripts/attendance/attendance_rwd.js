@@ -40,6 +40,40 @@
         return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
     }
 
+    // 加載公告清單
+    async function loadAnnouncements() {
+        try {
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements');
+            if (!response.ok) throw new Error('公告清單加載失敗');
+            const announcements = (await response.json()).$values || [];
+
+            // 清空現有清單
+            $('#announcementList').empty();
+
+            announcements.forEach(announcement => {
+                const listItem = $(`
+                    <li class="list-group-item" data-id="${announcement.announcement_id}">
+                        ${announcement.title}
+                    </li>
+                `);
+
+                // 點擊事件顯示詳細資訊
+                listItem.on('click', function () {
+                    $('#modalTitle').text(announcement.title);
+                    $('#modalContent').html(announcement.content);
+                    $('#modalStartTime').text(new Date(announcement.start_time).toLocaleString());
+                    $('#modalEndTime').text(new Date(announcement.end_time).toLocaleString());
+                    $('#modalAuthor').text(announcement.author);
+                    $('#announcementModal').modal('show');
+                });
+
+                $('#announcementList').append(listItem);
+            });
+        } catch (error) {
+            console.error('公告清單加載失敗:', error);
+        }
+    }
+
     // 使用 async/await 發送 API 請求
     async function postApiData(user_id, user_name, attendance_status) {
         const localDate = new Date();
@@ -221,6 +255,8 @@
 
     // 頁面加載時初始化
     defaultLoad();
+    // 初始加載公告清單
+    loadAnnouncements();
     handleButtonClick('#bt_start', '到班');
     handleButtonClick('#bt_end', '下班');
     handleButtonClick('#bt_going_out_on_business', '外出公務');

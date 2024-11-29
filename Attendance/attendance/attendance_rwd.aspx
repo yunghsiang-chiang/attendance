@@ -16,6 +16,12 @@
             <div class="inner-container image-container">
                 <img src="http://internal.hochi.org.tw:8083/images/男性.png" alt="Profile Picture">
             </div>
+            <!-- 新增公告清單於此 -->
+            <div class="announcement-list">
+                <h3>公告清單</h3>
+                <ul id="announcementList" class="list-group"></ul>
+            </div>
+
         </div>
         <div class="container col-sm-10" id="personal_infor">
             <h2>姓名:模範生</h2>
@@ -55,6 +61,30 @@
                 </div>
                 <div class="container" id="alert">
                     <string>請先登入，謝謝!😄</string>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 公告詳細資訊模態框 -->
+    <div id="announcementModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="announcementModalLabel">公告詳細資訊</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4 id="modalTitle"></h4>
+                    <p id="modalContent"></p>
+                    <p><strong>公告起始：</strong><span id="modalStartTime"></span></p>
+                    <p><strong>公告截止：</strong><span id="modalEndTime"></span></p>
+                    <p><strong>公告者：</strong><span id="modalAuthor"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                 </div>
             </div>
         </div>

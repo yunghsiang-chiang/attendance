@@ -34,6 +34,7 @@
                     <textarea id="content" name="content" rows="5" required placeholder="輸入公告內容"></textarea>
 
                     <button type="button" id="saveButton" class="btn btn-primary mt-3">儲存公告</button>
+                    <button type="button" id="resetFormButton" class="btn btn-primary mt-3">重製表單</button>
                 </div>
             </section>
 

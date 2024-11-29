@@ -151,8 +151,6 @@
             updated_at: createdAt,
         };
 
-        console.log(announcementData);
-
         try {
             const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {
                 method: 'POST',
@@ -175,6 +173,7 @@
 
     // 綁定事件
     $('#saveButton').on('click', saveAnnouncement);
+    $('#resetFormButton').on('click', resetForm);
     initializeEditor();
     loadNotifications();
 });

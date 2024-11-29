@@ -21,7 +21,6 @@
                 <h3>公告清單</h3>
                 <ul id="announcementList" class="list-group"></ul>
             </div>
-
         </div>
         <div class="container col-sm-10" id="personal_infor">
             <h2>姓名:模範生</h2>

@@ -67,11 +67,8 @@
             <!-- 系統公告清單 -->
             <div class="col-md-6 announcement mb-4">
                 <h3>系統公告</h3>
-                <ul class="list-group">
-                    <li class="list-group-item">公告1: 系統維護通知</li>
-                    <li class="list-group-item">公告2: 新功能上線</li>
-                    <li class="list-group-item">公告3: 員工培訓</li>
-                    <li class="list-group-item">公告4: 年終晚會</li>
+                <ul class="list-group" id="announcement-list">
+                    <!-- 動態插入公告 -->
                 </ul>
                 <button class="btn btn-primary mt-2" id="view-all-announcements" type="button">查看全部</button>
             </div>
@@ -116,15 +113,12 @@
         </div>
     </div>
 
-    <!-- jQuery UI Dialog for Announcements -->
+
+    <!-- 公告對話框 -->
     <div id="all-announcements-dialog" title="系統公告" style="display: none;">
-        <ul>
-            <li>公告1: 系統維護通知</li>
-            <li>公告2: 新功能上線</li>
-            <li>公告3: 員工培訓</li>
-            <li>公告4: 年終晚會</li>
-            <li>公告5: 新的安全政策</li>
-            <li>公告6: 聖誕假期安排</li>
+        <ul id="all-announcements-list">
+            <!-- 動態插入公告列表 -->
         </ul>
     </div>
+
 </asp:Content>

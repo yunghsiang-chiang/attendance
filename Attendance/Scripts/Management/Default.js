@@ -9,6 +9,7 @@
 });
 
 $(document).ready(async function () {
+    const API_URL = "http://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements";
     // 各類型人數初始化
     let staff_qty = 0;
     let disciples_qty = 0;
@@ -34,6 +35,93 @@ $(document).ready(async function () {
 
     // 計算並顯示未出勤人數
     updateNoAttendanceQty();
+    // 初始化公告清單
+    loadAnnouncements();
+
+    // 綁定「查看全部」按鈕點擊事件
+    $("#view-all-announcements").on("click", function () {
+        $("#all-announcements-dialog").dialog({
+            modal: true,
+            width: 600
+        });
+    });
+
+    /**
+     * 透過 API 獲取公告資料並渲染到公告清單
+     */
+    async function loadAnnouncements() {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) {
+                throw new Error("無法載入公告資料");
+            }
+
+            const data = await response.json();
+            const announcements = data.$values || [];
+
+            // 渲染最新公告（最多顯示 5 則）
+            const announcementList = $("#announcement-list");
+            announcements.slice(0, 5).forEach(item => {
+                const listItem = `
+                    <li class="list-group-item">
+                        <strong>${item.title}</strong> (${formatDate(item.issue_time)})
+                        <button type="button" class="btn btn-link view-content" data-title="${item.title}" data-content='${item.content}'>查看內容</button>
+                    </li>`;
+                announcementList.append(listItem);
+            });
+
+            // 綁定「查看內容」按鈕事件
+            $(".view-content").on("click", function () {
+                const title = $(this).data("title");
+                const content = $(this).data("content");
+                showAnnouncementContent(title, content);
+            });
+
+            // 渲染所有公告到對話框
+            const allAnnouncementsList = $("#all-announcements-list");
+            announcements.forEach(item => {
+                const listItem = `
+                    <li>
+                        <strong>${item.title}</strong> (${formatDate(item.issue_time)})<br>
+                        <div>${item.content}</div>
+                    </li>`;
+                allAnnouncementsList.append(listItem);
+            });
+        } catch (error) {
+            console.error("公告載入失敗:", error);
+        }
+    }
+
+    /**
+     * 顯示公告內容於模態框
+     * @param {string} title 公告標題
+     * @param {string} content 公告內容（HTML 格式）
+     */
+    function showAnnouncementContent(title, content) {
+        const modal = $(`<div title="${title}">${content}</div>`);
+        modal.dialog({
+            modal: true,
+            width: 600,
+            buttons: {
+                關閉: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+
+    /**
+     * 格式化日期
+     * @param {string} date 日期字串
+     * @returns {string} 格式化後的日期
+     */
+    function formatDate(date) {
+        return new Date(date).toLocaleDateString("zh-TW", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        });
+    }
 
     /**
      * 取得人員屬性並分類加總
@@ -138,7 +226,6 @@ $(document).ready(async function () {
         $('#no_attendance_qty').text(no_attendance_details.length + '人'); // 顯示未出勤人數
     }
 
-
     /**
      * 渲染請假紀錄表格
      * @param {Array} leaveDetails 請假詳細資料
@@ -241,4 +328,6 @@ $(document).ready(async function () {
             }
         );
     }
+
+
 });

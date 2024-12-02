@@ -58,6 +58,21 @@ th {
     background-color: #f2f2f2; /* 標題行背景色 */
 }
 
+.remark-tooltip {
+    position: absolute;
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    white-space: nowrap;
+    display: none;
+}
+
+
 /* 手機裝置的響應式設計 */
 @media (max-width: 768px) {
     .mainapply {

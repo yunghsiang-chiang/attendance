@@ -10,7 +10,7 @@
         .then(data => {
             const overtimeApplyDiv = $('.overtime_apply'); // 選取加班申請的 div
             let overtimeContent = `
-                <table>
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>

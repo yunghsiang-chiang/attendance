@@ -40,19 +40,24 @@
             overtimeContent += '</tbody></table>';
             overtimeApplyDiv.append(overtimeContent); // 將內容添加到加班申請 div 中
 
-            // 綁定滑鼠移動事件
-            $('.overtime_apply table tbody tr').on('mouseenter', function (e) {
+            // 使用事件代理綁定滑鼠事件
+            $('.overtime_apply').on('mouseenter', 'tr', function (e) {
                 const remark = $(this).data('remark'); // 取得備註內容
                 if (remark) {
                     // 顯示備註內容
                     const tooltip = $('<div class="remark-tooltip"></div>').text(`備註: ${remark}`);
-                    $('body').append(tooltip); // 加入提示框到頁面
-                    tooltip.css({
-                        top: e.pageY + 10 + 'px', // 使用事件物件設置提示框的 Y 位置
-                        left: e.pageX + 10 + 'px', // 使用事件物件設置提示框的 X 位置
+                    $('body').append(tooltip); // 動態添加提示框
+                    tooltip.show().css({
+                        top: e.pageY + 10 + 'px', // 滑鼠位置的下方
+                        left: e.pageX + 10 + 'px' // 滑鼠位置的右方
                     });
                 }
-            }).on('mouseleave', function () {
+            }).on('mousemove', 'tr', function (e) {
+                $('.remark-tooltip').css({
+                    top: e.pageY + 10 + 'px', // 更新滑鼠位置
+                    left: e.pageX + 10 + 'px'
+                });
+            }).on('mouseleave', 'tr', function () {
                 $('.remark-tooltip').remove(); // 滑鼠移開時移除提示框
             });
 

@@ -126,3 +126,25 @@ button#view-all-announcements {
 .mt-2 {
     margin-top: 10px !important;
 }
+
+/* 確保對話框中的圖片不超出容器寬度 */
+.ui-dialog-content img,
+.ui-dialog-content figure.image img {
+    max-width: 100%; /* 限制圖片最大寬度 */
+    height: auto; /* 自動調整高度以保持比例 */
+    display: block; /* 確保圖片是塊級元素，避免與其他內容衝突 */
+    margin: 0 auto; /* 讓圖片置中顯示 */
+}
+
+/* 表格的調整，避免超出容器寬度 */
+.ui-dialog-content table {
+    max-width: 100%;
+    width: 100%; /* 表格寬度適配容器 */
+    border-collapse: collapse; /* 去除多餘的邊框間隙 */
+}
+
+    .ui-dialog-content table td,
+    .ui-dialog-content table th {
+        word-wrap: break-word; /* 自動換行，避免文字過長 */
+        overflow-wrap: break-word;
+    }

@@ -98,10 +98,20 @@ $(document).ready(async function () {
      * @param {string} content 公告內容（HTML 格式）
      */
     function showAnnouncementContent(title, content) {
-        const modal = $(`<div title="${title}">${content}</div>`);
-        modal.dialog({
+        // 新增一個 div 包含公告內容
+        const modalContent = $(`<div>${content}</div>`);
+
+        // 確保圖片使用正確樣式
+        modalContent.find("img").each(function () {
+            $(this).addClass("img-responsive");
+        });
+
+        // 使用 jQuery UI 的 dialog 顯示內容
+        modalContent.dialog({
+            title: title,
             modal: true,
-            width: 600,
+            width: "90%", // 動態寬度適配裝置大小
+            maxWidth: 600, // 限制最大寬度
             buttons: {
                 關閉: function () {
                     $(this).dialog("close");
@@ -109,6 +119,7 @@ $(document).ready(async function () {
             }
         });
     }
+
 
     /**
      * 格式化日期

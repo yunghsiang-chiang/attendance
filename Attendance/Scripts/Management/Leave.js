@@ -1,5 +1,8 @@
 ﻿$(document).ready(async function () {
 
+    // 定义全局变量存储当前工具提示的内容
+    let currentTooltipContent = "";
+
     // 定義函式以從 Web API 獲取出勤資料
     async function fetchAttendanceData() {
         const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
@@ -195,6 +198,18 @@
 
     // 顯示請假紀錄的工具提示
     function showLeaveTooltip(element, records, leaveType) {
+
+        // 构建工具提示内容
+        let content = `<strong>${leaveType}紀錄:</strong><ul>`;
+        records.forEach(record => {
+            content += `<li>${new Date(record.startTime).toLocaleDateString()} - ${record.count_hours} 小時</li>`;
+        });
+        content += '</ul>';
+
+        // 保存内容到全局变量
+        currentTooltipContent = content.replace(/<[^>]+>/g, ''); // 移除 HTML 标签，仅保留纯文本
+
+        // 创建工具提示
         let tooltip = document.createElement('div');
         tooltip.classList.add('leave-tooltip');
         tooltip.style.position = 'absolute';
@@ -202,16 +217,12 @@
         tooltip.style.border = '1px solid #ccc';
         tooltip.style.padding = '10px';
         tooltip.style.zIndex = '1000';
-
-        let content = `<strong>${leaveType}紀錄:</strong><ul>`;
-        records.forEach(record => {
-            content += `<li>${new Date(record.startTime).toLocaleDateString()} - ${record.count_hours} 小時</li>`;
-        });
-        content += '</ul>';
-
         tooltip.innerHTML = content;
+
+        // 添加到页面
         document.body.appendChild(tooltip);
 
+        // 定位工具提示
         const rect = element.getBoundingClientRect();
         tooltip.style.left = `${rect.left + window.scrollX}px`;
         tooltip.style.top = `${rect.bottom + window.scrollY}px`;
@@ -223,6 +234,7 @@
         if (tooltip) {
             tooltip.remove();
         }
+        currentTooltipContent = ""; // 清空工具提示内容
     }
 
     // 定義排序函式
@@ -292,4 +304,23 @@
     }
 
     await leavechart();
+});
+
+// 添加键盘事件监听
+document.addEventListener('keydown', (event) => {
+    // 检查是否按下 Alt+S
+    if (event.altKey && event.key === 's') {
+        if (currentTooltipContent) {
+            // 将当前工具提示内容复制到剪贴板
+            navigator.clipboard.writeText(currentTooltipContent)
+                .then(() => {
+                    alert("內容已複製到剪貼板！");
+                })
+                .catch(err => {
+                    console.error("無法複製內容到剪貼板:", err);
+                });
+        } else {
+            alert("目前沒有可複製的內容！");
+        }
+    }
 });

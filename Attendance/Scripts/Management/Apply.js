@@ -26,7 +26,7 @@
 
             // 遍歷加班數據並動態生成表格內容
             data.forEach(record => {
-                overtimeContent += `<tr>
+                overtimeContent += `<tr data-remark="${record.remark || ''}">
                     <td>${record.userID}</td>
                     <td>${record.userName}</td>
                     <td>${record.overtimeType}</td>
@@ -39,6 +39,22 @@
 
             overtimeContent += '</tbody></table>';
             overtimeApplyDiv.append(overtimeContent); // 將內容添加到加班申請 div 中
+
+            // 綁定滑鼠移動事件
+            $('.overtime_apply table tbody tr').on('mouseenter', function (e) {
+                const remark = $(this).data('remark'); // 取得備註內容
+                if (remark) {
+                    // 顯示備註內容
+                    const tooltip = $('<div class="remark-tooltip"></div>').text(`備註: ${remark}`);
+                    $('body').append(tooltip); // 加入提示框到頁面
+                    tooltip.css({
+                        top: e.pageY + 10 + 'px', // 使用事件物件設置提示框的 Y 位置
+                        left: e.pageX + 10 + 'px', // 使用事件物件設置提示框的 X 位置
+                    });
+                }
+            }).on('mouseleave', function () {
+                $('.remark-tooltip').remove(); // 滑鼠移開時移除提示框
+            });
 
             // 為每個簽核按鈕綁定點擊事件
             $('.update-overtime').on('click', async function () {

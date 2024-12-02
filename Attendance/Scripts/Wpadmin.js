@@ -69,5 +69,5 @@
     }
 
     // 檢查 person_id 是否存在
-    await checkPersonId();
+    /*await checkPersonId();*/
 });

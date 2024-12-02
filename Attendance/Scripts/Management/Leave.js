@@ -3,6 +3,19 @@
     // 定义全局变量存储当前工具提示的内容
     let currentTooltipContent = "";
 
+    // 添加鍵盤事件監聽
+    document.addEventListener('keydown', (event) => {
+        console.log("Keydown event detected:", event.key, "Alt pressed:", event.altKey); // 調試輸出
+        if (event.altKey && event.key.toLowerCase() === 's') {
+            if (currentTooltipContent) {
+                copyToClipboardFallback(currentTooltipContent);
+                alert("內容已複製到剪貼板！");
+            } else {
+                alert("目前沒有可複製的內容！");
+            }
+        }
+    });
+
     // 定義函式以從 Web API 獲取出勤資料
     async function fetchAttendanceData() {
         const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
@@ -237,6 +250,21 @@
         currentTooltipContent = ""; // 清空工具提示内容
     }
 
+    // 替代方案：複製文字到剪貼板
+    function copyToClipboardFallback(text) {
+        // 創建隱藏的 <textarea>
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+
+        // 選中內容並執行複製
+        textarea.select();
+        document.execCommand('copy');
+
+        // 移除 <textarea>
+        document.body.removeChild(textarea);
+    }
+
     // 定義排序函式
     function sortTable(data, key) {
         const table = document.querySelector('table');
@@ -304,23 +332,8 @@
     }
 
     await leavechart();
+
+    
 });
 
-// 添加键盘事件监听
-document.addEventListener('keydown', (event) => {
-    // 检查是否按下 Alt+S
-    if (event.altKey && event.key === 's') {
-        if (currentTooltipContent) {
-            // 将当前工具提示内容复制到剪贴板
-            navigator.clipboard.writeText(currentTooltipContent)
-                .then(() => {
-                    alert("內容已複製到剪貼板！");
-                })
-                .catch(err => {
-                    console.error("無法複製內容到剪貼板:", err);
-                });
-        } else {
-            alert("目前沒有可複製的內容！");
-        }
-    }
-});
+

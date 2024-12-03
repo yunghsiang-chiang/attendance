@@ -68,6 +68,14 @@ input[type="button"] {
     margin-top: 20px;
 }
 
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* 確保圖片在容器中居中 */
+}
+
+
 /* Media Queries */
 @media (max-width: 768px) {
     #today_status {

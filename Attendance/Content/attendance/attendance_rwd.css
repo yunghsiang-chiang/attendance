@@ -68,12 +68,19 @@ input[type="button"] {
     margin-top: 20px;
 }
 
+.modal-body {
+    max-height: 80vh; /* 模態框內容的最大高度 */
+    overflow-y: auto; /* 垂直滾動 */
+}
+
 .modal-body img {
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 0 auto; /* 確保圖片在容器中居中 */
+    margin: 0 auto;
+    border-radius: 5px; /* 美化圖片圓角處理 */
 }
+
 
 
 /* Media Queries */

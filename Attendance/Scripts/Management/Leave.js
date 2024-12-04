@@ -63,7 +63,6 @@
             }
 
             // 當前月份，用於檢查補休只扣除當月的紀錄
-            const currentMonth = new Date().getMonth() + 1;
             const currentDate = new Date();
 
             // 針對每位員工進行數據更新
@@ -83,8 +82,8 @@
                 }
 
                 // 計算過去一年的範圍（從到職日週年後計算）
-                const oneYearAgo = new Date(startWorkAnniversary);
-                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                const nextAnniversary = new Date(startWorkAnniversary);
+                nextAnniversary.setFullYear(startWorkAnniversary.getFullYear() + 1);
 
                 // 將該員工的請假紀錄儲存在 person 對象中，用於後續的滑鼠互動顯示
                 person.leaveRecords = {
@@ -98,21 +97,17 @@
                         const leaveStartTime = new Date(leave.startTime);
 
                         // 確保請假記錄在過去一年內
-                        if (leaveStartTime >= oneYearAgo && leaveStartTime <= currentDate) {
-                            const leaveStartMonth = leaveStartTime.getMonth() + 1;
-
-                            // 根據請假類型進行相應的扣除
-                            if (leave.leaveType === '特休') {
-                                totalSpecialVacation -= leave.count_hours;
-                                person.leaveRecords.specialVacation.push(leave); // 存儲特休紀錄
+                        if (leaveStartTime >= startWorkAnniversary && leaveStartTime <= nextAnniversary) {
+                            if (leave.leaveType.toLowerCase() === '特休') {
+                                totalSpecialVacation -= parseFloat(leave.count_hours);
+                                person.leaveRecords.specialVacation.push(leave);
                             }
-                            if (leave.leaveType === '事假') {
-                                totalPersonalLeave -= leave.count_hours;
-                                person.leaveRecords.personalLeave.push(leave); // 存儲事假紀錄
+                            if (leave.leaveType.toLowerCase() === '事假') {
+                                totalPersonalLeave -= parseFloat(leave.count_hours);
+                                person.leaveRecords.personalLeave.push(leave);
                             }
-                            // 補休只扣除當月的紀錄
-                            if (leave.leaveType === '補休' && leaveStartMonth === currentMonth) {
-                                totalCompensatoryLeave -= leave.count_hours;
+                            if (leave.leaveType.toLowerCase() === '補休') {
+                                totalCompensatoryLeave -= parseFloat(leave.count_hours);
                             }
                         }
                     }

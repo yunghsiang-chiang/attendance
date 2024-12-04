@@ -303,6 +303,11 @@
                 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
                 const timeRegex = /^\d{2}:\d{2}$/;
 
+                if (new Date(start_Date) > new Date(end_Date)) {
+                    alert("開始日期不能晚於結束日期！");
+                    isValid = false;
+                }
+
                 if (!leaveType) {
                     alert("請選擇請假類型");
                     isValid = false;

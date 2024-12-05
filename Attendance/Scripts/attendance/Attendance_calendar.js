@@ -5,6 +5,18 @@
     let currentMonth = new Date().getMonth(); // 當前月份 (0~11)
     let currentYear = new Date().getFullYear(); // 當前年份
 
+    // 初始化對話框
+    $('#dialog').dialog({
+        autoOpen: false, // 初始時不打開
+        width: 600, // 設置寬度
+        modal: true, // 模態對話框
+        buttons: {
+            Close: function () {
+                $(this).dialog('close');
+            }
+        }
+    });
+
     // 更新累積數據函數
     function updateMonthlySummary(user_id, year, month) {
         const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendanceSummary?user_id=${user_id}&year=${year}&month=${month}`;
@@ -52,10 +64,9 @@
                 <td>${record.approved_by}</td>
             </tr>`;
         });
-        html_infor += `</tbody>
-        </table>`;
-        $('#dialog').html(html_infor);
-        $('#dialog').dialog('open');
+        html_infor += `</tbody></table>`;
+        $('#dialog').html(html_infor); // 設置對話框內容
+        $('#dialog').dialog('open'); // 打開對話框
     }
 
     // 產生日曆的函數
@@ -167,8 +178,7 @@
                         </tr>`;
                     });
                 }
-                html_infor += `</tbody>
-                </table>`;
+                html_infor += `</tbody></table>`;
                 $('#dialog').html(html_infor); // 設置對話框內容
                 $('#dialog').dialog('open'); // 打開對話框
             },

@@ -231,7 +231,6 @@
     // 頁面加載時初始化
     async function defaultLoad() {
         let cookieall = document.cookie;
-        console.log(cookieall);
 
         if (getCookie("person_name") !== "") {
             $('#personal_infor h2').text('姓名: ' + getCookie("person_name"));

@@ -119,26 +119,45 @@
             const actualAttendance = attendanceData.reduce((sum, value) => sum + value, 0);
             const userId = employeeIds[index];
 
-            const leaveCount = leaveData
-                .filter(record => record.userId === userId)
+            // 分類請假數據
+            const userLeaveRecords = leaveData.filter(record => record.userId === userId);
+
+            const sickLeaveCount = userLeaveRecords
+                .filter(record => record.leaveType === '病假')
                 .reduce((sum, record) => sum + (record.count_hours / 8), 0);
+
+            const personalLeaveCount = userLeaveRecords
+                .filter(record => record.leaveType === '事假')
+                .reduce((sum, record) => sum + (record.count_hours / 8), 0);
+
+            const menstrualLeaveCount = userLeaveRecords
+                .filter(record => record.leaveType === '生理假')
+                .reduce((sum, record) => sum + (record.count_hours / 8), 0);
+
+            const otherLeaveCount = userLeaveRecords
+                .filter(record => !['病假', '事假', '生理假'].includes(record.leaveType))
+                .reduce((sum, record) => sum + (record.count_hours / 8), 0);
+
             const overtimeCount = overtimeData
                 .filter(record => record.userID === userId)
                 .reduce((sum, record) => sum + (record.count_hours / 8), 0);
 
+            // Helper function to replace "0.00" with an empty string
+            const displayValue = value => value === 0 ? '' : value.toFixed(2);
+
             const row = `
-            <tr>
-                <td>${employeeNames[index]}</td>
-                <td>${workingDays.length}</td>
-                <td>${actualAttendance}</td>
-                <td>${overtimeCount.toFixed(2) }</td>
-                <td>${leaveCount.toFixed(2) }</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-        `;
+    <tr>
+        <td>${employeeNames[index]}</td>
+        <td>${workingDays.length}</td>
+        <td>${displayValue(actualAttendance)}</td>
+        <td>${displayValue(overtimeCount)}</td>
+        <td>${displayValue(sickLeaveCount + personalLeaveCount + menstrualLeaveCount + otherLeaveCount)}</td>
+        <td>${displayValue(sickLeaveCount)}</td>
+        <td>${displayValue(personalLeaveCount)}</td>
+        <td>${displayValue(menstrualLeaveCount)}</td>
+        <td>${displayValue(otherLeaveCount)}</td>
+    </tr>
+    `;
             $('#attendanceTable tbody').append(row);
         });
 

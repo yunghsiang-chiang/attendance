@@ -86,7 +86,7 @@ namespace Attendance.Auto
         private void ClosePage()
         {
             // 使用 ScriptManager 在網頁執行 JavaScript
-            string script = "<script type='text/javascript'>window.close();</script>";
+            string script = "<script type='text/javascript'>window.open('', '_self').close();</script>";
             ClientScript.RegisterStartupScript(this.GetType(), "ClosePage", script);
         }
 

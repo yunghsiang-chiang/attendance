@@ -8,7 +8,8 @@
     <link href="Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
     <script src="../Scripts/jquery-3.7.0.js"></script>
-    <script src="../Scripts/jquery-ui-1-13.3.js"></script>
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet" />
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Updated Bootstrap link -->

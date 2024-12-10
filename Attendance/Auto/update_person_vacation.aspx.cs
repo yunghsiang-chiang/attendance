@@ -1,11 +1,8 @@
 ﻿using Attendance.App_Code;
+using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Attendance.Auto
 {
@@ -13,9 +10,25 @@ namespace Attendance.Auto
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack) // 確保此方法只在首次加載頁面時執行
+            string taskPath = Request.Url.AbsoluteUri; // 獲取網頁執行的完整 URL
+            string status = "順利執行"; // 預設狀態為順利執行
+
+            try
             {
-                UpdateSpecialVacationHours(); // 更新特休時數
+                if (!IsPostBack) // 確保此方法只在首次加載頁面時執行
+                {
+                    UpdateSpecialVacationHours(); // 更新特休時數
+                }
+            }
+            catch (Exception ex)
+            {
+                // 發生異常時記錄異常資訊
+                status = $"發生異常: {ex.Message}";
+            }
+            finally
+            {
+                // 無論成功或失敗都更新排程檢視表
+                UpdateTaskViewTable(taskPath, status);
                 ClosePage(); // 執行完後關閉網頁
             }
         }
@@ -60,6 +73,7 @@ namespace Attendance.Auto
             {
                 // 處理例外狀況並記錄錯誤訊息
                 Console.WriteLine($"更新特休時數時發生錯誤: {ex.Message}");
+                throw; // 向上拋出例外
             }
         }
 
@@ -81,6 +95,68 @@ namespace Attendance.Auto
         }
 
         /// <summary>
+        /// 更新或插入排程檢視表記錄
+        /// </summary>
+        /// <param name="taskPath">執行的任務路徑 (URL)</param>
+        /// <param name="status">執行狀態</param>
+        private void UpdateTaskViewTable(string taskPath, string status)
+        {
+            try
+            {
+                // 建立資料庫連線字串
+                string connectionString = "server=192.168.11.51;UId=hochi_root;Pwd=hochi_Taoyuan;database=task_schema;";
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    // 檢查是否已經有對應的記錄
+                    string selectQuery = "SELECT COUNT(*) FROM r_task_python_selenium WHERE task_path = @taskPath";
+                    using (MySqlCommand selectCmd = new MySqlCommand(selectQuery, conn))
+                    {
+                        selectCmd.Parameters.AddWithValue("@taskPath", taskPath);
+                        int recordCount = Convert.ToInt32(selectCmd.ExecuteScalar()); // 查詢結果為記錄數量
+
+                        if (recordCount > 0)
+                        {
+                            // 如果記錄已存在，執行更新
+                            string updateQuery = @"
+                        UPDATE r_task_python_selenium
+                        SET lmtime = @lmtime, status = @status
+                        WHERE task_path = @taskPath";
+                            using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn))
+                            {
+                                updateCmd.Parameters.AddWithValue("@lmtime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                updateCmd.Parameters.AddWithValue("@status", status);
+                                updateCmd.Parameters.AddWithValue("@taskPath", taskPath);
+                                updateCmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            // 如果記錄不存在，插入新記錄
+                            string insertQuery = @"
+                        INSERT INTO r_task_python_selenium (lmtime, status, task_path)
+                        VALUES (@lmtime, @status, @taskPath)";
+                            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
+                            {
+                                insertCmd.Parameters.AddWithValue("@lmtime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                insertCmd.Parameters.AddWithValue("@status", status);
+                                insertCmd.Parameters.AddWithValue("@taskPath", taskPath);
+                                insertCmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // 如果更新或插入過程發生異常，記錄異常訊息
+                Console.WriteLine($"更新或插入排程檢視表時發生異常: {ex.Message}");
+            }
+        }
+
+
+        /// <summary>
         /// 執行完畢後關閉網頁的 JavaScript 方法
         /// </summary>
         private void ClosePage()
@@ -89,6 +165,5 @@ namespace Attendance.Auto
             string script = "<script type='text/javascript'>window.open('', '_self').close();</script>";
             ClientScript.RegisterStartupScript(this.GetType(), "ClosePage", script);
         }
-
     }
 }

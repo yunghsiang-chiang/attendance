@@ -165,7 +165,7 @@ namespace Attendance.App_Code
         public DataTable MySQL_Select(string SQLCommand)
         {
             DataTable table = new DataTable();
-            String cs = "server=192.168.11.51;UId=hochi_root; Pwd =hochi_Taoyuan;database=attendance;maximumpoolsize=150";
+            String cs = "server=internal.hochi.org.tw;UId=hochi_root; Pwd =hochi_Taoyuan;database=attendance;maximumpoolsize=150";
             MySqlConnection conn = new MySqlConnection(cs);
             MySqlDataAdapter da = new MySqlDataAdapter();
             da.SelectCommand = new MySqlCommand(SQLCommand, conn);
@@ -183,7 +183,7 @@ namespace Attendance.App_Code
         public string MySQL_Command(string SQLCommand)
         {
             string strReturn = "finish";
-            String cs = "server=192.168.11.51;UId=hochi_root; Pwd =hochi_Taoyuan;database=attendance;maximumpoolsize=150";
+            String cs = "server=internal.hochi.org.tw;UId=hochi_root; Pwd =hochi_Taoyuan;database=attendance;maximumpoolsize=150";
             MySqlConnection conn = new MySqlConnection(cs);
             try
             {

@@ -1547,6 +1547,9 @@
             different types. If unset, returns all event types.
             </summary>
         </member>
+        <member name="F:Google.Apis.Calendar.v3.EventsResource.ListRequest.EventTypesEnum.Birthday">
+            <summary>Special all-day events with an annual recurrence.</summary>
+        </member>
         <member name="F:Google.Apis.Calendar.v3.EventsResource.ListRequest.EventTypesEnum.Default__">
             <summary>Regular events.</summary>
         </member>
@@ -1735,7 +1738,7 @@
         <member name="M:Google.Apis.Calendar.v3.EventsResource.Move(System.String,System.String,System.String)">
             <summary>
             Moves an event to another calendar, i.e. changes an event's organizer. Note that only default events can be
-            moved; outOfOffice, focusTime, workingLocation and fromGmail events cannot be moved.
+            moved; birthday, focusTime, fromGmail, outOfOffice and workingLocation events cannot be moved.
             </summary>
             <param name="calendarId">Calendar identifier of the source calendar where the event currently is on.</param>
             <param name="eventId">Event identifier.</param>
@@ -1746,7 +1749,7 @@
         <member name="T:Google.Apis.Calendar.v3.EventsResource.MoveRequest">
             <summary>
             Moves an event to another calendar, i.e. changes an event's organizer. Note that only default events can be
-            moved; outOfOffice, focusTime, workingLocation and fromGmail events cannot be moved.
+            moved; birthday, focusTime, fromGmail, outOfOffice and workingLocation events cannot be moved.
             </summary>
         </member>
         <member name="M:Google.Apis.Calendar.v3.EventsResource.MoveRequest.#ctor(Google.Apis.Services.IClientService,System.String,System.String,System.String)">
@@ -2100,6 +2103,9 @@
             Event types to return. Optional. This parameter can be repeated multiple times to return events of
             different types. If unset, returns all event types.
             </summary>
+        </member>
+        <member name="F:Google.Apis.Calendar.v3.EventsResource.WatchRequest.EventTypesEnum.Birthday">
+            <summary>Special all-day events with an annual recurrence.</summary>
         </member>
         <member name="F:Google.Apis.Calendar.v3.EventsResource.WatchRequest.EventTypesEnum.Default__">
             <summary>Regular events.</summary>
@@ -2987,6 +2993,9 @@
             used to only update the participant's response. Optional. The default is False.
             </summary>
         </member>
+        <member name="P:Google.Apis.Calendar.v3.Data.Event.BirthdayProperties">
+            <summary>Birthday or special event data. Used if eventType is "birthday". Immutable.</summary>
+        </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.ColorId">
             <summary>
             The color of the event. This is an ID referring to an entry in the event section of the colors definition
@@ -3032,9 +3041,10 @@
         <member name="P:Google.Apis.Calendar.v3.Data.Event.EventType">
             <summary>
             Specific type of the event. This cannot be modified after the event is created. Possible values are:   -
-            "default" - A regular event or not further specified.  - "outOfOffice" - An out-of-office event.  -
-            "focusTime" - A focus-time event.  - "workingLocation" - A working location event.  - "fromGmail" - An event
-            from Gmail. This type of event cannot be created.
+            "birthday" - A special all-day event with an annual recurrence.  - "default" - A regular event or not
+            further specified.  - "focusTime" - A focus-time event.  - "fromGmail" - An event from Gmail. This type of
+            event cannot be created.  - "outOfOffice" - An out-of-office event.  - "workingLocation" - A working
+            location event.
             </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.ExtendedProperties">
@@ -3144,7 +3154,10 @@
             </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.Reminders">
-            <summary>Information about the event's reminders for the authenticated user.</summary>
+            <summary>
+            Information about the event's reminders for the authenticated user. Note that changing reminders does not
+            also change the updated property of the enclosing event.
+            </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.Sequence">
             <summary>Sequence number as per iCalendar.</summary>
@@ -3194,7 +3207,10 @@
             </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.UpdatedRaw">
-            <summary>Last modification time of the event (as a RFC3339 timestamp). Read-only.</summary>
+            <summary>
+            Last modification time of the main event data (as a RFC3339 timestamp). Updating event reminders will not
+            cause this to change. Read-only.
+            </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.UpdatedDateTimeOffset">
             <summary><seealso cref="T:System.DateTimeOffset"/> representation of <see cref="P:Google.Apis.Calendar.v3.Data.Event.UpdatedRaw"/>.</summary>
@@ -3303,7 +3319,10 @@
             </summary>
         </member>
         <member name="T:Google.Apis.Calendar.v3.Data.Event.RemindersData">
-            <summary>Information about the event's reminders for the authenticated user.</summary>
+            <summary>
+            Information about the event's reminders for the authenticated user. Note that changing reminders does not
+            also change the updated property of the enclosing event.
+            </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.Event.RemindersData.Overrides">
             <summary>
@@ -3390,8 +3409,9 @@
             "tentative" - The attendee has tentatively accepted the invitation.  - "accepted" - The attendee has
             accepted the invitation.  Warning: If you add an event using the values declined, tentative, or accepted,
             attendees with the "Add invitations to my calendar" setting set to "When I respond to invitation in email"
-            won't see an event on their calendar unless they choose to change their invitation response in the event
-            invitation email.
+            or "Only if the sender is known" might have their response reset to needsAction and won't see an event in
+            their calendar unless they change their response in the event invitation email. Furthermore, if more than
+            200 guests are invited to the event, response status is not propagated to the guests.
             </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.EventAttendee.Self">
@@ -3401,6 +3421,31 @@
             </summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.EventAttendee.ETag">
+            <summary>The ETag of the item.</summary>
+        </member>
+        <member name="P:Google.Apis.Calendar.v3.Data.EventBirthdayProperties.Contact">
+            <summary>
+            Resource name of the contact this birthday event is linked to. This can be used to fetch contact details
+            from People API. Format: "people/c12345". Read-only.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Calendar.v3.Data.EventBirthdayProperties.CustomTypeName">
+            <summary>
+            Custom type label specified for this event. This is populated if birthdayProperties.type is set to "custom".
+            Read-only.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Calendar.v3.Data.EventBirthdayProperties.Type">
+            <summary>
+            Type of birthday or special event. Possible values are:   - "anniversary" - An anniversary other than
+            birthday. Always has a contact.  - "birthday" - A birthday event. This is the default value.  - "custom" - A
+            special date whose label is further specified in the customTypeName field. Always has a contact.  - "other"
+            - A special date which does not fall into the other categories, and does not have a custom label. Always has
+            a contact.  - "self" - Calendar owner's own birthday. Cannot have a contact.  The Calendar API only supports
+            creating events with the type "birthday". The type cannot be changed after the event is created.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Calendar.v3.Data.EventBirthdayProperties.ETag">
             <summary>The ETag of the item.</summary>
         </member>
         <member name="P:Google.Apis.Calendar.v3.Data.EventDateTime.Date">

@@ -10,8 +10,8 @@
     <link href="Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <link href="Content/WpAdmin.css" rel="stylesheet" />
 
-    <script src="../Scripts/jquery-3.7.0.js"></script>
-    <script src="../Scripts/jquery-ui-1-13.3.js"></script>
+    <script src="../Scripts/jquery-3.7.1.js"></script>
+    <script src="../Scripts/jquery-ui-1-14.1.js"></script>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" /> <!-- Updated Bootstrap link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Updated Bootstrap script -->

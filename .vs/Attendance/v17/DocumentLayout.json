@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "D:\\Work\\Attendance\\attendance\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|D:\\Work\\Attendance\\attendance\\attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\management\\attendance.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\attendance.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\attendance\\attendance.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|D:\\Work\\Attendance\\attendance\\attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|D:\\Work\\Attendance\\attendance\\attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\app_code\\clsdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|D:\\Work\\Attendance\\attendance\\attendance\\app_code\\clsdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\app_code\\clsdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|d:\\work\\attendance\\attendance\\attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\wpadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +34,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
+              "Title": "Attendance.aspx",
+              "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\Management\\Attendance.aspx",
+              "RelativeDocumentMoniker": "Attendance\\Management\\Attendance.aspx",
+              "ToolTip": "D:\\Work\\Attendance\\attendance\\Attendance\\Management\\Attendance.aspx",
+              "RelativeToolTip": "Attendance\\Management\\Attendance.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-12-13T00:50:38.693Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "clsDB.cs",
               "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\App_Code\\clsDB.cs",
               "RelativeDocumentMoniker": "Attendance\\App_Code\\clsDB.cs",
@@ -42,12 +59,11 @@
               "RelativeToolTip": "Attendance\\App_Code\\clsDB.cs",
               "ViewState": "AQIAAJcAAAAAAAAAAAAmwK0AAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T00:28:38.299Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T00:28:38.299Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "Wpadmin.Master",
               "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\Wpadmin.Master",
               "RelativeDocumentMoniker": "Attendance\\Wpadmin.Master",
@@ -60,7 +76,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "attendance_rwd.aspx",
               "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\attendance\\attendance_rwd.aspx",
               "RelativeDocumentMoniker": "Attendance\\attendance\\attendance_rwd.aspx",
@@ -68,12 +84,11 @@
               "RelativeToolTip": "Attendance\\attendance\\attendance_rwd.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-12-13T00:26:11.349Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T00:26:11.349Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Site.Master",
               "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\Site.Master",
               "RelativeDocumentMoniker": "Attendance\\Site.Master",
@@ -86,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "attendance.aspx",
               "DocumentMoniker": "D:\\Work\\Attendance\\attendance\\Attendance\\attendance\\attendance.aspx",
               "RelativeDocumentMoniker": "Attendance\\attendance\\attendance.aspx",

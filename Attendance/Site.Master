@@ -49,7 +49,11 @@
         <!-- Updated Bootstrap link -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Updated Bootstrap script -->
-
+<%--<<<<<<< HEAD
+=======--%>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<%-->>>>>>> da61ca00ac4d538dcc2e978ce3b78b85078a346e
+--%>
 
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
             <div class="container">

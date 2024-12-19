@@ -129,6 +129,7 @@
     <Content Include="attendance\Attendance_calendar.aspx" />
     <Content Include="attendance\attendance_history.aspx" />
     <Content Include="attendance\attendance_rwd.aspx" />
+    <Content Include="attendance\hochi_calendar.aspx" />
     <Content Include="Auto\update_person_vacation.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\attendance\Attendance_calendar.css" />
@@ -337,6 +338,13 @@
     </Compile>
     <Compile Include="attendance\attendance_rwd.aspx.designer.cs">
       <DependentUpon>attendance_rwd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="attendance\hochi_calendar.aspx.cs">
+      <DependentUpon>hochi_calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="attendance\hochi_calendar.aspx.designer.cs">
+      <DependentUpon>hochi_calendar.aspx</DependentUpon>
     </Compile>
     <Compile Include="Auto\update_person_vacation.aspx.cs">
       <DependentUpon>update_person_vacation.aspx</DependentUpon>

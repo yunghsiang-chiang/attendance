@@ -196,34 +196,33 @@
             }
 
             // 額外考慮，加班，透過下班按鈕觸發
+            // 2024/12/24 同修護持美國班會，經常跨夜加班，取消檢查機制
             if (status == '下班') {
-                let currentDate = new Date();
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth() + 1;
-                const workingDays = [];
-                const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
-                const daysData = await $.getJSON(api_url);
-                if (daysData.length > 0) {
-                    let attendance_days = daysData[0].attendance_days.split(',');
+                $("#dialog").dialog("open");
+                //let currentDate = new Date();
+                //const year = currentDate.getFullYear();
+                //const month = currentDate.getMonth() + 1;
+                //const workingDays = [];
+                //const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
+                //const daysData = await $.getJSON(api_url);
+                //if (daysData.length > 0) {
+                //    let attendance_days = daysData[0].attendance_days.split(',');
 
-                    attendance_days = attendance_days.map(day => {
-                        let parts = day.split('-');
-                        let formattedMonth = parts[1].padStart(2, '0');
-                        let formattedDay = parts[2].padStart(2, '0');
-                        return `${parts[0]}-${formattedMonth}-${formattedDay}`;
-                    });
+                //    attendance_days = attendance_days.map(day => {
+                //        let parts = day.split('-');
+                //        let formattedMonth = parts[1].padStart(2, '0');
+                //        let formattedDay = parts[2].padStart(2, '0');
+                //        return `${parts[0]}-${formattedMonth}-${formattedDay}`;
+                //    });
 
-                    workingDays.push(...attendance_days);
-                }
+                //    workingDays.push(...attendance_days);
+                //}
+                //const currentTime = today.getHours() * 60 + today.getMinutes();
+                //const sixThirtyPM = 18 * 60 + 30;
 
-                const today = new Date();
-                const todayString = today.toISOString().split('T')[0];
-                const currentTime = today.getHours() * 60 + today.getMinutes();
-                const sixThirtyPM = 18 * 60 + 30;
-
-                if (!workingDays.includes(todayString) || currentTime > sixThirtyPM) {
-                    $("#dialog").dialog("open");
-                }
+                //if (!workingDays.includes(todayString) || currentTime > sixThirtyPM) {
+                //    $("#dialog").dialog("open");
+                //}
             }
         });
     }
@@ -254,6 +253,9 @@
 
     // 頁面加載時初始化
     defaultLoad();
+
+                const today = new Date();
+                const todayString = today.toISOString().split('T')[0];
     // 初始加載公告清單
     loadAnnouncements();
     handleButtonClick('#bt_start', '到班');

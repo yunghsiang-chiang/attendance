@@ -49,6 +49,10 @@ namespace Attendance
                 cookie.Expires = DateTime.Now.AddDays(365);
                 // 設定 Cookie 的路徑，使其在整個網站可用
                 cookie.Path = "/"; // 這行確保 Cookie 在整個網站可用
+
+                //設置 SameSite 屬性
+                cookie.SameSite = SameSiteMode.Strict;
+
                 //寫到用戶端
                 Response.Cookies.Add(cookie);
 

@@ -21,7 +21,7 @@
                         <p><strong>晨光上：</strong><span id="morningLightUpTotal">0</span></p>
                         <p><strong>晨光下：</strong><span id="morningLightDownTotal">0</span></p>
                         <p><strong>晨會：</strong><span id="morningMeetingTotal">0</span></p>
-                        <p><strong>晨會：</strong><span id="morningLightDownAfterPurpleLightTotal">0</span></p>
+                        <p><strong>晨下煉完紫光系：</strong><span id="morningLightDownAfterPurpleLightTotal">0</span></p>
                     </div>
                 </div>
 

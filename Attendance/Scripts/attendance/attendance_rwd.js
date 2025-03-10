@@ -138,7 +138,7 @@
         let morning_light_down = document.querySelector("#cb_morning_down_in_hochi").checked ? 1 : 0;
         let morning_meeting = document.querySelector("#cb_morning_meetnig_in_hochi").checked ? 1 : 0;
         let morning_light_down_after_purple_light = document.querySelector("#cb_morning_down_after_purple_light_in_hochi").checked ? 1 : 0;
-
+        //morning_light_down_after_purple_light
         try {
             await $.ajax({
                 type: "POST",

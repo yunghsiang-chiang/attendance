@@ -158,6 +158,7 @@
                 }
             });
             console.log('會議參與 上傳成功!');
+            console.log(morning_light_down_after_purple_light);
         } catch (error) {
             alert(error);
         }

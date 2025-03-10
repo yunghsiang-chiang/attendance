@@ -30,12 +30,14 @@
                 $('#morningLightUpTotal').text(response.totalMorningLightUp || 0);
                 $('#morningLightDownTotal').text(response.totalMorningLightDown || 0);
                 $('#morningMeetingTotal').text(response.totalMorningMeeting || 0);
+                $('#morningLightDownAfterPurpleLightTotal').text(response.totalMorning_light_down_after_purple_light || 0);
             },
             error: function (error) {
                 console.error('Error fetching monthly summary:', error);
                 $('#morningLightUpTotal').text(0);
                 $('#morningLightDownTotal').text(0);
                 $('#morningMeetingTotal').text(0);
+                $('#morningLightDownAfterPurpleLightTotal').text(0);
             }
         });
     }

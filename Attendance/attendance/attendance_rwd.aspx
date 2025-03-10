@@ -41,6 +41,10 @@
                             <input type="checkbox" id="cb_morning_meetnig_in_hochi" name="cb_morning_meetnig_in_hochi" />
                             <label for="cb_morning_meetnig_in_hochi">晨會</label>
                         </div>
+                        <div>
+                            <input type="checkbox" id="cb_morning_down_after_purple_light_in_hochi" name="cb_morning_down_after_purple_light_in_hochi" />
+                            <label for="cb_morning_down_after_purple_light_in_hochi">晨光下煉完紫光系</label>
+                        </div>
                     </div>
                     <div class="row align-items-start">
                         <input type="button" id="bt_start" class="btn btn-primary" value="到班" />

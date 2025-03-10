@@ -137,6 +137,7 @@
         let morning_light_up = document.querySelector("#cb_morning_up_in_hochi").checked ? 1 : 0;
         let morning_light_down = document.querySelector("#cb_morning_down_in_hochi").checked ? 1 : 0;
         let morning_meeting = document.querySelector("#cb_morning_meetnig_in_hochi").checked ? 1 : 0;
+        let morning_light_down_after_purple_light = document.querySelector("#cb_morning_down_after_purple_light_in_hochi").checked ? 1 : 0;
 
         try {
             await $.ajax({
@@ -148,7 +149,8 @@
                     "attendance_day": localISOString,
                     "morning_light_up": morning_light_up,
                     "morning_light_down": morning_light_down,
-                    "morning_meeting": morning_meeting
+                    "morning_meeting": morning_meeting,
+                    "morning_light_down_after_purple_light": morning_light_down_after_purple_light
                 }),
                 headers: {
                     'Accept': 'application/json',

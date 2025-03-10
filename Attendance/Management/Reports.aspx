@@ -34,6 +34,7 @@
                         <th>晨會(day</th>
                         <th>晨光上(day</th>
                         <th>晨光下(day</th>
+                        <th>晨下煉完紫光系</th>
                         <th>病假(hr</th>
                         <th>事假(hr</th>
                         <th>特休(hr</th>

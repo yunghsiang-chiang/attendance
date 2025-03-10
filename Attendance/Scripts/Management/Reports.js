@@ -49,6 +49,7 @@ function populateReportTable(data) {
                 <td>${record.晨會}</td>
                 <td>${record.晨光上}</td>
                 <td>${record.晨光下}</td>
+                <td>${record.晨下煉完紫光系}</td>
                 <td>${record.病假}</td>
                 <td>${record.事假}</td>
                 <td>${record.特休}</td>

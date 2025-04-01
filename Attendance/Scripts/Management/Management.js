@@ -387,10 +387,10 @@ $(document).ready(function () {
 
 });
 
-$(document).on('click', '#updatePurpleLightBtn', async function () {
+$(document).on('click', '#addRecordBtn', async function () {
     const userId = $('#employeeSelect').val();
     const userName = $('#employeeSelect option:selected').text();
-    const selectedDate = $('#purpleLightDate').val();
+    const selectedDate = $('#startTime').val();
     const purpleValue = $('#cb_morning_down_after_purple_light_update').prop('checked') ? 1 : 0;
 
     if (!selectedDate) {

@@ -134,30 +134,7 @@
 
                                 $('#calendar').append(dayElement);
 
-                                // 當日曆格子都完成後，再載入紫系 ✔️ 資料
-                                const fullAttendanceUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
-                                $.ajax({
-                                    url: fullAttendanceUrl,
-                                    type: 'GET',
-                                    success: function (fullResponse) {
-                                        const afterPurpleMap = {};
-                                        fullResponse.$values.forEach(record => {
-                                            const dateKey = record.attendance_day.split('T')[0];
-                                            afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;
-                                        });
-
-                                        // 加上 ✔️ 到對應的格子
-                                        $('#calendar .day').each(function () {
-                                            const date = $(this).data('day');
-                                            if (afterPurpleMap[date]) {
-                                                $(this).append('<br><span style="font-size: 20px; color: purple;">✔️</span>');
-                                            }
-                                        });
-                                    },
-                                    error: function (error) {
-                                        console.error('Error fetching full attendance for ✔️:', error);
-                                    }
-                                });
+                                
 
                             }
                         },
@@ -168,6 +145,31 @@
                 },
                 error: function (error) {
                     console.error('Error fetching attendance data:', error);
+                }
+            });
+
+            // 當日曆格子都完成後，再載入紫系 ✔️ 資料
+            const fullAttendanceUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+            $.ajax({
+                url: fullAttendanceUrl,
+                type: 'GET',
+                success: function (fullResponse) {
+                    const afterPurpleMap = {};
+                    fullResponse.$values.forEach(record => {
+                        const dateKey = record.attendance_day.split('T')[0];
+                        afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;
+                    });
+
+                    // 加上 ✔️ 到對應的格子
+                    $('#calendar .day').each(function () {
+                        const date = $(this).data('day');
+                        if (afterPurpleMap[date]) {
+                            $(this).append('<br><span style="font-size: 20px; color: purple;">✔️</span>');
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching full attendance for ✔️:', error);
                 }
             });
 

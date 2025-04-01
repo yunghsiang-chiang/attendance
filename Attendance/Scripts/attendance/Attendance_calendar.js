@@ -145,6 +145,32 @@
                 }
             });
 
+            const fullAttendanceUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+            $.ajax({
+                url: fullAttendanceUrl,
+                type: 'GET',
+                success: function (fullResponse) {
+                    // key: yyyy-mm-dd, value: boolean
+                    const afterPurpleMap = {};
+                    fullResponse.$values.forEach(record => {
+                        const dateKey = record.attendance_day.split('T')[0];
+                        afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;
+                    });
+
+                    // 遍歷日曆並加上 ✔️ 符號
+                    $('#calendar .day').each(function () {
+                        const date = $(this).data('day');
+                        if (afterPurpleMap[date]) {
+                            $(this).append('<br><span style="font-size: 20px;">✔️</span>');
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching full attendance for ✔️:', error);
+                }
+            });
+
+
             updateMonthlySummary(userid, year, month + 1);
         }
     }

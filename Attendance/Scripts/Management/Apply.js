@@ -196,6 +196,10 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
         approved_by: person_id
     };
 
+    console.log("傳送資料：", requestData);
+    console.log("URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`);
+
+
     fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`, {
         method: 'PUT',
         headers: {

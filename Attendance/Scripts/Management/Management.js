@@ -386,3 +386,43 @@ $(document).ready(function () {
 
 
 });
+
+$(document).on('click', '#updatePurpleLightBtn', async function () {
+    const userId = $('#employeeSelect').val();
+    const userName = $('#employeeSelect option:selected').text();
+    const selectedDate = $('#purpleLightDate').val();
+    const purpleValue = $('#cb_morning_down_after_purple_light_update').prop('checked') ? 1 : 0;
+
+    if (!selectedDate) {
+        alert("請選擇日期");
+        return;
+    }
+
+    try {
+        await $.ajax({
+            type: "PUT",
+            url: "http://internal.hochi.org.tw:8082/api/attendance/update_morning_light_down_after_purple",
+            data: JSON.stringify({
+                user_id: userId,
+                user_name: userName,
+                attendance_day: selectedDate,
+                morning_light_down_after_purple_light: purpleValue
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function () {
+                alert("紫光後關燈資料更新成功");
+                $('#queryBtn').click();
+            },
+            error: function (xhr) {
+                console.error(xhr);
+                alert("更新失敗，請稍後再試");
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        alert("發生錯誤，請稍後再試");
+    }
+});

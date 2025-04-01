@@ -84,5 +84,10 @@
                 <button type="button" class="btn btn-success w-100" id="addRecordBtn">新增記錄</button>
             </div>
         </div>
+
+        <label class="form-check-label">
+            <input type="checkbox" id="cb_morning_down_after_purple_light_update" class="form-check-input">
+            紫光後早安燈關燈
+        </label>
     </div>
 </asp:Content>

@@ -104,7 +104,7 @@
                                 leaveSet.get(leaveDate).push(leave);
                             });
 
-                            // 加入空白佔位符，直到對應的星期
+                            // 加入空白佔位符
                             for (let i = 0; i < firstDayOfMonth; i++) {
                                 $('#calendar').append('<div class="day empty"></div>');
                             }
@@ -114,7 +114,6 @@
                                 const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                                 const dayElement = $('<div>').addClass('day').text(day).data('day', formattedDate);
 
-                                // 檢查是否有出勤資料
                                 if (attendanceSet.has(formattedDate)) {
                                     const nameElement = $('<br><span>').text(username).addClass('clickable').on('click', function () {
                                         getAttendanceDetails(formattedDate);
@@ -123,7 +122,6 @@
                                     dayElement.addClass('present').css('background-color', 'lightgreen');
                                 }
 
-                                // 檢查是否有請假資料
                                 if (leaveSet.has(formattedDate)) {
                                     const leaveElement = $('<br><span>').text('請假').addClass('clickable').on('click', function () {
                                         showLeaveDetails(formattedDate, leaveSet.get(formattedDate));
@@ -133,10 +131,32 @@
                                 }
 
                                 $('#calendar').append(dayElement);
-
-                                
-
                             }
+
+                            // ✅✔️ 加在日曆格子產生完後，只跑一次的紫系判斷
+                            const fullAttendanceUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+                            $.ajax({
+                                url: fullAttendanceUrl,
+                                type: 'GET',
+                                success: function (fullResponse) {
+                                    const afterPurpleMap = {};
+                                    fullResponse.$values.forEach(record => {
+                                        const dateKey = record.attendance_day.split('T')[0];
+                                        afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;
+                                    });
+
+                                    $('#calendar .day').each(function () {
+                                        const date = $(this).data('day');
+                                        if (afterPurpleMap[date] && $(this).find('.after-purple-check').length === 0) {
+                                            $(this).append('<br><span class="after-purple-check" style="font-size: 20px; color: purple;">✔️</span>');
+                                        }
+                                    });
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching full attendance for ✔️:', error);
+                                }
+                            });
+
                         },
                         error: function (error) {
                             console.error('Error fetching leave data:', error);
@@ -145,31 +165,6 @@
                 },
                 error: function (error) {
                     console.error('Error fetching attendance data:', error);
-                }
-            });
-
-            // 當日曆格子都完成後，再載入紫系 ✔️ 資料
-            const fullAttendanceUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
-            $.ajax({
-                url: fullAttendanceUrl,
-                type: 'GET',
-                success: function (fullResponse) {
-                    const afterPurpleMap = {};
-                    fullResponse.$values.forEach(record => {
-                        const dateKey = record.attendance_day.split('T')[0];
-                        afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;
-                    });
-
-                    // 加上 ✔️ 到對應的格子
-                    $('#calendar .day').each(function () {
-                        const date = $(this).data('day');
-                        if (afterPurpleMap[date]) {
-                            $(this).append('<br><span style="font-size: 20px; color: purple;">✔️</span>');
-                        }
-                    });
-                },
-                error: function (error) {
-                    console.error('Error fetching full attendance for ✔️:', error);
                 }
             });
 

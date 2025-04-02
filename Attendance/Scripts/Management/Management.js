@@ -400,7 +400,7 @@ $(document).on('click', '#addRecordBtn', async function () {
 
     try {
         await $.ajax({
-            type: "PUT",
+            type: "POST",
             url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
             data: JSON.stringify({
                 user_id: userId,

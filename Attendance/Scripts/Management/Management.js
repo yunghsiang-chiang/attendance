@@ -401,7 +401,7 @@ $(document).on('click', '#addRecordBtn', async function () {
     try {
         await $.ajax({
             type: "PUT",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/update_morning_light_down_after_purple",
+            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
             data: JSON.stringify({
                 user_id: userId,
                 user_name: userName,

@@ -101,18 +101,18 @@ $(document).ready(function () {
     // 顯示查詢結果
     function displayMorningLightDown(records) {
         const realRecords = records.$values || records;
-        let content = `<h5>晨煉記錄（紫光後關燈）</h5>`;
+        let content = `<h5>晨煉記錄（修練至紫光後）</h5>`;
         realRecords.forEach(record => {
             const status = record.morning_light_down_after_purple_light === 1 ? "✅" : "❌";
             content += `
             <p>
-                日期: ${record.attendance_day}, 姓名: ${record.user_name}, 紫光後關燈: ${status}
+                日期: ${record.attendance_day}, 姓名: ${record.user_name}, 修練至紫光後: ${status}
                 ${record.morning_light_down_after_purple_light === 1
                     ? `<button class="btn btn-link cancel-purple-light"
                           type="button"
                           data-user-id="${record.user_id}"
                           data-attendance-day="${record.attendance_day}">
-                          取消紫光後關燈</button>`
+                          取消修練至紫光後</button>`
                     : ''
                 }
             </p>`;
@@ -418,7 +418,7 @@ $(document).ready(function () {
         // 直接取 yyyy-MM-dd 前 10 字元
         const attendanceDay = attendanceDayRaw.slice(0, 10);
 
-        if (confirm(`確定要取消 ${attendanceDay} 的紫光後關燈紀錄？`)) {
+        if (confirm(`確定要取消 ${attendanceDay} 的修練至紫光後？`)) {
             try {
                 await $.ajax({
                     type: "PUT",
@@ -468,7 +468,7 @@ $(document).on('click', '#addRecordBtn', async function () {
                 'Content-Type': 'application/json'
             },
             success: function () {
-                alert("紫光後關燈資料更新成功");
+                alert("修練至紫光後資料更新成功");
                 $('#queryBtn').click();
             },
             error: function (xhr) {

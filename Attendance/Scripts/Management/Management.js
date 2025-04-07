@@ -109,6 +109,7 @@ $(document).ready(function () {
                 日期: ${record.attendance_day}, 姓名: ${record.user_name}, 紫光後關燈: ${status}
                 ${record.morning_light_down_after_purple_light === 1
                     ? `<button class="btn btn-link cancel-purple-light"
+                          type="button"
                           data-user-id="${record.user_id}"
                           data-attendance-day="${record.attendance_day}">
                           取消紫光後關燈</button>`
@@ -408,6 +409,35 @@ $(document).ready(function () {
             console.error("發生錯誤：", error);
         }
     }
+
+    // 取消事件 取消 對應日期 修練至紫光
+    $(document).on('click', '.cancel-purple-light', async function () {
+        const userId = $(this).data('user-id');
+        const attendanceDayRaw = $(this).data('attendance-day'); // e.g., "2025-04-01T00:00:00"
+
+        // 轉換成 yyyy-MM-dd 格式
+        const attendanceDay = new Date(attendanceDayRaw).toISOString().split('T')[0]; // "2025-04-01"
+
+        if (confirm(`確定要取消 ${attendanceDay} 的紫光後關燈紀錄？`)) {
+            try {
+                await $.ajax({
+                    type: "PUT",
+                    url: `http://internal.hochi.org.tw:8082/api/attendance/cancel-purple-light/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceDay)}`,
+                    success: function () {
+                        alert("取消成功");
+                        $('#queryBtn').click(); // 重新查詢
+                    },
+                    error: function (xhr) {
+                        console.error(xhr);
+                        alert("取消失敗，請稍後再試");
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+                alert("發生錯誤，請稍後再試");
+            }
+        }
+    });
 
 
 });

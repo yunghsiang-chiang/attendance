@@ -100,8 +100,9 @@ $(document).ready(function () {
 
     // 顯示查詢結果
     function displayMorningLightDown(records) {
+        const realRecords = records.$values || records;
         let content = `<h5>晨煉記錄（紫光後關燈）</h5>`;
-        records.forEach(record => {
+        realRecords.forEach(record => {
             const status = record.morning_light_down_after_purple_light === 1 ? "✅" : "❌";
             content += `
             <p>

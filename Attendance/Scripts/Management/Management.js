@@ -83,6 +83,9 @@ $(document).ready(function () {
                 // 使用 Promise.all 同時發送請求
                 const requests = apiConfigs.map(config => $.get(config.url));
                 const results = await Promise.all(requests);
+                // 加在 queryBtn 點擊事件內的 Promise.all() 後面
+                const dayRecords = await $.get(`http://internal.hochi.org.tw:8082/api/attendance/get_attendance_day_record?user_id=${userId}&startDate=${startDate}&endDate=${endDate}`);
+                displayMorningLightDown(dayRecords);
 
                 // 根據返回的數據和配置顯示記錄
                 results.forEach((data, index) => {
@@ -94,6 +97,27 @@ $(document).ready(function () {
             }
         }
     });
+
+    // 顯示查詢結果
+    function displayMorningLightDown(records) {
+        let content = `<h5>晨煉記錄（紫光後關燈）</h5>`;
+        records.forEach(record => {
+            const status = record.morning_light_down_after_purple_light === 1 ? "✅" : "❌";
+            content += `
+            <p>
+                日期: ${record.attendance_day}, 姓名: ${record.user_name}, 紫光後關燈: ${status}
+                ${record.morning_light_down_after_purple_light === 1
+                    ? `<button class="btn btn-link cancel-purple-light"
+                          data-user-id="${record.user_id}"
+                          data-attendance-day="${record.attendance_day}">
+                          取消紫光後關燈</button>`
+                    : ''
+                }
+            </p>`;
+        });
+        $('#attendanceRecords').append(content);
+    }
+
 
     // 顯示查詢結果並添加更新按鈕
     function displayRecords(records, recordType, showEndTime) {

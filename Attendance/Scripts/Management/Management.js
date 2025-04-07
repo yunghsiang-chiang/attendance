@@ -415,8 +415,8 @@ $(document).ready(function () {
         const userId = $(this).data('user-id');
         const attendanceDayRaw = $(this).data('attendance-day'); // e.g., "2025-04-01T00:00:00"
 
-        // 轉換成 yyyy-MM-dd 格式
-        const attendanceDay = new Date(attendanceDayRaw).toISOString().split('T')[0]; // "2025-04-01"
+        // 直接取 yyyy-MM-dd 前 10 字元
+        const attendanceDay = attendanceDayRaw.slice(0, 10);
 
         if (confirm(`確定要取消 ${attendanceDay} 的紫光後關燈紀錄？`)) {
             try {

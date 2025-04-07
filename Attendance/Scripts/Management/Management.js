@@ -99,6 +99,7 @@ $(document).ready(function () {
     });
 
     // 顯示查詢結果
+
     function displayMorningLightDown(records) {
         const realRecords = records.$values || records;
         let content = `<h5>晨煉記錄（修練至紫光後）</h5>`;
@@ -106,7 +107,7 @@ $(document).ready(function () {
             const status = record.morning_light_down_after_purple_light === 1 ? "✅" : "❌";
             content += `
             <p>
-                日期: ${record.attendance_day}, 姓名: ${record.user_name}, 修練至紫光後: ${status}
+                日期: ${record.attendance_day.slice(0, 10) }, 姓名: ${record.user_name}, 修練至紫光後: ${status}
                 ${record.morning_light_down_after_purple_light === 1
                     ? `<button class="btn btn-link cancel-purple-light"
                           type="button"

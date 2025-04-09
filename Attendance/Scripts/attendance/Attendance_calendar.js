@@ -75,6 +75,7 @@
     function generateCalendar(month, year) {
         $('#calendar').empty(); // 清空日曆容器
 
+        let afterPurpleMap = {}; // <-- ✅ 加這行讓後續可存取紫光資訊
         const firstDayOfMonth = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -131,6 +132,51 @@
                                 }
 
                                 $('#calendar').append(dayElement);
+
+                                // 為整個格子加入點擊事件（排除超連結）
+                                dayElement.on('click', function (e) {
+                                    if ($(e.target).hasClass('clickable') || $(e.target).hasClass('after-purple-check')) {
+                                        return; // 點到姓名或紫色勾勾則跳過
+                                    }
+
+                                    if (!attendanceSet.has(formattedDate)) {
+                                        return; // 如果沒出勤，不給補登記
+                                    }
+
+                                    if (afterPurpleMap[formattedDate]) {
+                                        alert("此日已記錄紫光後，無需重複補登記");
+                                        return;
+                                    }
+
+                                    if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
+                                        const userId = getCookie("person_id");
+                                        const userName = getCookie("person_name");
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                            data: JSON.stringify({
+                                                user_id: userId,
+                                                user_name: userName,
+                                                attendance_day: formattedDate,
+                                                morning_light_down_after_purple_light: 1
+                                            }),
+                                            headers: {
+                                                'Accept': 'application/json',
+                                                'Content-Type': 'application/json'
+                                            },
+                                            success: function () {
+                                                alert("修練至紫光後資料更新成功");
+                                                generateCalendar(currentMonth, currentYear); // 重新刷新日曆
+                                            },
+                                            error: function (xhr) {
+                                                console.error(xhr);
+                                                alert("更新失敗，請稍後再試");
+                                            }
+                                        });
+                                    }
+                                });
+
                             }
 
                             // ✅✔️ 加在日曆格子產生完後，只跑一次的紫系判斷
@@ -156,6 +202,7 @@
                                     console.error('Error fetching full attendance for ✔️:', error);
                                 }
                             });
+
 
                         },
                         error: function (error) {

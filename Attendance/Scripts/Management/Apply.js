@@ -110,7 +110,7 @@
                     <td>${formatDateTime(record.startTime)}</td>
                     <td>${formatDateTime(record.endTime)}</td>
                     <td>${record.count_hours} 小時</td>
-                    <td><button type="button" class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
+                    <td><button class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
                 </tr>`;
             });
 
@@ -192,7 +192,7 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
 
     // 構建要提交的資料
     const requestData = {
-        userID: userId,
+        userID: String(userId),
         userName: userName,
         leaveType: leaveType, // leaveType 對應請假類型
         startTime: startTime,

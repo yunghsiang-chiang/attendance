@@ -199,7 +199,7 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
         approved_by: person_id
     };
 
-    fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`, {
+    fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
             console.error('更新請假記錄時出錯:', error); // 捕獲錯誤
         });
 
-    console.log("🚨 傳送 URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`);
+    console.log("🚨 傳送 URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`);
     console.log("🔍 startTime 類型：", typeof startTime, startTime);
 
 }

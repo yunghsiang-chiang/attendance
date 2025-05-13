@@ -125,6 +125,7 @@
                 const userName = $(this).data('username');
 
                 await updateLeaveRecord(userId, userName, leaveType, startTime);
+                console.log(userId, leaveType, startTime, userName);
                 alert('請假記錄更新成功！');
             });
         })
@@ -196,10 +197,6 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
         approved_by: person_id
     };
 
-    console.log("傳送資料：", requestData);
-    console.log("URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`);
-
-
     fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`, {
         method: 'PUT',
         headers: {
@@ -220,6 +217,10 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
         .catch(error => {
             console.error('更新請假記錄時出錯:', error); // 捕獲錯誤
         });
+
+    console.log("🚨 傳送 URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${userId}/${leaveType}/${startTime}`);
+    console.log("🔍 startTime 類型：", typeof startTime, startTime);
+
 }
 
 // 取得 cookie 值的函數

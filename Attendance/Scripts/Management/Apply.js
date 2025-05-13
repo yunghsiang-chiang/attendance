@@ -62,7 +62,7 @@
             });
 
             // 為每個簽核按鈕綁定點擊事件
-            $('.update-overtime').on('click', async function () {
+            $('.overtime_apply').on('click', '.update-overtime', async function () {
                 const userID = $(this).data('userid');
                 const overtimeType = $(this).data('overtimetype');
                 const startTime = $(this).data('starttime');
@@ -118,7 +118,7 @@
             afterApplyDiv.append(leaveContent); // 將內容添加到事後申請 div 中
 
             // 為每個簽核按鈕綁定點擊事件
-            $('.update-leave').on('click', async function () {
+            $('.after_apply').on('click', '.update-leave', async function () {
                 const userId = $(this).data('userid');
                 const leaveType = $(this).data('leavetype');
                 const startTime = $(this).data('starttime');

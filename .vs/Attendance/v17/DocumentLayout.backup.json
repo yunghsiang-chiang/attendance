@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\apply.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\management.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\scripts\\management\\management.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\management.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
@@ -34,8 +34,7 @@
               "RelativeToolTip": "Attendance\\Scripts\\Management\\Management.js",
               "ViewState": "AgIAAH4AAAAAAAAAAAAAAG8AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-05-13T01:40:08.839Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-13T01:40:08.839Z"
             },
             {
               "$type": "Document",
@@ -45,7 +44,7 @@
               "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Apply.js",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Apply.js",
               "RelativeToolTip": "Attendance\\Scripts\\Management\\Apply.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHAAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAALMAAAAAAAAAAAAowNYAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-05-13T01:26:40.825Z",
               "EditorCaption": ""

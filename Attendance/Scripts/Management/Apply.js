@@ -33,7 +33,7 @@
                     <td>${formatDateTime(record.startTime)}</td>
                     <td>${formatDateTime(record.endTime)}</td>
                     <td>${record.count_hours} 小時</td>
-                    <td><button type="button" class="update-overtime" data-userid="${record.userID}" data-username="${record.userName}" data-overtimetype="${record.overtimeType}" data-starttime="${record.startTime}">簽核</button></td>
+                    <td><button class="update-overtime" data-userid="${record.userID}" data-username="${record.userName}" data-overtimetype="${record.overtimeType}" data-starttime="${record.startTime}">簽核</button></td>
                 </tr>`;
             });
 
@@ -110,7 +110,7 @@
                     <td>${formatDateTime(record.startTime)}</td>
                     <td>${formatDateTime(record.endTime)}</td>
                     <td>${record.count_hours} 小時</td>
-                    <td><button type="button" class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
+                    <td><button class="update-leave" data-userid="${record.userId}" data-username="${record.userName}" data-leavetype="${record.leaveType}" data-starttime="${record.startTime}">簽核</button></td>
                 </tr>`;
             });
 

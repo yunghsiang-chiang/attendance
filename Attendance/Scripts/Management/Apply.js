@@ -117,21 +117,23 @@
             leaveContent += '</tbody></table>';
             afterApplyDiv.append(leaveContent); // 將內容添加到事後申請 div 中
 
-            // 為每個簽核按鈕綁定點擊事件
-            $('.after_apply').on('click', '.update-leave', async function () {
-                const userId = $(this).data('userid');
-                const leaveType = $(this).data('leavetype');
-                const startTime = $(this).data('starttime');
-                const userName = $(this).data('username');
-
-                await updateLeaveRecord(userId, userName, leaveType, startTime);
-                console.log(userId, leaveType, startTime, userName);
-                alert('請假記錄更新成功！');
-            });
         })
         .catch(error => {
             console.error('獲取請假數據時出錯:', error); // 捕獲錯誤
         });
+
+    // ✅ 請假事件委派放在 fetch 之外，DOM 初始化後立即綁定
+    $('.after_apply').on('click', '.update-leave', async function () {
+        console.log("🟢 點擊到 .update-leave 按鈕");
+        const userId = $(this).data('userid');
+        const leaveType = $(this).data('leavetype');
+        const startTime = $(this).data('starttime');
+        const userName = $(this).data('username');
+
+        await updateLeaveRecord(userId, userName, leaveType, startTime);
+        console.log(userId, leaveType, startTime, userName);
+        alert('請假記錄更新成功！');
+    });
 });
 
 // 格式化日期和時間的函數

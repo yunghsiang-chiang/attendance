@@ -67,6 +67,7 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/attendance/attendance_history">出勤紀錄</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/attendance/Attendance_calendar">出勤日曆</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="regulations.aspx">法規資訊</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="About.aspx">和氣大愛大數據</a></li>
                     </ul>
                 </div>
                 <div class="row justify-content-end">

@@ -289,6 +289,106 @@ namespace Attendance.App_Code
             }
             return NewDataTale;
         }
+
+        // string sql = "SELECT * FROM sysuserbase WHERE ub_account = @account AND ub_pwd = password(@pwd)";
+        // var parameters = new Dictionary<string, object>
+        // {
+        //     { "@account", txtAccount.Text.Trim() },
+        //     { "@pwd", txtPwd.Text.Trim() }
+        // };
+        // DataTable dt = db.SQL_Select_Param(sql, parameters, "yourConnectionStringName");
+
+        /// <summary>
+        /// 執行 參數化查詢的 SELECT 指令，並將查詢結果以 DataTable 回傳
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public DataTable SQL_Select_Param(string sql, Dictionary<string, object> parameters, string connectionString)
+        {
+            DataTable table = new DataTable();
+            using (SqlConnection conn = new SqlConnection(WebConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    conn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        table.Load(dr);
+                    }
+                }
+            }
+            return table;
+        }
+        /// <summary>
+        /// 執行參數化查詢並檢查 是否有結果資料，回傳 true/false
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public bool SQL_HasRows_Param(string sql, Dictionary<string, object> parameters, string connectionString)
+        {
+            using (SqlConnection conn = new SqlConnection(WebConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    conn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        return dr.HasRows;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 執行參數化查詢，同時
+        /// 檢查是否有資料
+        /// 將資料填入傳入的 DataTable（以 ref 傳入）
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public bool SQL_HasRows_Table_Param(string sql, Dictionary<string, object> parameters, string connectionString, ref DataTable table)
+        {
+            using (SqlConnection conn = new SqlConnection(WebConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    conn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        table.Load(dr);
+                        return dr.HasRows;
+                    }
+                }
+            }
+        }
+
     }
 
 }

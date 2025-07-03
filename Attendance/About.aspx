@@ -10,16 +10,6 @@
         </div>
 
         <div class="mb-3">
-            <button class="btn btn-outline-primary w-100 d-md-none mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#sourceCollapse">
-                📁 目前使用資料源
-            </button>
-            <div class="collapse d-md-block" id="sourceCollapse">
-                <h5 class="d-none d-md-block">📁 目前使用資料源</h5>
-                <ul class="list-group" id="sourceFiles"></ul>
-            </div>
-        </div>
-
-        <div class="mb-3">
             <h5>❓ 問我一個問題</h5>
             <div class="input-group mb-2">
                 <input type="text" class="form-control" id="questionInput" placeholder="請輸入您的問題..." />
@@ -36,6 +26,16 @@
                 <h5 class="card-title">📚 參考內容</h5>
                 <pre id="contextText" class="bg-light p-2"></pre>
                 <p class="text-end text-muted">⏱️ 花費時間：<span id="elapsed"></span> 秒</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-outline-primary w-100 d-md-none mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#sourceCollapse">
+                📁 目前使用資料源
+            </button>
+            <div class="collapse d-md-block" id="sourceCollapse">
+                <h5 class="d-none d-md-block">📁 目前使用資料源</h5>
+                <ul class="list-group" id="sourceFiles"></ul>
             </div>
         </div>
     </div>

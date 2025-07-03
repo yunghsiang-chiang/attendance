@@ -21,8 +21,7 @@ async function loadSources() {
         li.textContent = f;
         list.appendChild(li);
     });
-    document.getElementById('sourceInfo').textContent =
-        `共 ${result.file_count} 本書`;
+    document.getElementById('sourceInfo').textContent = `共 ${result.file_count} 本書`;
 }
 
 

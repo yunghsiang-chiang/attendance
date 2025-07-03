@@ -36,6 +36,7 @@
             <div class="collapse d-md-block" id="sourceCollapse">
                 <h5 class="d-none d-md-block">📁 目前使用資料源</h5>
                 <ul class="list-group" id="sourceFiles"></ul>
+                <p id="sourceInfo" class="text-muted mt-2"></p>
             </div>
         </div>
     </div>

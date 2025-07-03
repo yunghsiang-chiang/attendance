@@ -48,9 +48,10 @@
               "RelativeDocumentMoniker": "Attendance\\Scripts\\About.js",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\About.js",
               "RelativeToolTip": "Attendance\\Scripts\\About.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-07-03T02:04:12.116Z"
+              "WhenOpened": "2025-07-03T02:04:12.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

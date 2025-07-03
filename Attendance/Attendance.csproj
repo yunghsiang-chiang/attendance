@@ -211,6 +211,7 @@
     <Content Include="Management\Restriction.aspx" />
     <Content Include="Management\Schedule.aspx" />
     <Content Include="regulations.aspx" />
+    <Content Include="Scripts\About.js" />
     <Content Include="Scripts\attendance\Attendance_calendar.js" />
     <Content Include="Scripts\attendance\attendance_history.js" />
     <Content Include="Scripts\attendance\attendance_rwd.js" />

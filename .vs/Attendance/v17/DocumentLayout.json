@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\egrou\\source\\repos\\Attendance\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\about.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\about.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\about.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\about.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\about.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     },
     {
@@ -30,11 +34,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "About.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\About.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\About.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\About.js",
+              "RelativeToolTip": "Attendance\\Scripts\\About.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-03T02:04:12.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -51,7 +68,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Site.Master",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Site.Master",
               "RelativeDocumentMoniker": "Attendance\\Site.Master",
@@ -64,7 +81,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Default.aspx",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Default.aspx",
               "RelativeDocumentMoniker": "Attendance\\Default.aspx",
@@ -76,7 +93,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Management.js",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Management.js",
               "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Management.js",
@@ -88,7 +105,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Apply.js",
               "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Apply.js",
               "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Apply.js",

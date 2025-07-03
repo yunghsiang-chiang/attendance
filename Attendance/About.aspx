@@ -8,6 +8,7 @@
 
         <!-- 資料來源 -->
         <h4>目前使用資料源</h4>
+        <p id="sourceInfo" class="text-muted mt-2"></p>
         <ul id="sourceFiles" class="list-group mb-4"></ul>
 
         <!-- 提問區塊 -->
@@ -41,16 +42,21 @@
 
         async function loadSources() {
             const res = await fetch(`${apiBase}/source-files`);
-            const files = await res.json();
+            const result = await res.json(); // result 是 { file_count, files, folder }
+
             const list = document.getElementById('sourceFiles');
             list.innerHTML = '';
-            files.forEach(f => {
+
+            result.files.forEach(f => {
                 const li = document.createElement('li');
                 li.className = 'list-group-item';
                 li.textContent = f;
                 list.appendChild(li);
             });
+            document.getElementById('sourceInfo').textContent =
+                `共 ${result.file_count} 本書`;
         }
+
 
         async function askQuestion() {
             const q = document.getElementById('questionInput').value.trim();

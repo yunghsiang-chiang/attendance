@@ -13,7 +13,7 @@
             <h5>❓ 問我一個問題</h5>
             <div class="input-group mb-2">
                 <input type="text" class="form-control" id="questionInput" placeholder="請輸入您的問題..." />
-                <button class="btn btn-success" id="askBtn">送出</button>
+                <button type="button" class="btn btn-success" id="askBtn">送出</button>
             </div>
         </div>
 

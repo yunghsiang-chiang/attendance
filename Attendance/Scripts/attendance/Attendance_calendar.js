@@ -150,8 +150,8 @@
                                         // 已登記，要取消
                                         if (confirm(`此日已登記為「晨下煉完紫光系」，是否要取消？`)) {
                                             $.ajax({
-                                                type: "PUT",
-                                                url: "http://internal.hochi.org.tw:8082/api/attendance/updateattendance_day",
+                                                type: "POST",
+                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
                                                 data: JSON.stringify({
                                                     user_id: userId,
                                                     user_name: userName,

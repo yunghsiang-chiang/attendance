@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\attendance\\attendance_calendar.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\about.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\scripts\\about.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\about.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "Attendance\\Scripts\\attendance\\Attendance_calendar.js",
               "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\Attendance_calendar.js",
               "RelativeToolTip": "Attendance\\Scripts\\attendance\\Attendance_calendar.js",
-              "ViewState": "AgIAAIAAAAAAAAAAAAAcwI4AAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAANQAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-07-10T07:17:10.15Z",
               "EditorCaption": ""
@@ -67,8 +67,7 @@
               "RelativeToolTip": "Attendance\\Scripts\\About.js",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-07-03T02:04:12.116Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-03T02:04:12.116Z"
             },
             {
               "$type": "Document",

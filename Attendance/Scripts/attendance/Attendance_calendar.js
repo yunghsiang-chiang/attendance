@@ -210,7 +210,7 @@
                                 url: fullAttendanceUrl,
                                 type: 'GET',
                                 success: function (fullResponse) {
-                                    const afterPurpleMap = {};
+                                    afterPurpleMap = {};
                                     fullResponse.$values.forEach(record => {
                                         const dateKey = record.attendance_day.split('T')[0];
                                         afterPurpleMap[dateKey] = record.morning_light_down_after_purple_light === 1;

@@ -143,38 +143,63 @@
                                         return; // 如果沒出勤，不給補登記
                                     }
 
+                                    const userId = getCookie("person_id");
+                                    const userName = getCookie("person_name");
+
                                     if (afterPurpleMap[formattedDate]) {
-                                        alert("此日已記錄紫光後，無需重複補登記");
-                                        return;
+                                        // 已登記，要取消
+                                        if (confirm(`此日已登記為「晨下煉完紫光系」，是否要取消？`)) {
+                                            $.ajax({
+                                                type: "PUT",
+                                                url: "http://internal.hochi.org.tw:8082/api/attendance/updateattendance_day",
+                                                data: JSON.stringify({
+                                                    user_id: userId,
+                                                    user_name: userName,
+                                                    attendance_day: formattedDate,
+                                                    morning_light_down_after_purple_light: 0
+                                                }),
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                success: function () {
+                                                    alert("已取消紫光煉氣登記");
+                                                    generateCalendar(currentMonth, currentYear); // 重新載入日曆
+                                                },
+                                                error: function (xhr) {
+                                                    console.error(xhr);
+                                                    alert("取消失敗，請稍後再試");
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        // 尚未登記，要新增
+                                        if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                                data: JSON.stringify({
+                                                    user_id: userId,
+                                                    user_name: userName,
+                                                    attendance_day: formattedDate,
+                                                    morning_light_down_after_purple_light: 1
+                                                }),
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                success: function () {
+                                                    alert("修練至紫光後資料更新成功");
+                                                    generateCalendar(currentMonth, currentYear);
+                                                },
+                                                error: function (xhr) {
+                                                    console.error(xhr);
+                                                    alert("更新失敗，請稍後再試");
+                                                }
+                                            });
+                                        }
                                     }
 
-                                    if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
-                                        const userId = getCookie("person_id");
-                                        const userName = getCookie("person_name");
-
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
-                                            data: JSON.stringify({
-                                                user_id: userId,
-                                                user_name: userName,
-                                                attendance_day: formattedDate,
-                                                morning_light_down_after_purple_light: 1
-                                            }),
-                                            headers: {
-                                                'Accept': 'application/json',
-                                                'Content-Type': 'application/json'
-                                            },
-                                            success: function () {
-                                                alert("修練至紫光後資料更新成功");
-                                                generateCalendar(currentMonth, currentYear); // 重新刷新日曆
-                                            },
-                                            error: function (xhr) {
-                                                console.error(xhr);
-                                                alert("更新失敗，請稍後再試");
-                                            }
-                                        });
-                                    }
                                 });
 
                             }

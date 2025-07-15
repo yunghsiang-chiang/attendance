@@ -102,18 +102,18 @@ $(document).ready(function () {
 
     function displayMorningLightDown(records) {
         const realRecords = records.$values || records;
-        let content = `<h5>晨煉記錄（修練至紫光後）</h5>`;
+        let content = `<h5>晨煉記錄（修煉至紫光後）</h5>`;
         realRecords.forEach(record => {
             const status = record.morning_light_down_after_purple_light === 1 ? "✅" : "❌";
             content += `
             <p>
-                日期: ${record.attendance_day.slice(0, 10) }, 姓名: ${record.user_name}, 修練至紫光後: ${status}
+                日期: ${record.attendance_day.slice(0, 10) }, 姓名: ${record.user_name}, 修煉至紫光後: ${status}
                 ${record.morning_light_down_after_purple_light === 1
                     ? `<button class="btn btn-link cancel-purple-light"
                           type="button"
                           data-user-id="${record.user_id}"
                           data-attendance-day="${record.attendance_day}">
-                          取消修練至紫光後</button>`
+                          取消修煉至紫光後</button>`
                     : ''
                 }
             </p>`;
@@ -411,7 +411,7 @@ $(document).ready(function () {
         }
     }
 
-    // 取消事件 取消 對應日期 修練至紫光
+    // 取消事件 取消 對應日期 修煉至紫光
     $(document).on('click', '.cancel-purple-light', async function () {
         const userId = $(this).data('user-id');
         const attendanceDayRaw = $(this).data('attendance-day'); // e.g., "2025-04-01T00:00:00"
@@ -419,7 +419,7 @@ $(document).ready(function () {
         // 直接取 yyyy-MM-dd 前 10 字元
         const attendanceDay = attendanceDayRaw.slice(0, 10);
 
-        if (confirm(`確定要取消 ${attendanceDay} 的修練至紫光後？`)) {
+        if (confirm(`確定要取消 ${attendanceDay} 的修煉至紫光後？`)) {
             try {
                 await $.ajax({
                     type: "PUT",
@@ -469,7 +469,7 @@ $(document).on('click', '#addRecordBtn', async function () {
                 'Content-Type': 'application/json'
             },
             success: function () {
-                alert("修練至紫光後資料更新成功");
+                alert("修煉至紫光後資料更新成功");
                 $('#queryBtn').click();
             },
             error: function (xhr) {

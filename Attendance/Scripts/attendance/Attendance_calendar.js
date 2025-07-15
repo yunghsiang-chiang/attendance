@@ -189,7 +189,7 @@
                                                     'Content-Type': 'application/json'
                                                 },
                                                 success: function () {
-                                                    alert("修練至紫光後資料更新成功");
+                                                    alert("修煉至紫光後資料更新成功");
                                                     generateCalendar(currentMonth, currentYear);
                                                 },
                                                 error: function (xhr) {

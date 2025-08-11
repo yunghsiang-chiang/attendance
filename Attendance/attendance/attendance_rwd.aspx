@@ -103,6 +103,7 @@
                     <option value="事假">事假</option>
                     <option value="特休">特休</option>
                     <option value="補休">補休</option>
+                    <option value="公休">公休</option>
                     <option value="生理假">生理假</option>
                 </select>
                 <br />

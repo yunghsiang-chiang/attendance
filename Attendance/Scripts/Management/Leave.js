@@ -65,6 +65,7 @@
             data.forEach(person => {
                 let remainSpecial = Number(person.special_vacation_hours) || 0;
                 let remainPersonal = Number(person.personal_leave_hours) || 0;
+                let remainSick = Number(person.personal_sick_hours) || 0; // ✅ 病假可用時數
 
                 // 計算今年度到職週年範圍
                 const startWorkDate = new Date(person.start_work);
@@ -83,10 +84,11 @@
                 // 預備滑鼠提示資料
                 person.leaveRecords = {
                     specialVacation: [],
-                    personalLeave: []
+                    personalLeave: [],
+                    sickLeave: [] // ✅ 病假明細
                 };
 
-                // 扣除近一年內的「特休 / 事假」時數；（✅ 不再處理補休）
+                // 扣除近一年內：特休 / 事假 / 病假（✅ 新增病假）
                 leaveData.forEach(leave => {
                     if (leave.userId === person.person_id) {
                         const leaveStart = new Date(leave.startTime);
@@ -98,6 +100,9 @@
                             } else if (leave.leaveType === '事假') {
                                 remainPersonal -= hrs;
                                 person.leaveRecords.personalLeave.push(leave);
+                            } else if (leave.leaveType === '病假') { // ✅ 新增
+                                remainSick -= hrs;
+                                person.leaveRecords.sickLeave.push(leave);
                             }
                         }
                     }
@@ -106,6 +111,7 @@
                 // 只保留剩餘欄位（兩位小數顯示用數值保留原樣，渲染時再 toFixed）
                 person.special_vacation_hours = remainSpecial;
                 person.personal_leave_hours = remainPersonal;
+                person.personal_sick_hours = remainSick;   // ✅ 新增
 
                 // ✅ 明確移除補休欄位（若原物件有）
                 delete person.compensatory_leave_hours;
@@ -136,9 +142,10 @@
         const headers = [
             { title: '員工姓名', key: 'person_name' },
             { title: '起始日期', key: 'start_work' },
-            { title: '剩餘特休時數', key: 'special_vacation_hours' }, // ✅ 改名
-            { title: '剩餘事假時數', key: 'personal_leave_hours' },  // ✅ 改名
-            { title: '年資(年)', key: 'years_of_service' }           // ✅ 以年資取代補休欄位
+            { title: '剩餘特休時數', key: 'special_vacation_hours' },
+            { title: '剩餘事假時數', key: 'personal_leave_hours' },
+            { title: '剩餘病假時數', key: 'personal_sick_hours' }, // ✅ 新增
+            { title: '年資(年)', key: 'years_of_service' }
         ];
 
         headers.forEach(header => {
@@ -156,7 +163,8 @@
                 <td>${person.person_name}</td>
                 <td>${new Date(person.start_work).toLocaleDateString()}</td>
                 <td class="vacation-cell special-vacation" data-id="${person.person_id}">${fmt2(person.special_vacation_hours)}</td>
-                <td class="vacation-cell personal-leave" data-id="${person.person_id}">${fmt2(person.personal_leave_hours)}</td>
+                <td class="vacation-cell personal-leave"   data-id="${person.person_id}">${fmt2(person.personal_leave_hours)}</td>
+                <td class="vacation-cell sick-leave"       data-id="${person.person_id}">${fmt2(person.personal_sick_hours)}</td>
                 <td>${fmt2(person.years_of_service)}</td>
             `;
             table.appendChild(row);
@@ -164,7 +172,7 @@
 
         staffLeaveElement.appendChild(table);
 
-        // 滑鼠提示（仍保留特休/事假）
+        // 滑鼠提示：特休 / 事假 / 病假（Alt+S 可複製）
         addHoverEffect(data);
     }
 
@@ -187,6 +195,16 @@
             });
             cell.addEventListener('mouseout', hideLeaveTooltip);
         });
+
+        // ✅ 病假 tooltip
+        document.querySelectorAll('.sick-leave').forEach(cell => {
+            cell.addEventListener('mouseover', function () {
+                const userId = this.getAttribute('data-id');
+                const person = data.find(p => p.person_id === userId);
+                if (person) showLeaveTooltip(this, person.leaveRecords.sickLeave, '病假');
+            });
+            cell.addEventListener('mouseout', hideLeaveTooltip);
+        });
     }
 
     function showLeaveTooltip(element, records, leaveType) {
@@ -196,7 +214,7 @@
             const end = new Date(record.endTime);
             const hrs = Number(record.count_hours) || 0;
 
-            // 超過 8 小時 → 顯示起訖日期；否則只顯示起始日期
+            // >8 小時 → 顯示起訖日期；≤8 小時 → 只顯示起始日期
             const datePart = hrs > 8
                 ? `${start.toLocaleDateString()} → ${end.toLocaleDateString()}`
                 : `${start.toLocaleDateString()}`;
@@ -204,7 +222,7 @@
             content += `<li>${datePart} - ${hrs.toFixed(2)} 小時</li>`;
         });
         content += '</ul>';
-        // 讓 Alt+S 可複製的純文字也包含新格式
+        // Alt+S 可複製純文字
         currentTooltipContent = content.replace(/<[^>]+>/g, '');
 
         let tooltip = document.createElement('div');
@@ -260,11 +278,12 @@
     // 先載入 & 更新資料
     const updatedData = await fetchAttendanceData();
 
-    // ===== 圖表（已移除「補休」資料集）=====
+    // ===== 圖表（加入「剩餘病假時數」資料集）=====
     async function leavechart() {
         const labels = updatedData.map(person => person.person_name);
         const specialVacationHours = updatedData.map(person => Number(fmt2(person.special_vacation_hours)));
         const personalLeaveHours = updatedData.map(person => Number(fmt2(person.personal_leave_hours)));
+        const sickLeaveHours = updatedData.map(person => Number(fmt2(person.personal_sick_hours))); // ✅ 新增
 
         const ctx = document.getElementById('attendanceChart').getContext('2d');
         const attendanceChart = new Chart(ctx, {
@@ -273,12 +292,16 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: '剩餘特休時數', // ✅ 改名
+                        label: '剩餘特休時數',
                         data: specialVacationHours
                     },
                     {
-                        label: '剩餘事假時數', // ✅ 改名
+                        label: '剩餘事假時數',
                         data: personalLeaveHours
+                    },
+                    {
+                        label: '剩餘病假時數', // ✅ 新增
+                        data: sickLeaveHours
                     }
                 ]
             },

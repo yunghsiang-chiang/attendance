@@ -1,4 +1,15 @@
 ﻿$(document).ready(function () {
+    // 兩位小數
+    const fmt2 = (v) => {
+        const n = Number(v);
+        return Number.isFinite(n) ? n.toFixed(2) : '0.00';
+    };
+
+    // 年資用與周年視窗計算（365.2425 天/年）
+    const yearsBetween = (start, end) => {
+        const ms = new Date(end) - new Date(start);
+        return ms / (365.2425 * 24 * 60 * 60 * 1000);
+    };
 
     // 取得 cookie 值
     function getCookie(cname) {
@@ -182,6 +193,72 @@
         }
     }
 
+    // 取得並顯示個人剩餘 特休/事假/病假（到職週年視窗扣抵近一年請假）
+    async function loadPersonalLeaveBalances() {
+        const personId = getCookie("person_id");
+        const personName = getCookie("person_name");
+        if (!personId) return;
+
+        try {
+            // 1) 取得可用時數（特休/事假/病假）
+            const vRes = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+            if (!vRes.ok) throw new Error('get_person_vacation 失敗');
+            const vJson = await vRes.json();
+            const list = (vJson && vJson.$values) ? vJson.$values : [];
+            const me = list.find(x => String(x.person_id) === String(personId));
+            if (!me) return;
+
+            // 初始（API 提供的一年可用時數）
+            let remainSpecial = Number(me.special_vacation_hours) || 0;
+            let remainPersonal = Number(me.personal_leave_hours) || 0;
+            let remainSick = Number(me.personal_sick_hours) || 0;
+
+            // 2) 取得近一年請假紀錄，用到職週年視窗扣抵
+            const lRes = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
+            if (!lRes.ok) throw new Error('get_leave_record_last_year 失敗');
+            const records = await lRes.json();
+
+            const now = new Date();
+            const startWorkDate = new Date(me.start_work || now);
+            const anniversaryThisYear = new Date(startWorkDate);
+            anniversaryThisYear.setFullYear(now.getFullYear());
+            if (now < anniversaryThisYear) {
+                anniversaryThisYear.setFullYear(now.getFullYear() - 1);
+            }
+            const nextAnniversary = new Date(anniversaryThisYear);
+            nextAnniversary.setFullYear(anniversaryThisYear.getFullYear() + 1);
+
+            // 只處理本人、且落在週年視窗的請假
+            (Array.isArray(records) ? records : []).forEach(r => {
+                if (String(r.userId) !== String(personId)) return;
+                const st = new Date(r.startTime);
+                if (st < anniversaryThisYear || st > nextAnniversary) return;
+                const hrs = Number(r.count_hours) || 0;
+                if (r.leaveType === '特休') remainSpecial -= hrs;
+                if (r.leaveType === '事假') remainPersonal -= hrs;
+                if (r.leaveType === '病假') remainSick -= hrs;
+            });
+
+            // 3) 將結果渲染到 personal_infor
+            // 若尚未有容器就建立一個
+            if (!document.getElementById('personal_balances')) {
+                const wrap = document.createElement('div');
+                wrap.id = 'personal_balances';
+                wrap.style.marginTop = '6px';
+                // 追加到 #personal_infor 內文最後
+                document.getElementById('personal_infor')?.appendChild(wrap);
+            }
+            const el = document.getElementById('personal_balances');
+            el.innerHTML = `
+      <p>剩餘特休時數：<strong>${fmt2(remainSpecial)}</strong> 小時</p>
+      <p>剩餘事假時數：<strong>${fmt2(remainPersonal)}</strong> 小時</p>
+      <p>剩餘病假時數：<strong>${fmt2(remainSick)}</strong> 小時</p>
+    `;
+        } catch (err) {
+            console.error('loadPersonalLeaveBalances error:', err);
+        }
+    }
+
     // 處理按鈕點擊事件
     async function handleButtonClick(selector, status) {
         $(selector).click(async function () {
@@ -238,6 +315,7 @@
             $('#personal_infor h2').text('姓名: ' + getCookie("person_name"));
             $('#personal_infor p:nth-child(2)').text('區屬: ' + getCookie("person_area"));
             await getLastStatus(getCookie("person_id"));
+            await loadPersonalLeaveBalances();
         }
 
         if (getCookie("person_ipaddress") !== "") {
@@ -257,8 +335,8 @@
     // 頁面加載時初始化
     defaultLoad();
 
-                const today = new Date();
-                const todayString = today.toISOString().split('T')[0];
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
     // 初始加載公告清單
     loadAnnouncements();
     handleButtonClick('#bt_start', '到班');
@@ -418,7 +496,7 @@
                     totalHours += hours;
 
                     // 發送 API 請求 (不再轉換為 UTC)
-                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours,remark);
+                    postApiData_overtime(userId, userName, '加班', toLocalISOString(start_DateTime), toLocalISOString(end_DateTime), hours, remark);
 
                 });
 

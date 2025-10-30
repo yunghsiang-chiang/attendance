@@ -34,6 +34,67 @@
         return ms / (365.2425 * 24 * 60 * 60 * 1000);
     };
 
+    // 將請假三類合併成列資料，依開始時間排序
+    function buildLeaveRows(person) {
+        const rows = [];
+        const pushRows = (arr, type) => {
+            (arr || []).forEach(r => {
+                const start = new Date(r.startTime);
+                const end = new Date(r.endTime);
+                const hrs = Number(r.count_hours) || 0;
+                rows.push([
+                    person.person_id,
+                    person.person_name,
+                    type,
+                    start.toLocaleString(),
+                    end.toLocaleString(),
+                    hrs.toFixed(2),
+                    (hrs / 8).toFixed(2)
+                ]);
+            });
+        };
+        pushRows(person.leaveRecords?.specialVacation, '特休');
+        pushRows(person.leaveRecords?.personalLeave, '事假');
+        pushRows(person.leaveRecords?.sickLeave, '病假');
+
+        // 依起始時間排序
+        rows.sort((a, b) => new Date(a[3]) - new Date(b[3]));
+        return rows;
+    }
+
+    // 下載 CSV（無外掛）
+    function downloadCSV(filename, headerAoa, dataAoa) {
+        const rows = headerAoa.concat(dataAoa);
+        const csv = rows.map(r =>
+            r.map(v => {
+                const s = String(v ?? '');
+                // 需要時加引號並逃逸
+                return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+            }).join(',')
+        ).join('\n');
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    // 下載 XLSX（需先在頁面引入 SheetJS：<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>）
+    function downloadXLSX(filename, headerAoa, dataAoa) {
+        if (typeof XLSX === 'undefined' || !XLSX.utils) {
+            alert('尚未載入 SheetJS（xlsx）。請先在頁面引入 xlsx.full.min.js 後再試。');
+            return;
+        }
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(headerAoa.concat(dataAoa));
+        XLSX.utils.book_append_sheet(wb, ws, 'leave_records');
+        XLSX.writeFile(wb, filename);
+    }
+
     // ===== 取＆加工資料（以「小時」為基準）=====
     async function fetchAttendanceData() {
         const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
@@ -165,7 +226,8 @@
             { title: svTitle, key: 'special_vacation_hours' },
             { title: plTitle, key: 'personal_leave_hours' },
             { title: skTitle, key: 'personal_sick_hours' },
-            { title: '年資(年)', key: 'years_of_service' }
+            { title: '年資(年)', key: 'years_of_service' },
+            { title: '下載', key: '__download__' }          // ✅ 新增
         ];
 
         headers.forEach(header => {
@@ -189,12 +251,54 @@
                 <td class="vacation-cell personal-leave"   data-id="${person.person_id}">${pl}</td>
                 <td class="vacation-cell sick-leave"       data-id="${person.person_id}">${sk}</td>
                 <td>${fmt2(person.years_of_service)}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary btn-dl-csv"  data-id="${person.person_id}">CSV</button>
+                    <button class="btn btn-sm btn-outline-secondary btn-dl-xlsx" data-id="${person.person_id}">XLSX</button>
+                </td>
             `;
             table.appendChild(row);
         });
 
         staffLeaveElement.appendChild(table);
         addHoverEffect(data); // tooltip 邏輯不變（仍使用請假明細的「小時」）
+
+        // 綁定「下載」按鈕事件
+        // 檔名：leave_<員工姓名>_<YYYYMMDD>.csv/xlsx
+        (function bindDownloadButtons() {
+            const todayStr = (() => {
+                const d = new Date();
+                const pad = n => String(n).padStart(2, '0');
+                return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+            })();
+
+            // 共用 header（固定輸出小時欄位，較精準；若要輸出天，可再加一欄換算天數）
+            const header = [[
+                '員工ID', '員工姓名', '假別', '開始時間', '結束時間', '時數(小時)', '天數(1天=8小時)'
+            ]];
+
+            document.querySelectorAll('.btn-dl-csv').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const uid = btn.getAttribute('data-id');
+                    const person = data.find(p => String(p.person_id) === String(uid));
+                    if (!person) return;
+                    const rows = buildLeaveRows(person);
+                    const filename = `leave_${person.person_name}_${todayStr}.csv`;
+                    downloadCSV(filename, header, rows);
+                });
+            });
+
+            document.querySelectorAll('.btn-dl-xlsx').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const uid = btn.getAttribute('data-id');
+                    const person = data.find(p => String(p.person_id) === String(uid));
+                    if (!person) return;
+                    const rows = buildLeaveRows(person);
+                    const filename = `leave_${person.person_name}_${todayStr}.xlsx`;
+                    downloadXLSX(filename, header, rows);
+                });
+            });
+        })();
+
     }
 
     // ===== 滑鼠提示（>8 小時顯示起訖日期；≤8 小時顯示起始日期）=====

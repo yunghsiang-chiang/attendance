@@ -1,6 +1,8 @@
 ﻿$(document).ready(async function () {
     let attendanceChart; // 定義圖表變數
     let currentDate = new Date(); // 取得當前日期
+    let allLeaveRecords = [];      // ✅ 新增：儲存當月所有請假資料
+    let currentFilterUserId = null; // ✅ 新增：目前篩選中的員工ID（再點同人即取消）
     // 更新顯示的月份資訊
     function updateMonthLabel() {
         const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
@@ -112,6 +114,8 @@
 
         const leaveData = await fetchLeaveData(year, month);
         const overtimeData = await fetchOvertimeData(year, month);
+        allLeaveRecords = leaveData;  // ✅ 新增：同步到全域暫存
+        currentFilterUserId = null;   // ✅ 新增：換月時清掉既有篩選
 
         $("#attendanceTable tbody").empty();
 
@@ -146,18 +150,18 @@
             const displayValue = value => value === 0 ? '' : value.toFixed(2);
 
             const row = `
-    <tr>
-        <td>${employeeNames[index]}</td>
-        <td>${workingDays.length}</td>
-        <td>${displayValue(actualAttendance)}</td>
-        <td>${displayValue(overtimeCount)}</td>
-        <td>${displayValue(sickLeaveCount + personalLeaveCount + menstrualLeaveCount + otherLeaveCount)}</td>
-        <td>${displayValue(sickLeaveCount)}</td>
-        <td>${displayValue(personalLeaveCount)}</td>
-        <td>${displayValue(menstrualLeaveCount)}</td>
-        <td>${displayValue(otherLeaveCount)}</td>
-    </tr>
-    `;
+<tr data-user-id="${userId}" data-user-name="${employeeNames[index]}">
+    <td>${employeeNames[index]}</td>
+    <td>${workingDays.length}</td>
+    <td>${displayValue(actualAttendance)}</td>
+    <td>${displayValue(overtimeCount)}</td>
+    <td>${displayValue(sickLeaveCount + personalLeaveCount + menstrualLeaveCount + otherLeaveCount)}</td>
+    <td>${displayValue(sickLeaveCount)}</td>
+    <td>${displayValue(personalLeaveCount)}</td>
+    <td>${displayValue(menstrualLeaveCount)}</td>
+    <td>${displayValue(otherLeaveCount)}</td>
+</tr>
+`;
             $('#attendanceTable tbody').append(row);
         });
 
@@ -214,6 +218,31 @@
                 }
             }
         });
+
+        // ❺ 在 showchart() 末尾（建立完表格、也建完圖表）綁定點擊事件代理
+        //   放在 showchart() 的最後面即可（避免重複綁定先 off 再 on）
+        $('#attendanceTable tbody').off('click').on('click', 'tr', function () {
+            const uid = $(this).data('userId');
+            const uname = $(this).data('userName');
+
+            if (!uid) return;
+
+            // 點到同一位員工 -> 取消篩選，還原全部
+            if (currentFilterUserId === uid) {
+                currentFilterUserId = null;
+                displayLeaveRecords(allLeaveRecords);
+                return;
+            }
+
+            // 設定新篩選並顯示
+            currentFilterUserId = uid;
+            const filtered = (allLeaveRecords || []).filter(r => r.userId === uid);
+            displayLeaveRecords(filtered);
+
+            // 可選：視覺提示目前鎖定列（簡單加上 active 樣式）
+            $(this).addClass('table-active').siblings().removeClass('table-active');
+        });
+
     }
 
     // 獲取並展示請假記錄
@@ -225,7 +254,15 @@
                 throw new Error('Network response was not ok'); // 如果請求失敗則拋出錯誤
             }
             const leaveRecords = await response.json(); // 將響應轉為 JSON 格式
-            displayLeaveRecords(leaveRecords); // 展示請假記錄
+            allLeaveRecords = leaveRecords; // ✅ 新增：更新全域暫存
+
+            // 若已有鎖定某位員工，沿用篩選；否則顯示全部
+            if (currentFilterUserId) {
+                const filtered = leaveRecords.filter(r => r.userId === currentFilterUserId);
+                displayLeaveRecords(filtered); // 展示請假記錄
+            } else {
+                displayLeaveRecords(leaveRecords); // 展示請假記錄
+            }
         } catch (error) {
             console.error('Fetch error:', error); // 錯誤處理
         }
@@ -235,6 +272,13 @@
     function displayLeaveRecords(records) {
         const leaveRecordsContainer = document.getElementById('leave_records');
         leaveRecordsContainer.innerHTML = ''; // 清空之前的請假記錄
+
+        if (!records || records.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = currentFilterUserId ? '（該員工本月無請假紀錄）' : '（本月無請假紀錄）';
+            leaveRecordsContainer.appendChild(li);
+            return;
+        }
 
         records.forEach(record => {
             const li = document.createElement('li'); // 創建列表項

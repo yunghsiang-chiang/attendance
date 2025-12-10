@@ -11,6 +11,12 @@
         return ms / (365.2425 * 24 * 60 * 60 * 1000);
     };
 
+    // 🕘 上班時間與午休時間（分鐘）
+    const WORK_START_MIN = 9 * 60;          // 09:00
+    const WORK_END_MIN = 18 * 60;         // 18:00
+    const LUNCH_START_MIN = 12 * 60 + 30;   // 12:30
+    const LUNCH_END_MIN = 13 * 60 + 30;   // 13:30
+
     // 取得 cookie 值
     function getCookie(cname) {
         let name = cname + "=";
@@ -49,6 +55,64 @@
         const offset = date.getTimezoneOffset() * 60000; // 當前時區的偏移量，分鐘轉毫秒
         const localTime = new Date(date.getTime() - offset); // 減去偏移量來獲取當地時間
         return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
+    }
+
+    // 計算請假起訖之間的實際工作時數（只算週一～週五，09:00~18:00，扣掉 12:30~13:30）
+    function calcWorkHoursBetween(startDateTime, endDateTime) {
+        if (!(startDateTime instanceof Date) || !(endDateTime instanceof Date)) return 0;
+        if (endDateTime <= startDateTime) return 0;
+
+        let totalMinutes = 0;
+
+        // 取起始「日期」(00:00) 與結束「日期」(00:00)
+        let cur = new Date(startDateTime);
+        cur.setHours(0, 0, 0, 0);
+
+        const lastDay = new Date(endDateTime);
+        lastDay.setHours(0, 0, 0, 0);
+
+        while (cur <= lastDay) {
+            const dow = cur.getDay(); // 0=Sun, 6=Sat
+
+            // 只算週一～週五
+            if (dow !== 0 && dow !== 6) {
+                // 當天的上班時間區段：09:00~18:00
+                const dayWorkStart = new Date(cur);
+                dayWorkStart.setHours(9, 0, 0, 0);
+
+                const dayWorkEnd = new Date(cur);
+                dayWorkEnd.setHours(18, 0, 0, 0);
+
+                // 與整體請假區間交集
+                const segStart = new Date(Math.max(dayWorkStart.getTime(), startDateTime.getTime()));
+                const segEnd = new Date(Math.min(dayWorkEnd.getTime(), endDateTime.getTime()));
+
+                if (segEnd > segStart) {
+                    let minutes = (segEnd - segStart) / 60000; // 轉分鐘
+
+                    // 扣掉午休 12:30~13:30 的重疊
+                    const lunchStart = new Date(cur);
+                    lunchStart.setHours(12, 30, 0, 0);
+                    const lunchEnd = new Date(cur);
+                    lunchEnd.setHours(13, 30, 0, 0);
+
+                    const lStart = Math.max(lunchStart.getTime(), segStart.getTime());
+                    const lEnd = Math.min(lunchEnd.getTime(), segEnd.getTime());
+                    if (lEnd > lStart) {
+                        minutes -= (lEnd - lStart) / 60000;
+                    }
+
+                    if (minutes > 0) {
+                        totalMinutes += minutes;
+                    }
+                }
+            }
+
+            // 下一天
+            cur.setDate(cur.getDate() + 1);
+        }
+
+        return totalMinutes / 60.0; // 轉成小時
     }
 
     // 加載公告清單
@@ -373,23 +437,10 @@
                 let userName = getCookie("person_name");
                 const localISOString = toLocalISOString(new Date());
 
-                let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
-                let endDateTime = new Date(`${end_Date}T${end_Time}:00`);
-                const timeDifference = endDateTime - startDateTime;
-
-                let hoursDifference = timeDifference / (1000 * 60 * 60);
-                if (hoursDifference > 8) {
-                    hoursDifference = 8;
-                }
-
                 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
                 const timeRegex = /^\d{2}:\d{2}$/;
 
-                if (new Date(start_Date) > new Date(end_Date)) {
-                    alert("開始日期不能晚於結束日期！");
-                    isValid = false;
-                }
-
+                // ===== 基本欄位檢查 =====
                 if (!leaveType) {
                     alert("請選擇請假類型");
                     isValid = false;
@@ -411,34 +462,60 @@
                     isValid = false;
                 }
 
-                if (isValid) {
-                    const postData = {
-                        userId: userId,
-                        userName: userName,
-                        leaveType: leaveType,
-                        startTime: `${start_Date}T${start_Time}:00.000Z`,
-                        endTime: `${end_Date}T${end_Time}:00.000Z`,
-                        count_hours: hoursDifference,
-                        submitted_at: localISOString
-                    };
+                if (new Date(start_Date) > new Date(end_Date)) {
+                    alert("開始日期不能晚於結束日期！");
+                    isValid = false;
+                }
 
-                    try {
-                        let response = await $.ajax({
-                            type: "POST",
-                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
-                            data: JSON.stringify(postData),
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        console.log(response);
-                        alert('請假申請成功');
-                        $(this).dialog("close");
-                    } catch (error) {
-                        console.error("Error submitting leave request:", error);
-                        alert("請假申請失敗");
-                    }
+                if (!isValid) {
+                    return;
+                }
+
+                // 建立 Date 物件
+                let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
+                let endDateTime = new Date(`${end_Date}T${end_Time}:00`);
+
+                // 再次防呆：整體起迄不可相同或倒退（避免 count_hours 為負數或 0）
+                if (endDateTime <= startDateTime) {
+                    alert("結束時間必須晚於開始時間！");
+                    return;
+                }
+
+                // ⭐ 關鍵：統一用函式計算（自動處理單日/跨日、扣週末、扣午休）
+                let hoursDifference = calcWorkHoursBetween(startDateTime, endDateTime);
+
+                // 再次保險：不接受 0 或負數
+                if (hoursDifference <= 0) {
+                    alert("計算出的請假時數不合理（小於等於 0），請重新確認時間區間。\n(提示：請確認時間是否落在 週一～週五 09:00~18:00 之內)");
+                    return;
+                }
+
+                const postData = {
+                    userId: userId,
+                    userName: userName,
+                    leaveType: leaveType,
+                    startTime: `${start_Date}T${start_Time}:00.000Z`,
+                    endTime: `${end_Date}T${end_Time}:00.000Z`,
+                    count_hours: hoursDifference,
+                    submitted_at: localISOString
+                };
+
+                try {
+                    let response = await $.ajax({
+                        type: "POST",
+                        url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
+                        data: JSON.stringify(postData),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    console.log(response);
+                    alert(`請假申請成功，系統計算時數：${hoursDifference.toFixed(2)} 小時`);
+                    $(this).dialog("close");
+                } catch (error) {
+                    console.error("Error submitting leave request:", error);
+                    alert("請假申請失敗");
                 }
             },
             "取消": function () {

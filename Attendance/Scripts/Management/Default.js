@@ -303,23 +303,43 @@ $(document).ready(async function () {
             : "無人員資料";
     }
 
-    // 綁定 hover 事件顯示未出勤人員資訊
-    bindHoverEvent('#no_attendance_qty', no_attendance_details);
+    // ★ 新增：點擊對應 form-group 也能顯示同一份詳細資訊
 
-    // 綁定滑鼠移動事件以顯示人員詳細資訊
-    bindHoverEvent('#staff_qty', staff_details);
-    bindHoverEvent('#disciples_qty', disciples_details);
-    bindHoverEvent('#secretary_qty', secretary_details);
-    bindHoverEvent('#IT_qty', IT_details);
-    bindHoverEvent('#attendance_qty', attendance_details, showAttendanceDetails);
+    // 社團 /人員類型
+    bindClickEvent('#staff_qty', staff_details);
+    bindClickEvent('#disciples_qty', disciples_details);
+    bindClickEvent('#secretary_qty', secretary_details);
+    bindClickEvent('#IT_qty', IT_details);
+
+    // 出勤人員
+    bindClickEvent('#attendance_qty', attendance_details, showAttendanceDetails);
+
+    // 未出勤人員
+    bindClickEvent('#no_attendance_qty', no_attendance_details);
+
+    // 請假人員（改用共用的 getLeaveTooltipText）
+    bindClickEvent('#leave_qty', leave_details, function () {
+        return getLeaveTooltipText();
+    });
+
+
+    // 組出請假 tooltip 的文字（供 hover / click 共用）
+    function getLeaveTooltipText() {
+        if (leave_details.length === 0) return "無請假資料";
+
+        return leave_details.map(detail =>
+            `姓名: ${detail.userName} (${detail.userId})\n` +
+            `類型: ${detail.leaveType}\n` +
+            `時間: ${new Date(detail.startTime).toLocaleString()} - ${new Date(detail.endTime).toLocaleString()}\n` +
+            `時數: ${detail.count_hours} 小時`
+        ).join("\n\n");
+    }
 
     // 綁定滑鼠移動事件以顯示請假人員詳細資訊
     $('#leave_qty').hover(
         function () {
+            const tooltipText = getLeaveTooltipText();
             if (leave_details.length > 0) {
-                const tooltipText = leave_details.map(detail =>
-                    `姓名: ${detail.userName} (${detail.userId})\n類型: ${detail.leaveType}\n時間: ${new Date(detail.startTime).toLocaleString()} - ${new Date(detail.endTime).toLocaleString()}\n時數: ${detail.count_hours} 小時`
-                ).join("\n\n");
                 $(this).attr('title', tooltipText);
             }
         },
@@ -327,6 +347,7 @@ $(document).ready(async function () {
             $(this).removeAttr('title');
         }
     );
+
 
     // 綁定 hover 事件的共用函數
     function bindHoverEvent(selector, details, displayFn = showPersonDetails) {
@@ -340,5 +361,30 @@ $(document).ready(async function () {
         );
     }
 
+    // 綁定 click 事件：點擊對應的 form-group，也顯示詳細資訊
+    function bindClickEvent(selector, details, displayFn) {
+        displayFn = displayFn || showPersonDetails;
+
+        var $target = $(selector);
+        var $group = $target.closest('.form-group');
+
+        // 讓使用者知道這區塊可點擊
+        $group.css('cursor', 'pointer');
+
+        $group.on('click', function () {
+            var text = displayFn(details);
+            if (!text || !text.trim()) return;
+
+            // 這裡用 alert 最簡單；若想改成 jQuery UI dialog 也很容易
+            alert(text);
+            // 若想用 dialog 可以改成：
+            // $("<div/>").text(text).dialog({
+            //     title: $group.text().trim() || "詳細資訊",
+            //     modal: true,
+            //     width: 400,
+            //     buttons: { "關閉": function () { $(this).dialog("close"); } }
+            // });
+        });
+    }
 
 });

@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\egrou\\source\\repos\\Attendance\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\attendance\\attendance_calendar.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_calendar.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\management\\leave.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\leave.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_rwd.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|C:\\Users\\egrou\\source\\repos\\Attendance\\attendance\\scripts\\attendance\\attendance_rwd.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\attendance\\attendance_rwd.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\attendance\\attendance_calendar.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\attendance\\attendance_calendar.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,53 +26,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Leave.js",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Leave.js",
-              "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Leave.js",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Leave.js",
-              "RelativeToolTip": "Attendance\\Scripts\\Management\\Leave.js",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAgwDAAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-10-30T04:17:24.606Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Leave.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx",
-              "RelativeDocumentMoniker": "Attendance\\Management\\Leave.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx",
-              "RelativeToolTip": "Attendance\\Management\\Leave.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-30T04:06:28.769Z",
+              "Title": "Attendance_calendar.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\Attendance_calendar.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\attendance\\Attendance_calendar.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\Attendance_calendar.js",
+              "RelativeToolTip": "Attendance\\Scripts\\attendance\\Attendance_calendar.js",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAiwHMAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-10T00:38:44.563Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "attendance_rwd.js",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "RelativeDocumentMoniker": "Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "RelativeToolTip": "Attendance\\Scripts\\attendance\\attendance_rwd.js",
-              "ViewState": "AgIAAC4BAAAAAAAAAAAAADwBAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-10-30T03:30:08.051Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "attendance_rwd.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeDocumentMoniker": "Attendance\\attendance\\attendance_rwd.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\attendance_rwd.aspx",
-              "RelativeToolTip": "Attendance\\attendance\\attendance_rwd.aspx",
+              "DocumentIndex": 0,
+              "Title": "Attendance_calendar.aspx",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\Attendance_calendar.aspx",
+              "RelativeDocumentMoniker": "Attendance\\attendance\\Attendance_calendar.aspx",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\Attendance_calendar.aspx",
+              "RelativeToolTip": "Attendance\\attendance\\Attendance_calendar.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-30T03:29:59.086Z"
+              "WhenOpened": "2025-12-10T00:38:31.18Z",
+              "EditorCaption": ""
             }
           ]
         }

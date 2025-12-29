@@ -8,6 +8,71 @@ function toLocalISOString(date) {
     return localTime.toISOString().slice(0, -1); // 去掉 'Z' 後的 ISO 格式
 }
 
+// ★ 上班時間與午休時間（分鐘，週一～週五）
+const WORK_START_MIN = 9 * 60;        // 09:00
+const WORK_END_MIN = 18 * 60;       // 18:00
+const LUNCH_START_MIN = 12 * 60 + 30; // 12:30
+const LUNCH_END_MIN = 13 * 60 + 30; // 13:30
+
+// ★ 計算請假起訖之間的實際工作時數（只算週一～週五，09:00~18:00，扣掉 12:30~13:30）
+function calcWorkHoursBetween(startDateTime, endDateTime) {
+    if (!(startDateTime instanceof Date) || !(endDateTime instanceof Date)) return 0;
+    if (endDateTime <= startDateTime) return 0;
+
+    let totalMinutes = 0;
+
+    // 取起始「日期」(00:00) 與結束「日期」(00:00)
+    let cur = new Date(startDateTime);
+    cur.setHours(0, 0, 0, 0);
+
+    const lastDay = new Date(endDateTime);
+    lastDay.setHours(0, 0, 0, 0);
+
+    while (cur <= lastDay) {
+        const dow = cur.getDay(); // 0=Sun, 6=Sat
+
+        // 只算週一～週五
+        if (dow !== 0 && dow !== 6) {
+            // 當天的上班時間區段：09:00~18:00
+            const dayWorkStart = new Date(cur);
+            dayWorkStart.setHours(9, 0, 0, 0);
+
+            const dayWorkEnd = new Date(cur);
+            dayWorkEnd.setHours(18, 0, 0, 0);
+
+            // 與整體請假區間交集
+            const segStart = new Date(Math.max(dayWorkStart.getTime(), startDateTime.getTime()));
+            const segEnd = new Date(Math.min(dayWorkEnd.getTime(), endDateTime.getTime()));
+
+            if (segEnd > segStart) {
+                let minutes = (segEnd - segStart) / 60000; // 轉分鐘
+
+                // 扣掉午休 12:30~13:30 的重疊
+                const lunchStart = new Date(cur);
+                lunchStart.setHours(12, 30, 0, 0);
+                const lunchEnd = new Date(cur);
+                lunchEnd.setHours(13, 30, 0, 0);
+
+                const lStart = Math.max(lunchStart.getTime(), segStart.getTime());
+                const lEnd = Math.min(lunchEnd.getTime(), segEnd.getTime());
+                if (lEnd > lStart) {
+                    minutes -= (lEnd - lStart) / 60000;
+                }
+
+                if (minutes > 0) {
+                    totalMinutes += minutes;
+                }
+            }
+        }
+
+        // 下一天
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    return totalMinutes / 60.0; // 轉成小時
+}
+
+
 $(document).ready(function () {
     // 初始化員工下拉清單
     async function initializeEmployeeSelect() {
@@ -167,9 +232,18 @@ $(document).ready(function () {
             return;
         }
 
-        const startTime = toLocalISOString(new Date(startDateVal));
-        const endTime = endDateVal ? toLocalISOString(new Date(endDateVal)) : null;
-        const countHours = endTime ? (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60) : null;
+        const startObj = new Date(startDateVal);
+        const endObj = endDateVal ? new Date(endDateVal) : null;
+
+        if (recordType !== 'attendance') {
+            if (!endObj || isNaN(endObj.getTime()) || isNaN(startObj.getTime()) || endObj <= startObj) {
+                alert("結束時間必須晚於開始時間！");
+                return;
+            }
+        }
+
+        const startTime = toLocalISOString(startObj);
+        const endTime = endObj ? toLocalISOString(endObj) : null;
 
         // 根據 API 規範設置不同的字段名稱
         let data = {
@@ -198,20 +272,27 @@ $(document).ready(function () {
                     }
                 });
             } else if (recordType === 'leave') {
-                // 請假記錄的 API 使用 userId 和 userName
+                // ★ 請假：使用 calcWorkHoursBetween，自動套用上班日/時間規則
+                const hours = calcWorkHoursBetween(startObj, endObj);
+                if (hours <= 0) {
+                    alert("計算出的請假時數不合理（小於等於 0），請確認時間需落在週一～週五 09:00~18:00 之內，且會自動扣除 12:30~13:30。");
+                    return;
+                }
+
                 data.userId = userId;
                 data.userName = userName;
                 data.leaveType = $('#leaveType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
-                data.count_hours = countHours;
+                data.count_hours = hours;
+
                 await $.ajax({
                     url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
                     type: "POST",
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     success: function () {
-                        alert("請假記錄已新增");
+                        alert(`請假記錄已新增（系統計算時數：${hours.toFixed(2)} 小時）`);
                     },
                     error: function (error) {
                         console.error(error);
@@ -219,13 +300,20 @@ $(document).ready(function () {
                     }
                 });
             } else if (recordType === 'overtime') {
-                // 加班記錄的 API 使用 userID 和 userName
+                // 加班：沿用原本計算邏輯（不套上班時間限制）
+                const countHours = (endObj - startObj) / (1000 * 60 * 60);
+                if (countHours <= 0) {
+                    alert("加班時數不合理（小於等於 0），請重新確認時間。");
+                    return;
+                }
+
                 data.userID = userId;
                 data.userName = userName;
                 data.overtimeType = $('#overtimeType').val();
                 data.startTime = startTime;
                 data.endTime = endTime;
                 data.count_hours = countHours;
+
                 await $.ajax({
                     url: "http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
                     type: "POST",
@@ -244,6 +332,7 @@ $(document).ready(function () {
             console.error("發生錯誤：", error);
         }
     });
+
 
     // 更新按鈕事件綁定
     $(document).on('click', '.update-record', function () {
@@ -268,10 +357,9 @@ $(document).ready(function () {
             const newLeaveType = prompt("輸入新的請假類型:", leaveType);
             const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
             const newEndTime = prompt("輸入新的結束時間 (格式 yyyy-MM-ddTHH:mm:ss):", endTime);
-            const countHours = prompt("輸入更新後的總小時數:");
 
-            if (newLeaveType && newStartTime && newEndTime && countHours) {
-                updateLeaveRecord(userId, userName, leaveType, startTime, newLeaveType, newStartTime, newEndTime, countHours);
+            if (newLeaveType && newStartTime && newEndTime) {
+                updateLeaveRecord(userId, userName, leaveType, startTime, newLeaveType, newStartTime, newEndTime);
             }
         } else if (recordType === '加班') {
             const newStartTime = prompt("輸入新的開始時間 (格式 yyyy-MM-ddTHH:mm:ss):", startTime);
@@ -347,15 +435,29 @@ $(document).ready(function () {
         }
     }
 
-    // 更新請假記錄的函數
-    async function updateLeaveRecord(userId, userName, oldLeaveType, oldStartTime, newLeaveType, newStartTime, newEndTime, countHours) {
+    // 更新請假記錄的函數（自動依上班日/時間重算 count_hours）
+    async function updateLeaveRecord(userId, userName, oldLeaveType, oldStartTime, newLeaveType, newStartTime, newEndTime) {
+        const startObj = new Date(newStartTime);
+        const endObj = new Date(newEndTime);
+
+        if (isNaN(startObj.getTime()) || isNaN(endObj.getTime()) || endObj <= startObj) {
+            alert("新的開始/結束時間不合理，請確認格式與先後順序。");
+            return;
+        }
+
+        const hours = calcWorkHoursBetween(startObj, endObj);
+        if (hours <= 0) {
+            alert("計算出的請假時數不合理（小於等於 0），請確認須落在週一～週五 09:00~18:00，且會自動扣除 12:30~13:30。");
+            return;
+        }
+
         const data = {
             userId: userId.toString(),
             userName: userName,
             leaveType: newLeaveType,
             startTime: newStartTime,
             endTime: newEndTime,
-            count_hours: parseFloat(countHours),
+            count_hours: hours,
             submitted_at: toLocalISOString(new Date()),
             approved_by: getCookie("person_id")
         };
@@ -366,7 +468,7 @@ $(document).ready(function () {
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function () {
-                    alert("請假記錄已更新");
+                    alert(`請假記錄已更新（系統計算時數：${hours.toFixed(2)} 小時）`);
                     $('#queryBtn').click(); // 刷新顯示
                 },
                 error: function (error) {
@@ -378,6 +480,7 @@ $(document).ready(function () {
             console.error("發生錯誤：", error);
         }
     }
+
 
     // 更新加班記錄的函數
     async function updateOvertimeRecord(userId, userName, oldStartTime, overtimeType, newStartTime, newEndTime, countHours) {
@@ -447,7 +550,12 @@ $(document).on('click', '#addRecordBtn', async function () {
     const userId = $('#employeeSelect').val();
     const userName = $('#employeeSelect option:selected').text();
     const selectedDate = $('#startTime').val();
-    const purpleValue = $('#cb_morning_down_after_purple_light_update').prop('checked') ? 1 : 0;
+    const purpleChecked = $('#cb_morning_down_after_purple_light_update').prop('checked');
+
+    // ★ 沒勾選就完全不處理「紫光」資料，也不顯示任何訊息
+    if (!purpleChecked) {
+        return;
+    }
 
     if (!selectedDate) {
         alert("請選擇日期");
@@ -462,7 +570,7 @@ $(document).on('click', '#addRecordBtn', async function () {
                 user_id: userId,
                 user_name: userName,
                 attendance_day: selectedDate,
-                morning_light_down_after_purple_light: purpleValue
+                morning_light_down_after_purple_light: 1   // 只有在勾選時才寫入 1
             }),
             headers: {
                 'Accept': 'application/json',
@@ -470,6 +578,8 @@ $(document).on('click', '#addRecordBtn', async function () {
             },
             success: function () {
                 alert("修煉至紫光後資料更新成功");
+                // 用完順手把勾勾清掉，避免下次誤觸
+                $('#cb_morning_down_after_purple_light_update').prop('checked', false);
                 $('#queryBtn').click();
             },
             error: function (xhr) {
@@ -482,3 +592,4 @@ $(document).on('click', '#addRecordBtn', async function () {
         alert("發生錯誤，請稍後再試");
     }
 });
+

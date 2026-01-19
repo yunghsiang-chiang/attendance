@@ -1,6 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="attendance_history.aspx.cs" Inherits="Attendance.attendance.attendance_history" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <%
+        var personCookie = Request.Cookies["person"];
+        var personIdValue = personCookie != null ? Server.UrlDecode(personCookie["person_id"]) : "";
+    %>
+    <input type="hidden" id="current-person-id" value="<%= Server.HtmlEncode(personIdValue) %>" />
     <script src="../Scripts/attendance/attendance_history.js"></script>
     <main>
         <section>

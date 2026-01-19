@@ -1,7 +1,7 @@
 ﻿// 當文件載入完畢後執行
 $(document).ready(function () {
     // 將同修資訊載入下拉選單
-    getPersonInformationToDropdownlist();
+    initializeDefaultState();
 
     // 搜尋按鈕事件綁定
     $("#search").click(function () {
@@ -20,8 +20,35 @@ $(document).ready(function () {
     });
 });
 
+function getCurrentPersonId() {
+    return ($('#current-person-id').val() || '').trim();
+}
+
+function toDateInputValue(date) {
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function parseDateOnly(dateValue) {
+    if (!dateValue) return null;
+    const parts = String(dateValue).split('T')[0].split('-');
+    if (parts.length !== 3) return null;
+    const y = Number(parts[0]);
+    const m = Number(parts[1]);
+    const d = Number(parts[2]);
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
+    return new Date(y, m - 1, d);
+}
+
+async function initializeDefaultState() {
+    const personId = getCurrentPersonId();
+    await getPersonInformationToDropdownlist(personId);
+    await setDefaultDates(personId);
+    $("#search").trigger("click");
+}
+
 // 使用 async/await 將同修資訊載入下拉選單
-async function getPersonInformationToDropdownlist() {
+async function getPersonInformationToDropdownlist(defaultPersonId) {
     let api_url = "http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
 
     try {
@@ -37,9 +64,47 @@ async function getPersonInformationToDropdownlist() {
 
         // 將生成的選項加入下拉選單
         $('#name-select').append(unit);
+        if (defaultPersonId) {
+            const hasOption = $(`#name-select option[value="${defaultPersonId}"]`).length > 0;
+            if (hasOption) {
+                $('#name-select').val(defaultPersonId);
+            }
+        }
     } catch (error) {
         console.error('Error fetching person information:', error);
     }
+}
+
+async function setDefaultDates(personId) {
+    const endDate = new Date();
+    $('#end-date').val(toDateInputValue(endDate));
+
+    let startDate = new Date(endDate);
+    startDate.setFullYear(startDate.getFullYear() - 1);
+
+    if (personId) {
+        try {
+            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+            if (!response.ok) throw new Error('get_person_vacation 失敗');
+            const data = await response.json();
+            const list = (data && data.$values) ? data.$values : data;
+            if (Array.isArray(list)) {
+                const me = list.find(p => String(p.person_id) === String(personId));
+                const startWorkDate = parseDateOnly(me && me.start_work);
+                if (startWorkDate) {
+                    const anniversaryThisYear = new Date(endDate.getFullYear(), startWorkDate.getMonth(), startWorkDate.getDate());
+                    const startCandidate = new Date(anniversaryThisYear);
+                    startCandidate.setFullYear(anniversaryThisYear.getFullYear() - 1);
+                    const maxTime = Math.max(startWorkDate.getTime(), startCandidate.getTime());
+                    startDate = new Date(maxTime);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching person vacation:', error);
+        }
+    }
+
+    $('#start-date').val(toDateInputValue(startDate));
 }
 
 // 使用 async/await 搜尋出勤資料

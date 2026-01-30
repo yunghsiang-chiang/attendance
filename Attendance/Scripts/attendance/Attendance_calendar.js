@@ -82,11 +82,18 @@
         // ✅ 紫光狀態表：key=YYYY-MM-DD -> true/false
         let afterPurpleMap = {};
 
+        // ✅ 上班日 Set：key=YYYY-MM-DD
+        let workdaySet = new Set();
+
         const firstDayOfMonth = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         const userid = getCookie("person_id");
         if (!userid) return;
+
+        // ✅ 先拿「上班日」(calendaryear / calendarmonth)
+        const workdayApiUrl =
+            `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month + 1}`;
 
         const attendanceApiUrl =
             `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
@@ -96,213 +103,263 @@
             `&startdate=${year}-${String(month + 1).padStart(2, '0')}-01` +
             `&enddate=${year}-${String(month + 1).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
 
-        // 先拿出勤
-        $.ajax({
-            url: attendanceApiUrl,
-            type: 'GET',
-            success: function (attendanceResponse) {
-                // attendanceDates 建議做 normalize（保險）
-                const attendanceSet = new Set(
-                    (attendanceResponse || []).map(r => {
-                        const s = (r.attendanceDates || '').toString();
-                        return s.replaceAll('/', '-').split('T')[0];
-                    })
-                );
+        // ✅ 工具：把 "2026-1-2" 轉成 "2026-01-02"
+        function normalizeYMD(s) {
+            if (!s) return "";
+            s = s.toString().trim().split('T')[0].replaceAll('/', '-');
+            const parts = s.split('-');
+            if (parts.length < 3) return s;
+            const y = parts[0];
+            const m = String(parseInt(parts[1], 10)).padStart(2, '0');
+            const d = String(parseInt(parts[2], 10)).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
 
-                // 再拿請假
-                $.ajax({
-                    url: leaveApiUrl,
-                    type: 'GET',
-                    success: function (leaveResponse) {
-                        const leaveSet = new Map();
+        // ✅ 渲染主流程（拿到 workdaySet 後才進來）
+        function proceedRender(workdaySet) {
 
-                        // ✅ 本月起訖（用來截斷跨月請假）
-                        const monthStart = new Date(year, month, 1);
-                        const monthEnd = new Date(year, month, daysInMonth);
+            // 先拿出勤
+            $.ajax({
+                url: attendanceApiUrl,
+                type: 'GET',
+                success: function (attendanceResponse) {
 
-                        (leaveResponse || []).forEach(leave => {
-                            const start = new Date(leave.startTime);
-                            const end = new Date(leave.endTime);
+                    const attendanceSet = new Set(
+                        (attendanceResponse || []).map(r => normalizeYMD(r.attendanceDates || ''))
+                    );
 
-                            // 取交集區間
-                            let cur = new Date(Math.max(start.getTime(), monthStart.getTime()));
-                            const last = new Date(Math.min(end.getTime(), monthEnd.getTime()));
+                    // 再拿請假
+                    $.ajax({
+                        url: leaveApiUrl,
+                        type: 'GET',
+                        success: function (leaveResponse) {
+                            const leaveSet = new Map();
 
-                            // 展開成每天
-                            while (cur.getTime() <= last.getTime()) {
-                                const y = cur.getFullYear();
-                                const m = String(cur.getMonth() + 1).padStart(2, '0');
-                                const d = String(cur.getDate()).padStart(2, '0');
-                                const leaveDateStr = `${y}-${m}-${d}`;
+                            const monthStart = new Date(year, month, 1);
+                            const monthEnd = new Date(year, month, daysInMonth);
 
-                                if (!leaveSet.has(leaveDateStr)) leaveSet.set(leaveDateStr, []);
-                                leaveSet.get(leaveDateStr).push(leave);
+                            (leaveResponse || []).forEach(leave => {
+                                const start = new Date(leave.startTime);
+                                const end = new Date(leave.endTime);
 
-                                cur.setDate(cur.getDate() + 1);
-                            }
-                        });
+                                let cur = new Date(Math.max(start.getTime(), monthStart.getTime()));
+                                const last = new Date(Math.min(end.getTime(), monthEnd.getTime()));
 
-                        // 先補空白
-                        for (let i = 0; i < firstDayOfMonth; i++) {
-                            $('#calendar').append('<div class="day empty"></div>');
-                        }
+                                while (cur.getTime() <= last.getTime()) {
+                                    const y = cur.getFullYear();
+                                    const m = String(cur.getMonth() + 1).padStart(2, '0');
+                                    const d = String(cur.getDate()).padStart(2, '0');
+                                    const leaveDateStr = `${y}-${m}-${d}`;
 
-                        const username = getCookie('person_name');
+                                    if (!leaveSet.has(leaveDateStr)) leaveSet.set(leaveDateStr, []);
+                                    leaveSet.get(leaveDateStr).push(leave);
 
-                        // 產生日曆格
-                        for (let day = 1; day <= daysInMonth; day++) {
-                            const formattedDate =
-                                `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-                            const dayElement = $('<div>')
-                                .addClass('day')
-                                .text(day)
-                                .data('day', formattedDate);
-
-                            // 出勤（綠）
-                            if (attendanceSet.has(formattedDate)) {
-                                const nameElement = $('<br><span>')
-                                    .text(username)
-                                    .addClass('clickable')
-                                    .on('click', function () {
-                                        getAttendanceDetails(formattedDate);
-                                    });
-
-                                dayElement.append(nameElement);
-                                dayElement.addClass('present').css('background-color', 'lightgreen');
-                            }
-
-                            // 請假（紅）
-                            if (leaveSet.has(formattedDate)) {
-                                const leaveElement = $('<br><span>')
-                                    .text('請假')
-                                    .addClass('clickable')
-                                    .on('click', function () {
-                                        showLeaveDetails(formattedDate, leaveSet.get(formattedDate));
-                                    });
-
-                                dayElement.append(leaveElement);
-                                dayElement.addClass('on-leave').css('background-color', 'lightcoral');
-                            }
-
-                            $('#calendar').append(dayElement);
-
-                            // ✅ 點整格：補登/取消 紫光（排除點到姓名/請假/✔️）
-                            dayElement.on('click', function (e) {
-                                if ($(e.target).hasClass('clickable') || $(e.target).hasClass('after-purple-check')) {
-                                    return;
-                                }
-
-                                // 沒出勤就不給補登
-                                if (!attendanceSet.has(formattedDate)) {
-                                    return;
-                                }
-
-                                const userId = getCookie("person_id");
-                                const userName = getCookie("person_name");
-
-                                // 已登記 -> 取消
-                                if (afterPurpleMap[formattedDate]) {
-                                    if (confirm('此日已登記為「晨下煉完紫光系」，是否要取消？')) {
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
-                                            data: JSON.stringify({
-                                                user_id: userId,
-                                                user_name: userName,
-                                                attendance_day: formattedDate,
-                                                morning_light_down_after_purple_light: 0
-                                            }),
-                                            headers: {
-                                                'Accept': 'application/json',
-                                                'Content-Type': 'application/json'
-                                            },
-                                            success: function () {
-                                                alert("已取消紫光煉氣登記");
-                                                generateCalendar(currentMonth, currentYear);
-                                            },
-                                            error: function (xhr) {
-                                                console.error(xhr);
-                                                alert("取消失敗，請稍後再試");
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    // 尚未登記 -> 新增
-                                    if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
-                                            data: JSON.stringify({
-                                                user_id: userId,
-                                                user_name: userName,
-                                                attendance_day: formattedDate,
-                                                morning_light_down_after_purple_light: 1
-                                            }),
-                                            headers: {
-                                                'Accept': 'application/json',
-                                                'Content-Type': 'application/json'
-                                            },
-                                            success: function () {
-                                                alert("修煉至紫光後資料更新成功");
-                                                generateCalendar(currentMonth, currentYear);
-                                            },
-                                            error: function (xhr) {
-                                                console.error(xhr);
-                                                alert("更新失敗，請稍後再試");
-                                            }
-                                        });
-                                    }
+                                    cur.setDate(cur.getDate() + 1);
                                 }
                             });
-                        }
 
-                        // ✅✔️ 日曆格子都畫完後，查本月每日紫光狀態（只跑一次）
-                        const fullAttendanceUrl =
-                            `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+                            // 先補空白
+                            for (let i = 0; i < firstDayOfMonth; i++) {
+                                $('#calendar').append('<div class="day empty"></div>');
+                            }
 
-                        $.ajax({
-                            url: fullAttendanceUrl,
-                            type: 'GET',
-                            success: function (fullResponse) {
-                                afterPurpleMap = {};
+                            const username = getCookie('person_name');
 
-                                const list = fullResponse && fullResponse.$values ? fullResponse.$values : (fullResponse || []);
-                                list.forEach(record => {
-                                    const dateKey = (record.attendance_day || '').split('T')[0].replaceAll('/', '-');
-                                    afterPurpleMap[dateKey] = (record.morning_light_down_after_purple_light === 1);
-                                });
+                            // 產生日曆格
+                            for (let day = 1; day <= daysInMonth; day++) {
 
-                                // 把 ✔️ 貼回日曆
-                                $('#calendar .day').each(function () {
-                                    const date = $(this).data('day');
-                                    if (!date) return;
+                                const formattedDate =
+                                    `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-                                    if (afterPurpleMap[date] && $(this).find('.after-purple-check').length === 0) {
-                                        $(this).append('<br><span class="after-purple-check" style="font-size: 20px; color: purple;">✔️</span>');
+                                const isWorkday = workdaySet.has(formattedDate);
+
+                                const dayElement = $('<div>')
+                                    .addClass('day')
+                                    .text(day)
+                                    .data('day', formattedDate);
+
+                                // ✅ 非上班日（先標 class，但不覆蓋出勤/請假顏色）
+                                if (!isWorkday) {
+                                    dayElement.addClass('non-workday');
+                                }
+
+                                // 出勤（綠）
+                                if (attendanceSet.has(formattedDate)) {
+                                    const nameElement = $('<br><span>')
+                                        .text(username)
+                                        .addClass('clickable')
+                                        .on('click', function () {
+                                            getAttendanceDetails(formattedDate);
+                                        });
+
+                                    dayElement.append(nameElement);
+                                    dayElement.addClass('present').css('background-color', 'lightgreen');
+                                }
+
+                                // 請假（紅）
+                                if (leaveSet.has(formattedDate)) {
+                                    const leaveElement = $('<br><span>')
+                                        .text('請假')
+                                        .addClass('clickable')
+                                        .on('click', function () {
+                                            showLeaveDetails(formattedDate, leaveSet.get(formattedDate));
+                                        });
+
+                                    dayElement.append(leaveElement);
+                                    dayElement.addClass('on-leave').css('background-color', 'lightcoral');
+                                }
+
+                                // ✅ 顯示文字「非上班日」：只在「沒有出勤、沒有請假」時顯示，避免資訊打架
+                                if (!isWorkday && !attendanceSet.has(formattedDate) && !leaveSet.has(formattedDate)) {
+                                    dayElement.append('<br><span class="non-workday-label">非上班日</span>');
+                                }
+
+                                $('#calendar').append(dayElement);
+
+                                // ✅ 點整格：補登/取消 紫光（排除點到姓名/請假/✔️）
+                                dayElement.on('click', function (e) {
+                                    if ($(e.target).hasClass('clickable') || $(e.target).hasClass('after-purple-check')) {
+                                        return;
+                                    }
+
+                                    // 沒出勤就不給補登
+                                    if (!attendanceSet.has(formattedDate)) {
+                                        return;
+                                    }
+
+                                    const userId = getCookie("person_id");
+                                    const userName = getCookie("person_name");
+
+                                    // 已登記 -> 取消
+                                    if (afterPurpleMap[formattedDate]) {
+                                        if (confirm('此日已登記為「晨下煉完紫光系」，是否要取消？')) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                                data: JSON.stringify({
+                                                    user_id: userId,
+                                                    user_name: userName,
+                                                    attendance_day: formattedDate,
+                                                    morning_light_down_after_purple_light: 0
+                                                }),
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                success: function () {
+                                                    alert("已取消紫光煉氣登記");
+                                                    generateCalendar(currentMonth, currentYear);
+                                                },
+                                                error: function (xhr) {
+                                                    console.error(xhr);
+                                                    alert("取消失敗，請稍後再試");
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        // 尚未登記 -> 新增
+                                        if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                                data: JSON.stringify({
+                                                    user_id: userId,
+                                                    user_name: userName,
+                                                    attendance_day: formattedDate,
+                                                    morning_light_down_after_purple_light: 1
+                                                }),
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                success: function () {
+                                                    alert("修煉至紫光後資料更新成功");
+                                                    generateCalendar(currentMonth, currentYear);
+                                                },
+                                                error: function (xhr) {
+                                                    console.error(xhr);
+                                                    alert("更新失敗，請稍後再試");
+                                                }
+                                            });
+                                        }
                                     }
                                 });
-
-                                // ✅ 同步更新月統計（避免剛載入時總數不同步）
-                                updateMonthlySummary(userid, year, month + 1);
-                            },
-                            error: function (error) {
-                                console.error('Error fetching full attendance for ✔️:', error);
                             }
-                        });
-                    },
-                    error: function (error) {
-                        console.error('Error fetching leave data:', error);
-                    }
-                });
+
+                            // ✅✔️ 日曆格子都畫完後，查本月每日紫光狀態（只跑一次）
+                            const fullAttendanceUrl =
+                                `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+
+                            $.ajax({
+                                url: fullAttendanceUrl,
+                                type: 'GET',
+                                success: function (fullResponse) {
+                                    afterPurpleMap = {};
+
+                                    const list = fullResponse && fullResponse.$values ? fullResponse.$values : (fullResponse || []);
+                                    list.forEach(record => {
+                                        const dateKey = normalizeYMD(record.attendance_day || '');
+                                        afterPurpleMap[dateKey] = (record.morning_light_down_after_purple_light === 1);
+                                    });
+
+                                    // 把 ✔️ 貼回日曆
+                                    $('#calendar .day').each(function () {
+                                        const date = $(this).data('day');
+                                        if (!date) return;
+
+                                        if (afterPurpleMap[date] && $(this).find('.after-purple-check').length === 0) {
+                                            $(this).append('<br><span class="after-purple-check" style="font-size: 20px; color: purple;">✔️</span>');
+                                        }
+                                    });
+
+                                    updateMonthlySummary(userid, year, month + 1);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching full attendance for ✔️:', error);
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            console.error('Error fetching leave data:', error);
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching attendance data:', error);
+                }
+            });
+
+            updateMonthlySummary(userid, year, month + 1);
+        }
+        // ✅ Step 1：呼叫上班日 API，建立 workdaySet
+        $.ajax({
+            url: workdayApiUrl,
+            type: 'GET',
+            success: function (resp) {
+                try {
+                    // resp 範例：[{ "$id":"1", "attendance_days":"2026-1-2,2026-1-9,..." }]
+                    const first = (resp && resp.length) ? resp[0] : null;
+                    const raw = first && first.attendance_days ? first.attendance_days : "";
+
+                    workdaySet = new Set(
+                        raw.split(',')
+                            .map(x => normalizeYMD(x))
+                            .filter(x => x)
+                    );
+                } catch (e) {
+                    console.error('Parse workday response failed:', e);
+                    workdaySet = new Set();
+                }
+
+                proceedRender(workdaySet);
             },
-            error: function (error) {
-                console.error('Error fetching attendance data:', error);
+            error: function (err) {
+                console.error('Error fetching workdays:', err);
+                // 失敗就不標示非上班日（避免誤判）
+                workdaySet = new Set();
+                proceedRender(workdaySet);
             }
         });
-
-        // 先更新一次月統計（之後 fullAttendance 回來也會再更新一次）
-        updateMonthlySummary(userid, year, month + 1);
     }
 
     // 取得出勤詳細資料

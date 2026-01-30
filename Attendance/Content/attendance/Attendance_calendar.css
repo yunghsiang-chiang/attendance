@@ -59,6 +59,23 @@ button {
         white-space: nowrap; /* 確保文字不會換行 */
     }
 
+/* 非上班日：底色淡灰 + 字色灰（但若出勤/請假有上色，會被 inline background-color 蓋過） */
+.day.non-workday {
+    background: #f3f3f3;
+    color: #8a8a8a;
+    border: 1px solid #e1e1e1;
+}
+
+/* 非上班日文字標籤 */
+.non-workday-label {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 10px;
+    background: #e9e9e9;
+    color: #666;
+}
 
 
 /* 設置 dialog 背景為淡藍色 */

@@ -128,10 +128,14 @@
                 <p id="message"></p>
                 <div id="overtime-times">
                     <div class="overtime-entry">
+                        <label for="overtime-start-date-0">請選擇申報加班的起始日期：</label>
+                        <input type="date" id="overtime-start-date-0" class="overtime-start-date" required>
                         <label for="overtime-start-0">請選擇申報加班的起始時間：</label>
-                        <input type="time" id="overtime-start-0" required>
+                        <input type="time" id="overtime-start-0" class="overtime-start-time" required>
+                        <label for="overtime-end-date-0">請選擇申報加班的結束日期：</label>
+                        <input type="date" id="overtime-end-date-0" class="overtime-end-date" required>
                         <label for="overtime-end-0">請選擇申報加班的結束時間：</label>
-                        <input type="time" id="overtime-end-0" required>
+                        <input type="time" id="overtime-end-0" class="overtime-end-time" required>
                         <label for="overtime-remark-0">備註：</label>
                         <textarea id="overtime-remark-0" class="form-control" rows="2" placeholder="加班原因或說明"></textarea>
                     </div>

@@ -414,6 +414,23 @@
     handleButtonClick('#bt_compensatory_leave', '補休');
     handleButtonClick('#bt_specaial_leave', '特休');
 
+    function setOvertimeDefaultDates(scope) {
+        const dateValue = new Date().toISOString().split('T')[0];
+        const container = scope || $(document);
+
+        container.find('.overtime-start-date').each(function () {
+            if (!$(this).val()) {
+                $(this).val(dateValue);
+            }
+        });
+
+        container.find('.overtime-end-date').each(function () {
+            if (!$(this).val()) {
+                $(this).val(dateValue);
+            }
+        });
+    }
+
     // 根據當前時間限制每個時間選擇器
     function updateTimeLimit() {
         let currentHour = new Date().getHours();
@@ -542,25 +559,48 @@
 
                 let totalHours = 0;
                 let validEntries = true;
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                const timeRegex = /^\d{2}:\d{2}$/;
 
                 overtimeEntries.each(function (index) {
-                    const startTimeString = $(this).find('input[type="time"]').eq(0).val();
-                    const endTimeString = $(this).find('input[type="time"]').eq(1).val();
+                    const startDateString = $(this).find('.overtime-start-date').val();
+                    const startTimeString = $(this).find('.overtime-start-time').val();
+                    const endDateString = $(this).find('.overtime-end-date').val();
+                    const endTimeString = $(this).find('.overtime-end-time').val();
                     const remark = $(this).find('textarea').val(); // 獲取備註內容
 
-                    if (!startTimeString || !endTimeString) {
-                        alert("請選擇加班的起始時間和結束時間!");
+                    if (!dateRegex.test(startDateString) || !timeRegex.test(startTimeString)) {
+                        alert("請選擇正確的加班起始日期與時間!");
                         validEntries = false;
                         return false;
                     }
 
-                    const start_DateTime = new Date();
-                    const [startHours, startMinutes] = startTimeString.split(':').map(Number);
-                    start_DateTime.setHours(startHours, startMinutes, 0, 0);
+                    if (!dateRegex.test(endDateString) || !timeRegex.test(endTimeString)) {
+                        alert("請選擇正確的加班結束日期與時間!");
+                        validEntries = false;
+                        return false;
+                    }
 
-                    const end_DateTime = new Date();
-                    const [endHours, endMinutes] = endTimeString.split(':').map(Number);
-                    end_DateTime.setHours(endHours, endMinutes, 0, 0);
+                    const start_DateTime = new Date(`${startDateString}T${startTimeString}:00`);
+                    const end_DateTime = new Date(`${endDateString}T${endTimeString}:00`);
+
+                    if (!(start_DateTime instanceof Date) || Number.isNaN(start_DateTime.getTime())) {
+                        alert("加班起始時間無法解析，請重新輸入。");
+                        validEntries = false;
+                        return false;
+                    }
+
+                    if (!(end_DateTime instanceof Date) || Number.isNaN(end_DateTime.getTime())) {
+                        alert("加班結束時間無法解析，請重新輸入。");
+                        validEntries = false;
+                        return false;
+                    }
+
+                    if (end_DateTime <= start_DateTime) {
+                        alert("加班結束時間必須晚於起始時間！");
+                        validEntries = false;
+                        return false;
+                    }
 
                     const hours = (end_DateTime - start_DateTime) / (1000 * 60 * 60);
 
@@ -593,19 +633,25 @@
         const index = $('.overtime-entry').length;
         const newEntry = `
         <div class="overtime-entry">
+            <label for="overtime-start-date-${index}">請選擇申報加班的起始日期：</label>
+            <input type="date" id="overtime-start-date-${index}" class="overtime-start-date" required>
             <label for="overtime-start-${index}">請選擇申報加班的起始時間：</label>
-            <input type="time" id="overtime-start-${index}" required>
+            <input type="time" id="overtime-start-${index}" class="overtime-start-time" required>
+            <label for="overtime-end-date-${index}">請選擇申報加班的結束日期：</label>
+            <input type="date" id="overtime-end-date-${index}" class="overtime-end-date" required>
             <label for="overtime-end-${index}">請選擇申報加班的結束時間：</label>
-            <input type="time" id="overtime-end-${index}" required>
+            <input type="time" id="overtime-end-${index}" class="overtime-end-time" required>
             <label for="overtime-remark-${index}">備註：</label>
             <textarea id="overtime-remark-${index}" class="form-control" rows="2" placeholder="加班原因或說明"></textarea>
         </div>
         `;
         $('#overtime-times').append(newEntry);
+        setOvertimeDefaultDates($('#overtime-times'));
     });
 
     // 初始調用限制時間
     updateTimeLimit();
+    setOvertimeDefaultDates($('#overtime-times'));
 
     // 每次新增加班或請假時段時，為其設置時間限制
     $(document).on('change', 'input[type="time"]', function () {

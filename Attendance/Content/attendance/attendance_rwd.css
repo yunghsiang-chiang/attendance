@@ -81,6 +81,17 @@ input[type="button"] {
     border-radius: 5px; /* 美化圖片圓角處理 */
 }
 
+.overtime-entry {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.overtime-entry label {
+    margin-top: 4px;
+}
+
 
 
 /* Media Queries */

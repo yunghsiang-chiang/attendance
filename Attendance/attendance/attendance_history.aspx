@@ -49,6 +49,9 @@
                             <th>病假時數</th>
                             <th>補休時數</th>
                             <th>生理假時數</th>
+                            <th>剩餘特休時數</th>
+                            <th>剩餘事假時數</th>
+                            <th>剩餘病假時數</th>
                         </tr>
                     </thead>
                     <tbody id="statistics-tbody">

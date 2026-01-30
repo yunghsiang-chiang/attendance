@@ -40,6 +40,61 @@ function parseDateOnly(dateValue) {
     return new Date(y, m - 1, d);
 }
 
+function fmt2(value) {
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue.toFixed(2) : '0.00';
+}
+
+async function getRemainingLeaveBalances(userId) {
+    if (!userId) return null;
+    try {
+        const vacationResponse = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+        if (!vacationResponse.ok) throw new Error('get_person_vacation 失敗');
+        const vacationData = await vacationResponse.json();
+        const list = (vacationData && vacationData.$values) ? vacationData.$values : vacationData;
+        if (!Array.isArray(list)) return null;
+        const me = list.find(person => String(person.person_id) === String(userId));
+        if (!me) return null;
+
+        let remainSpecial = Number(me.special_vacation_hours) || 0;
+        let remainPersonal = Number(me.personal_leave_hours) || 0;
+        let remainSick = Number(me.personal_sick_hours) || 0;
+
+        const leaveResponse = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
+        if (!leaveResponse.ok) throw new Error('get_leave_record_last_year 失敗');
+        const records = await leaveResponse.json();
+
+        const now = new Date();
+        const startWorkDate = new Date(me.start_work || now);
+        const anniversaryThisYear = new Date(startWorkDate);
+        anniversaryThisYear.setFullYear(now.getFullYear());
+        if (now < anniversaryThisYear) {
+            anniversaryThisYear.setFullYear(now.getFullYear() - 1);
+        }
+        const nextAnniversary = new Date(anniversaryThisYear);
+        nextAnniversary.setFullYear(anniversaryThisYear.getFullYear() + 1);
+
+        (Array.isArray(records) ? records : []).forEach(record => {
+            if (String(record.userId) !== String(userId)) return;
+            const startTime = new Date(record.startTime);
+            if (startTime < anniversaryThisYear || startTime > nextAnniversary) return;
+            const hours = Number(record.count_hours) || 0;
+            if (record.leaveType === '特休') remainSpecial -= hours;
+            if (record.leaveType === '事假') remainPersonal -= hours;
+            if (record.leaveType === '病假') remainSick -= hours;
+        });
+
+        return {
+            special: remainSpecial,
+            personal: remainPersonal,
+            sick: remainSick
+        };
+    } catch (error) {
+        console.error('Error fetching remaining leave balances:', error);
+        return null;
+    }
+}
+
 async function initializeDefaultState() {
     const personId = getCurrentPersonId();
     await getPersonInformationToDropdownlist(personId);
@@ -200,8 +255,13 @@ async function searchAttendanceRecord(userid, startdate, enddate) {
             // 將加班紀錄插入到表格中
             $('#overtime-records-tbody').append(overtimeRows);
 
+            const remainingBalances = await getRemainingLeaveBalances(userid);
+            const remainingSpecial = remainingBalances ? fmt2(remainingBalances.special) : '-';
+            const remainingPersonal = remainingBalances ? fmt2(remainingBalances.personal) : '-';
+            const remainingSick = remainingBalances ? fmt2(remainingBalances.sick) : '-';
+
             // 將統計數據插入表格
-            let statisticsRow = `<tr><td>${username}</td><td>${attendancedaysarray.size}</td><td>${overtimehours}</td><td>${leavehours}</td><td>${special_vacation_hours}</td><td>${sick_leave_hours}</td><td>${compensatory_leave_hours}</td><td>${menstrual_leave_hours}</td></tr>`;
+            let statisticsRow = `<tr><td>${username}</td><td>${attendancedaysarray.size}</td><td>${overtimehours}</td><td>${leavehours}</td><td>${special_vacation_hours}</td><td>${sick_leave_hours}</td><td>${compensatory_leave_hours}</td><td>${menstrual_leave_hours}</td><td>${remainingSpecial}</td><td>${remainingPersonal}</td><td>${remainingSick}</td></tr>`;
             $('#statistics-tbody').append(statisticsRow);
         } else {
             console.log('No attendance data found for this user.');

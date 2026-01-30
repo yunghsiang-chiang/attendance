@@ -44,6 +44,10 @@ function fmt2(value) {
     const numberValue = Number(value);
     return Number.isFinite(numberValue) ? numberValue.toFixed(2) : '0.00';
 }
+function normId(v) {
+    return String(v ?? '').trim().replace(/^0+/, '') || '0';
+}
+
 
 async function getRemainingLeaveBalances(userId) {
     if (!userId) return null;
@@ -53,7 +57,7 @@ async function getRemainingLeaveBalances(userId) {
         const vacationData = await vacationResponse.json();
         const list = (vacationData && vacationData.$values) ? vacationData.$values : vacationData;
         if (!Array.isArray(list)) return null;
-        const me = list.find(person => String(person.person_id) === String(userId));
+        const me = list.find(person => normId(person.person_id) === normId(userId));
         if (!me) return null;
 
         let remainSpecial = Number(me.special_vacation_hours) || 0;

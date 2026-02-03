@@ -184,3 +184,5 @@ D:\Work\Attendance\attendance\Attendance\obj\Debug\Attendance.csproj.CoreCompile
 D:\Work\Attendance\attendance\Attendance\obj\Debug\Attendance.csproj.Up2Date
 D:\Work\Attendance\attendance\Attendance\obj\Debug\Attendance.dll
 D:\Work\Attendance\attendance\Attendance\obj\Debug\Attendance.pdb
+C:\Users\egrou\source\repos\Attendance\Attendance\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\egrou\source\repos\Attendance\Attendance\bin\System.Runtime.CompilerServices.Unsafe.xml

@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\egrou\\source\\repos\\Attendance\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\attendance\\attendance_calendar.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\attendance\\attendance_calendar.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\leave.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\leave.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\updatespecialvacationall.ashx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\updatespecialvacationall.ashx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\scripts\\management\\leave.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|c:\\users\\egrou\\source\\repos\\attendance\\attendance\\management\\leave.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A702E6-F12F-48B2-A6FC-6872658A9695}|Attendance\\Attendance.csproj|solutionrelative:attendance\\management\\leave.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,15 +38,67 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UpdateSpecialVacationAll.ashx.cs",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\UpdateSpecialVacationAll.ashx.cs",
+              "RelativeDocumentMoniker": "Attendance\\Management\\UpdateSpecialVacationAll.ashx.cs",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\UpdateSpecialVacationAll.ashx.cs",
+              "RelativeToolTip": "Attendance\\Management\\UpdateSpecialVacationAll.ashx.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAqwFIAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T06:34:15.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Leave.js",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Leave.js",
+              "RelativeDocumentMoniker": "Attendance\\Scripts\\Management\\Leave.js",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Scripts\\Management\\Leave.js",
+              "RelativeToolTip": "Attendance\\Scripts\\Management\\Leave.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-02-03T06:19:13.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Web.config",
+              "RelativeDocumentMoniker": "Attendance\\Web.config",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Web.config",
+              "RelativeToolTip": "Attendance\\Web.config",
+              "ViewState": "AgIAABsAAAAAAAAAAAAgwDgAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-02-03T06:19:03.427Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Leave.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx.cs",
+              "RelativeDocumentMoniker": "Attendance\\Management\\Leave.aspx.cs",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx.cs",
+              "RelativeToolTip": "Attendance\\Management\\Leave.aspx.cs",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAAAAkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T06:18:54.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Attendance_calendar.aspx",
-              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\Attendance_calendar.aspx",
-              "RelativeDocumentMoniker": "Attendance\\attendance\\Attendance_calendar.aspx",
-              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\attendance\\Attendance_calendar.aspx",
-              "RelativeToolTip": "Attendance\\attendance\\Attendance_calendar.aspx",
+              "Title": "Leave.aspx",
+              "DocumentMoniker": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx",
+              "RelativeDocumentMoniker": "Attendance\\Management\\Leave.aspx",
+              "ToolTip": "C:\\Users\\egrou\\source\\repos\\Attendance\\Attendance\\Management\\Leave.aspx",
+              "RelativeToolTip": "Attendance\\Management\\Leave.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-01-30T09:09:15.428Z",
+              "WhenOpened": "2026-02-03T06:18:45.719Z",
               "EditorCaption": ""
             }
           ]

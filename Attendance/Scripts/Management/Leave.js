@@ -1,5 +1,44 @@
 ﻿$(document).ready(async function () {
 
+    // ✅ 批次更新所有人特休
+    $('#btn-update-special-all').on('click', async function () {
+        if (!confirm('確定要依到職日重新計算並更新所有人的特休時數嗎？')) return;
+
+        const $btn = $(this);
+        const $status = $('#special-update-status');
+
+        try {
+            $btn.prop('disabled', true);
+            $status.text('更新中...');
+
+            const resp = await fetch('UpdateSpecialVacationAll.ashx', {
+                method: 'POST',
+                credentials: 'same-origin'
+            });
+
+            const d = await resp.json();
+
+            if (!d || d.ok !== true) {
+                $status.text((d && d.message) ? d.message : '更新失敗');
+                alert((d && d.message) ? d.message : '更新失敗');
+                return;
+            }
+
+            $status.text(`完成：總筆數 ${d.total}，更新 ${d.updated}，略過 ${d.skipped}（${d.today}）`);
+
+            // ✅ 更新完後：重抓資料、重畫表格/圖表
+            cachedData = await fetchAttendanceData();
+            renderAll();
+
+        } catch (e) {
+            console.error(e);
+            $status.text('更新發生錯誤，請看 console');
+            alert('更新發生錯誤，請看 console');
+        } finally {
+            $btn.prop('disabled', false);
+        }
+    });
+
     // ===== 狀態 =====
     let currentTooltipContent = "";
     let currentUnit = 'hours'; // 'hours' | 'days'

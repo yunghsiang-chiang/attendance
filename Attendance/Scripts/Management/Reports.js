@@ -21,7 +21,7 @@
 });
 
 function generateReport(startDate, endDate) {
-    const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/GetAttendanceSummary?startDate=${startDate}&endDate=${endDate}`;
+    const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/GetAttendanceSummary?startDate=${startDate}&endDate=${endDate}`;
 
     $.ajax({
         url: apiUrl,

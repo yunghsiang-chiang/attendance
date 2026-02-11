@@ -1,8 +1,8 @@
 ﻿$(document).ready(function () {
     // API 路徑
-    const API_PERSON_LIST = "http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
-    const API_ATTENDANCE_DAYS = "http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays";
-    const API_OVERTIME_RECORDS = "http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record";
+    const API_PERSON_LIST = "https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
+    const API_ATTENDANCE_DAYS = "https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays";
+    const API_OVERTIME_RECORDS = "https://internal.hochi.org.tw:8082/api/attendance/get_overtime_record";
 
     // 加載用戶資料到下拉選單
     async function loadUserSelect() {

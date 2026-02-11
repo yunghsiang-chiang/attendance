@@ -19,7 +19,7 @@
 
     // 更新累積數據函數
     function updateMonthlySummary(user_id, year, month) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendanceSummary?user_id=${user_id}&year=${year}&month=${month}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendanceSummary?user_id=${user_id}&year=${year}&month=${month}`;
 
         $.ajax({
             url: apiUrl,
@@ -93,13 +93,13 @@
 
         // ✅ 先拿「上班日」(calendaryear / calendarmonth)
         const workdayApiUrl =
-            `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month + 1}`;
+            `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month + 1}`;
 
         const attendanceApiUrl =
-            `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
+            `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month + 1}`;
 
         const leaveApiUrl =
-            `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}` +
+            `https://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}` +
             `&startdate=${year}-${String(month + 1).padStart(2, '0')}-01` +
             `&enddate=${year}-${String(month + 1).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
 
@@ -235,7 +235,7 @@
                                         if (confirm('此日已登記為「晨下煉完紫光系」，是否要取消？')) {
                                             $.ajax({
                                                 type: "POST",
-                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                                url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
                                                 data: JSON.stringify({
                                                     user_id: userId,
                                                     user_name: userName,
@@ -261,7 +261,7 @@
                                         if (confirm(`確定要補登記 ${formattedDate} 為「晨下煉完紫光系」？`)) {
                                             $.ajax({
                                                 type: "POST",
-                                                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                                                url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
                                                 data: JSON.stringify({
                                                     user_id: userId,
                                                     user_name: userName,
@@ -288,7 +288,7 @@
 
                             // ✅✔️ 日曆格子都畫完後，查本月每日紫光狀態（只跑一次）
                             const fullAttendanceUrl =
-                                `http://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
+                                `https://internal.hochi.org.tw:8082/api/attendance/getMonthlyAttendance?user_id=${userid}&year=${year}&month=${month + 1}`;
 
                             $.ajax({
                                 url: fullAttendanceUrl,
@@ -367,7 +367,7 @@
         $('#dialog').empty();
 
         const userid = getCookie('person_id');
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record_by_date?userid=${userid}&attendanceDate=${date}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_attendance_record_by_date?userid=${userid}&attendanceDate=${date}`;
 
         $.ajax({
             url: apiUrl,

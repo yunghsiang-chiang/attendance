@@ -27,7 +27,7 @@
 
     // 使用 Promise 封裝 API 請求來獲取出勤數據
     async function fetchAttendanceData(userid, year, month) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDates?userid=${userid}&attendanceyear=${year}&attendancemonth=${month}`;
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: apiUrl, // 請求 API 的 URL
@@ -48,7 +48,7 @@
 
     // 獲取請假數據
     async function fetchLeaveData(year, month) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_by_year_month?year=${year}&month=${month}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_leave_record_by_year_month?year=${year}&month=${month}`;
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: apiUrl, // 請求 API 的 URL
@@ -66,7 +66,7 @@
 
     // 獲取加班數據
     async function fetchOvertimeData(year, month) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record_by_year_month?year=${year}&month=${month}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_overtime_record_by_year_month?year=${year}&month=${month}`;
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: apiUrl, // 請求 API 的 URL
@@ -87,7 +87,7 @@
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
         const workingDays = [];
-        const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
+        const api_url = `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
         const daysData = await $.getJSON(api_url);
 
         if (daysData.length > 0) {
@@ -96,7 +96,7 @@
         }
 
         // 獲取所有員工的ID和姓名
-        const personData = await $.getJSON('http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType');
+        const personData = await $.getJSON('https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType');
 
         // 過濾掉 person_type 為 'group' 的資料
         const filteredPersonData = personData.filter(person => person.person_type !== 'group');
@@ -247,7 +247,7 @@
 
     // 獲取並展示請假記錄
     async function fetchLeaveRecords(year, month) {
-        const url = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_by_year_month?year=${year}&month=${month}`;
+        const url = `https://internal.hochi.org.tw:8082/api/attendance/get_leave_record_by_year_month?year=${year}&month=${month}`;
         try {
             const response = await fetch(url); // 發起 API 請求
             if (!response.ok) {

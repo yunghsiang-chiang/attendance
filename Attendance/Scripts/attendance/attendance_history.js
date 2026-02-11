@@ -52,7 +52,7 @@ function normId(v) {
 async function getRemainingLeaveBalances(userId) {
     if (!userId) return null;
     try {
-        const vacationResponse = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+        const vacationResponse = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
         if (!vacationResponse.ok) throw new Error('get_person_vacation 失敗');
         const vacationData = await vacationResponse.json();
         const list = (vacationData && vacationData.$values) ? vacationData.$values : vacationData;
@@ -64,7 +64,7 @@ async function getRemainingLeaveBalances(userId) {
         let remainPersonal = Number(me.personal_leave_hours) || 0;
         let remainSick = Number(me.personal_sick_hours) || 0;
 
-        const leaveResponse = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
+        const leaveResponse = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
         if (!leaveResponse.ok) throw new Error('get_leave_record_last_year 失敗');
         const records = await leaveResponse.json();
 
@@ -108,7 +108,7 @@ async function initializeDefaultState() {
 
 // 使用 async/await 將同修資訊載入下拉選單
 async function getPersonInformationToDropdownlist(defaultPersonId) {
-    let api_url = "http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
+    let api_url = "https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName";
 
     try {
         // 使用 fetch API 進行請求，並等待結果
@@ -143,7 +143,7 @@ async function setDefaultDates(personId) {
 
     if (personId) {
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
             if (!response.ok) throw new Error('get_person_vacation 失敗');
             const data = await response.json();
             const list = (data && data.$values) ? data.$values : data;
@@ -174,9 +174,9 @@ async function searchAttendanceRecord(userid, startdate, enddate) {
     $('#leave-records-tbody').empty();
 
     // 構建出勤紀錄 API 的 URL
-    let attendanceApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
-    let leaveApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
-    let overtimeApiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
+    let attendanceApiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
+    let leaveApiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
+    let overtimeApiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userid}&startdate=${startdate}&enddate=${enddate}`;
 
     console.log(attendanceApiUrl);
     console.log(leaveApiUrl);

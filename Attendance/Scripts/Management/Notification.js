@@ -8,7 +8,7 @@
     async function initializeEditor() {
         try {
             editor = await ClassicEditor.create(document.querySelector('#content'), {
-                ckfinder: { uploadUrl: 'http://internal.hochi.org.tw:8081/api/FileUpload/UploadFiles' }
+                ckfinder: { uploadUrl: 'https://internal.hochi.org.tw:8081/api/FileUpload/UploadFiles' }
             });
         } catch (error) {
             console.error('CKEditor 初始化失敗:', error);
@@ -47,7 +47,7 @@
     // 加載公告清單
     async function loadNotifications() {
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/GetAnnouncements');
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/GetAnnouncements');
             if (!response.ok) throw new Error('加載公告清單失敗');
 
             const announcements = (await response.json()).$values || [];
@@ -152,7 +152,7 @@
         };
 
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/AddAnnouncement', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify(announcementData),

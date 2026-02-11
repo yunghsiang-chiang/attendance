@@ -103,7 +103,7 @@
             let attendance_days = Array.from(selectedDays).join(','); // 轉換為字串
 
             // 檢查該月份是否已經有儲存的選取日期
-            let api_url_check = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${calendar_year}&calendarmonth=${calendar_month}`;
+            let api_url_check = `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${calendar_year}&calendarmonth=${calendar_month}`;
             $.getJSON(api_url_check)
                 .done(function (data) {
                     // 如果該月份的選取日期已存在，使用PUT請求更新
@@ -121,7 +121,7 @@
     function updateAttendance(api_url_check, calendar_year, calendar_month, attendance_days) {
         $.ajax({
             type: "PUT",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/update_attendance_calendar", // 更新的 Web API 的 URL
+            url: "https://internal.hochi.org.tw:8082/api/attendance/update_attendance_calendar", // 更新的 Web API 的 URL
             data: JSON.stringify({
                 "calendar_year": calendar_year,
                 "calendar_month": calendar_month,
@@ -145,7 +145,7 @@
     function appendAttendance(calendar_year, calendar_month, attendance_days) {
         $.ajax({
             type: "POST",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar", // 儲存的 Web API 的 URL
+            url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_calendar", // 儲存的 Web API 的 URL
             data: JSON.stringify({
                 "calendar_year": calendar_year,
                 "calendar_month": calendar_month,
@@ -168,7 +168,7 @@
     // 從API加載儲存的選取日期
     function loadSelections(year, month) {
         selectedDays.clear(); // 清空已選取的日期
-        let api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
+        let api_url = `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
 
         $.getJSON(api_url, { format: "json" })
             .done(function (data) {

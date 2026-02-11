@@ -76,7 +76,7 @@ function calcWorkHoursBetween(startDateTime, endDateTime) {
 $(document).ready(function () {
     // 初始化員工下拉清單
     async function initializeEmployeeSelect() {
-        const data = await $.get("http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName");
+        const data = await $.get("https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdName");
         data.forEach(item => {
             $('#employeeSelect').append(new Option(item.person_name, item.person_id));
         });
@@ -128,17 +128,17 @@ $(document).ready(function () {
 
             const apiConfigs = [
                 {
-                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    url: `https://internal.hochi.org.tw:8082/api/attendance/get_attendance_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
                     type: '出勤',
                     showEndTime: false
                 },
                 {
-                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    url: `https://internal.hochi.org.tw:8082/api/attendance/get_leave_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
                     type: '請假',
                     showEndTime: true
                 },
                 {
-                    url: `http://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
+                    url: `https://internal.hochi.org.tw:8082/api/attendance/get_overtime_record?userid=${userId}&startdate=${startDate}&enddate=${endDate}`,
                     type: '加班',
                     showEndTime: true
                 }
@@ -149,7 +149,7 @@ $(document).ready(function () {
                 const requests = apiConfigs.map(config => $.get(config.url));
                 const results = await Promise.all(requests);
                 // 加在 queryBtn 點擊事件內的 Promise.all() 後面
-                const dayRecords = await $.get(`http://internal.hochi.org.tw:8082/api/attendance/get_attendance_day_record?user_id=${userId}&startDate=${startDate}&endDate=${endDate}`);
+                const dayRecords = await $.get(`https://internal.hochi.org.tw:8082/api/attendance/get_attendance_day_record?user_id=${userId}&startDate=${startDate}&endDate=${endDate}`);
                 displayMorningLightDown(dayRecords);
 
                 // 根據返回的數據和配置顯示記錄
@@ -259,7 +259,7 @@ $(document).ready(function () {
                 data.attendance_status = $('#attendanceStatus').val();
                 data.create_time = startTime;
                 await $.ajax({
-                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
+                    url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
                     type: "POST",
                     data: JSON.stringify(data),
                     contentType: "application/json",
@@ -287,7 +287,7 @@ $(document).ready(function () {
                 data.count_hours = hours;
 
                 await $.ajax({
-                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
+                    url: "https://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
                     type: "POST",
                     data: JSON.stringify(data),
                     contentType: "application/json",
@@ -315,7 +315,7 @@ $(document).ready(function () {
                 data.count_hours = countHours;
 
                 await $.ajax({
-                    url: "http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
+                    url: "https://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
                     type: "POST",
                     data: JSON.stringify(data),
                     contentType: "application/json",
@@ -383,11 +383,11 @@ $(document).ready(function () {
         // 根據不同記錄類型選擇對應的刪除 API
         let deleteUrl;
         if (recordType === '出勤') {
-            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-attendance-record/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(startTime)}`;
+            deleteUrl = `https://internal.hochi.org.tw:8082/api/attendance/delete-attendance-record/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(startTime)}`;
         } else if (recordType === '請假') {
-            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`;
+            deleteUrl = `https://internal.hochi.org.tw:8082/api/attendance/delete-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`;
         } else if (recordType === '加班') {
-            deleteUrl = `http://internal.hochi.org.tw:8082/api/attendance/delete-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(startTime)}`;
+            deleteUrl = `https://internal.hochi.org.tw:8082/api/attendance/delete-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(startTime)}`;
         }
 
         if (deleteUrl) {
@@ -417,7 +417,7 @@ $(document).ready(function () {
         };
         try {
             await $.ajax({
-                url: `http://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
+                url: `https://internal.hochi.org.tw:8082/api/attendance/update-attendance/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceStatus)}/${encodeURIComponent(createTime)}`,
                 type: "PUT",
                 data: JSON.stringify(data),
                 contentType: "application/json",
@@ -463,7 +463,7 @@ $(document).ready(function () {
         };
         try {
             await $.ajax({
-                url: `http://internal.hochi.org.tw:8082/api/attendance/replace-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldLeaveType)}/${encodeURIComponent(oldStartTime)}`,
+                url: `https://internal.hochi.org.tw:8082/api/attendance/replace-leave-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldLeaveType)}/${encodeURIComponent(oldStartTime)}`,
                 type: "PUT",
                 data: JSON.stringify(data),
                 contentType: "application/json",
@@ -496,7 +496,7 @@ $(document).ready(function () {
         };
         try {
             await $.ajax({
-                url: `http://internal.hochi.org.tw:8082/api/attendance/replace-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldStartTime)}`,
+                url: `https://internal.hochi.org.tw:8082/api/attendance/replace-overtime-record/${encodeURIComponent(userId)}/${encodeURIComponent(oldStartTime)}`,
                 type: "PUT",
                 data: JSON.stringify(data),
                 contentType: "application/json",
@@ -526,7 +526,7 @@ $(document).ready(function () {
             try {
                 await $.ajax({
                     type: "PUT",
-                    url: `http://internal.hochi.org.tw:8082/api/attendance/cancel-purple-light/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceDay)}`,
+                    url: `https://internal.hochi.org.tw:8082/api/attendance/cancel-purple-light/${encodeURIComponent(userId)}/${encodeURIComponent(attendanceDay)}`,
                     success: function () {
                         alert("取消成功");
                         $('#queryBtn').click(); // 重新查詢
@@ -565,7 +565,7 @@ $(document).on('click', '#addRecordBtn', async function () {
     try {
         await $.ajax({
             type: "POST",
-            url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+            url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
             data: JSON.stringify({
                 user_id: userId,
                 user_name: userName,

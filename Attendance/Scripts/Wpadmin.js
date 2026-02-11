@@ -54,7 +54,7 @@
     // 功能：檢查使用者的權限
     async function checkUserPermissions(personId) {
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_permissions_infor');
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_permissions_infor');
             const permissionsData = await response.json();
 
             // 檢查 personId 是否在 permissions 中

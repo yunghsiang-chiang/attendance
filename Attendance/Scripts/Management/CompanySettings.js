@@ -2,7 +2,7 @@
     // 透過 fetch 取得 API 資料
     async function fetchAttendanceTimes() {
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/getAllAttendanceTimes');
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/getAllAttendanceTimes');
             const data = await response.json();
 
             // 呼叫顯示資料的函數
@@ -57,7 +57,7 @@ async function updateAttendanceTimes() {
         lunch_end_time: lunchEnd
     };
     try {
-        const response = await fetch(`http://internal.hochi.org.tw:8082/api/attendance/UpdateAttendanceTimes/${id}`, {
+        const response = await fetch(`https://internal.hochi.org.tw:8082/api/attendance/UpdateAttendanceTimes/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

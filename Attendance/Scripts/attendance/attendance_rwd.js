@@ -118,7 +118,7 @@
     // 加載公告清單
     async function loadAnnouncements() {
         try {
-            const response = await fetch('http://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements');
+            const response = await fetch('https://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements');
             if (!response.ok) throw new Error('公告清單加載失敗');
             const announcements = (await response.json()).$values || [];
 
@@ -156,7 +156,7 @@
         try {
             let response = await $.ajax({
                 type: "POST",
-                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
+                url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_record",
                 data: JSON.stringify({
                     "user_id": user_id,
                     "user_name": user_name,
@@ -181,7 +181,7 @@
         try {
             let response = await $.ajax({
                 type: "POST",
-                url: "http://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
+                url: "https://internal.hochi.org.tw:8082/api/attendance/appendovetime_record",
                 data: JSON.stringify({
                     "userID": userID,
                     "userName": userName,
@@ -217,7 +217,7 @@
         try {
             await $.ajax({
                 type: "POST",
-                url: "http://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
+                url: "https://internal.hochi.org.tw:8082/api/attendance/appendattendance_day",
                 data: JSON.stringify({
                     "user_id": user_id,
                     "user_name": user_name,
@@ -241,7 +241,7 @@
 
     // 取得 API 最後打卡狀態
     async function getLastStatus(user_id) {
-        const apiUrl = `http://internal.hochi.org.tw:8082/api/attendance/get_attendance_last_status?userid=${user_id}`;
+        const apiUrl = `https://internal.hochi.org.tw:8082/api/attendance/get_attendance_last_status?userid=${user_id}`;
         try {
             let detailResponse = await $.ajax({
                 url: apiUrl,
@@ -265,7 +265,7 @@
 
         try {
             // 1) 取得可用時數（特休/事假/病假）
-            const vRes = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
+            const vRes = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_person_vacation');
             if (!vRes.ok) throw new Error('get_person_vacation 失敗');
             const vJson = await vRes.json();
             const list = (vJson && vJson.$values) ? vJson.$values : [];
@@ -278,7 +278,7 @@
             let remainSick = Number(me.personal_sick_hours) || 0;
 
             // 2) 取得近一年請假紀錄，用到職週年視窗扣抵
-            const lRes = await fetch('http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
+            const lRes = await fetch('https://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year');
             if (!lRes.ok) throw new Error('get_leave_record_last_year 失敗');
             const records = await lRes.json();
 
@@ -347,7 +347,7 @@
                 //const year = currentDate.getFullYear();
                 //const month = currentDate.getMonth() + 1;
                 //const workingDays = [];
-                //const api_url = `http://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
+                //const api_url = `https://internal.hochi.org.tw:8082/api/attendance/get_attendanceDays?calendaryear=${year}&calendarmonth=${month}`;
                 //const daysData = await $.getJSON(api_url);
                 //if (daysData.length > 0) {
                 //    let attendance_days = daysData[0].attendance_days.split(',');
@@ -520,7 +520,7 @@
                 try {
                     let response = await $.ajax({
                         type: "POST",
-                        url: "http://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
+                        url: "https://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
                         data: JSON.stringify(postData),
                         headers: {
                             'Accept': 'application/json',

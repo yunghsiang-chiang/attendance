@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     // 獲取加班申請數據
-    fetch('http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record')
+    fetch('https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record')
         .then(response => {
             if (!response.ok) {
                 throw new Error('網絡響應不正常'); // 若響應失敗，拋出錯誤
@@ -77,7 +77,7 @@
         });
 
     // 獲取請假申請數據
-    fetch('http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record')
+    fetch('https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record')
         .then(response => {
             if (!response.ok) {
                 throw new Error('網絡響應不正常'); // 若響應失敗，拋出錯誤
@@ -163,7 +163,7 @@ async function updateOvertimeRecord(userID, userName, overtimeType, startTime) {
         approved_by: person_id
     };
 
-    fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-overtime/${userID}/${overtimeType}/${startTime}`, {
+    fetch(`https://internal.hochi.org.tw:8082/api/attendance/update-overtime/${userID}/${overtimeType}/${startTime}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -201,7 +201,7 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
 
     console.log("🟡 準備送出的 requestData:", requestData); // 👈 加這一行
 
-    fetch(`http://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`, {
+    fetch(`https://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ async function updateLeaveRecord(userId, userName, leaveType, startTime) {
             console.error('更新請假記錄時出錯:', error); // 捕獲錯誤
         });
 
-    console.log("🚨 傳送 URL：", `http://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`);
+    console.log("🚨 傳送 URL：", `https://internal.hochi.org.tw:8082/api/attendance/update-leave/${encodeURIComponent(userId)}/${encodeURIComponent(leaveType)}/${encodeURIComponent(startTime)}`);
     console.log("🔍 startTime 類型：", typeof startTime, startTime);
 
 }

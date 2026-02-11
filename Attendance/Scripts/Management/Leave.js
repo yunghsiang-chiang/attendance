@@ -136,7 +136,7 @@
 
     // ===== 取＆加工資料（以「小時」為基準）=====
     async function fetchAttendanceData() {
-        const apiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
+        const apiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/get_person_vacation';
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`HTTP 錯誤！狀態: ${response.status}`);
@@ -152,7 +152,7 @@
     }
 
     async function updateLeaveHours(data) {
-        const leaveApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year';
+        const leaveApiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/get_leave_record_last_year';
         try {
             const leaveResponse = await fetch(leaveApiUrl);
             if (!leaveResponse.ok) throw new Error(`HTTP 錯誤！狀態: ${leaveResponse.status}`);

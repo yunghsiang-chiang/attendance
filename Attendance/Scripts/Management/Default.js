@@ -9,7 +9,7 @@
 });
 
 $(document).ready(async function () {
-    const API_URL = "http://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements";
+    const API_URL = "https://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements";
     // 各類型人數初始化
     let staff_qty = 0;
     let disciples_qty = 0;
@@ -139,7 +139,7 @@ $(document).ready(async function () {
      * 將不同類型的人員分開計數，並更新對應的人數顯示
      */
     async function get_person_types() {
-        const api_url = "http://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType";
+        const api_url = "https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
                 data.forEach(person => {
@@ -182,7 +182,7 @@ $(document).ready(async function () {
      * 只記錄出勤或外出公務的人員
      */
     async function get_today_attendance_records() {
-        const api_url = "http://internal.hochi.org.tw:8082/api/attendance/get_today_attendance_record/";
+        const api_url = "https://internal.hochi.org.tw:8082/api/attendance/get_today_attendance_record/";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
                 if (data.length > 0) {
@@ -204,7 +204,7 @@ $(document).ready(async function () {
      * 顯示請假人數及詳細資料
      */
     async function get_today_leave_records() {
-        const api_url = "http://internal.hochi.org.tw:8082/api/attendance/get_today_leave_record";
+        const api_url = "https://internal.hochi.org.tw:8082/api/attendance/get_today_leave_record";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
                 if (data.length > 0) {
@@ -271,8 +271,8 @@ $(document).ready(async function () {
 
     // 更新請求審核和休假審批的待簽核數量
     async function updatePendingRequests() {
-        const overtimeApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record';
-        const leaveApiUrl = 'http://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record';
+        const overtimeApiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record';
+        const leaveApiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record';
 
         // 取得加班待審核數據
         const overtimePendingCount = await $.getJSON(overtimeApiUrl).then(data => {

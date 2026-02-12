@@ -492,48 +492,56 @@
                 let startDateTime = new Date(`${start_Date}T${start_Time}:00`);
                 let endDateTime = new Date(`${end_Date}T${end_Time}:00`);
 
-                // 再次防呆：整體起迄不可相同或倒退（避免 count_hours 為負數或 0）
                 if (endDateTime <= startDateTime) {
                     alert("結束時間必須晚於開始時間！");
                     return;
                 }
 
-                // ⭐ 關鍵：統一用函式計算（自動處理單日/跨日、扣週末、扣午休）
+                // ⭐ 統一用函式計算（你這段本來就對）
                 let hoursDifference = calcWorkHoursBetween(startDateTime, endDateTime);
-
-                // 再次保險：不接受 0 或負數
                 if (hoursDifference <= 0) {
                     alert("計算出的請假時數不合理（小於等於 0），請重新確認時間區間。\n(提示：請確認時間是否落在 週一～週五 09:00~18:00 之內)");
                     return;
                 }
 
+                // ✅ 關鍵：start/end 改用 toLocalISOString（不要自己拼 Z）
+                const startTimeISO = toLocalISOString(startDateTime);
+                const endTimeISO = toLocalISOString(endDateTime);
+
                 const postData = {
-                    userId: userId,
-                    userName: userName,
-                    leaveType: leaveType,
-                    startTime: `${start_Date}T${start_Time}:00.000Z`,
-                    endTime: `${end_Date}T${end_Time}:00.000Z`,
+                    userId: getCookie("person_id"),
+                    userName: getCookie("person_name"),
+                    leaveType: $("#leave-type").val(),
+                    startTime: startTimeISO,
+                    endTime: endTimeISO,
                     count_hours: hoursDifference,
-                    submitted_at: localISOString
+                    submitted_at: toLocalISOString(new Date()),
+                    approved_by: getCookie("person_id")  // ✅ 對齊 Management.js
                 };
 
                 try {
-                    let response = await $.ajax({
+                    await $.ajax({
                         type: "POST",
                         url: "https://internal.hochi.org.tw:8082/api/attendance/appendleave_record",
                         data: JSON.stringify(postData),
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
+                        contentType: "application/json; charset=utf-8", // ✅ 用 contentType
+                        processData: false,                              // ✅ 避免被轉碼
+                        success: function () {
+                            alert(`請假申請成功，系統計算時數：${hoursDifference.toFixed(2)} 小時`);
+                            $("#dialog-form").dialog("close");
+                        },
+                        error: function (xhr, status, err) {
+                            console.error("status:", status, "err:", err);
+                            console.error("HTTP:", xhr.status, xhr.statusText);
+                            console.error("response:", xhr.responseText);
+                            alert("請假申請失敗：" + (xhr.responseText || xhr.statusText));
                         }
                     });
-                    console.log(response);
-                    alert(`請假申請成功，系統計算時數：${hoursDifference.toFixed(2)} 小時`);
-                    $(this).dialog("close");
                 } catch (error) {
                     console.error("Error submitting leave request:", error);
                     alert("請假申請失敗");
                 }
+
             },
             "取消": function () {
                 $(this).dialog("close");

@@ -294,11 +294,14 @@ $(document).ready(function () {
                     success: function () {
                         alert(`請假記錄已新增（系統計算時數：${hours.toFixed(2)} 小時）`);
                     },
-                    error: function (error) {
-                        console.error(error);
-                        alert("新增記錄失敗，請檢查資料並重試");
+                    error: function (xhr, status, err) {
+                        console.error("status:", status, "err:", err);
+                        console.error("HTTP:", xhr.status, xhr.statusText);
+                        console.error("response:", xhr.responseText);
+                        alert("新增記錄失敗：" + (xhr.responseText || xhr.statusText));
                     }
                 });
+
             } else if (recordType === 'overtime') {
                 // 加班：沿用原本計算邏輯（不套上班時間限制）
                 const countHours = (endObj - startObj) / (1000 * 60 * 60);

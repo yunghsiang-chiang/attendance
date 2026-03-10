@@ -10,16 +10,17 @@
 
 $(document).ready(async function () {
     const API_URL = "https://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements";
-    // 各類型人數初始化
+
+    // 人數初始化
     let staff_qty = 0;
 
-    // 儲存人員詳細資訊
+    // 詳細資料
     let staff_details = [];
     let attendance_details = [];
     let leave_details = [];
-    let no_attendance_details = []; // 未出勤人員清單
+    let no_attendance_details = [];
 
-    // 獲取 API 資料的 promise 組合
+    // 先取得資料
     await Promise.all([
         get_person_types(),
         get_today_attendance_records(),
@@ -27,9 +28,10 @@ $(document).ready(async function () {
         updatePendingRequests()
     ]);
 
-    // 計算並顯示未出勤人數
+    // 計算未出勤
     updateNoAttendanceQty();
-    // 初始化公告清單
+
+    // 初始化公告
     loadAnnouncements();
 
     // 綁定「查看全部」按鈕點擊事件
@@ -53,8 +55,9 @@ $(document).ready(async function () {
             const data = await response.json();
             const announcements = data.$values || [];
 
-            // 渲染最新公告（最多顯示 5 則）
             const announcementList = $("#announcement-list");
+            announcementList.empty();
+
             announcements.slice(0, 5).forEach(item => {
                 const listItem = `
                     <li class="list-group-item">
@@ -64,15 +67,15 @@ $(document).ready(async function () {
                 announcementList.append(listItem);
             });
 
-            // 綁定「查看內容」按鈕事件
-            $(".view-content").on("click", function () {
+            $(".view-content").off("click").on("click", function () {
                 const title = $(this).data("title");
                 const content = $(this).data("content");
                 showAnnouncementContent(title, content);
             });
 
-            // 渲染所有公告到對話框
             const allAnnouncementsList = $("#all-announcements-list");
+            allAnnouncementsList.empty();
+
             announcements.forEach(item => {
                 const listItem = `
                     <li>
@@ -88,24 +91,19 @@ $(document).ready(async function () {
 
     /**
      * 顯示公告內容於模態框
-     * @param {string} title 公告標題
-     * @param {string} content 公告內容（HTML 格式）
      */
     function showAnnouncementContent(title, content) {
-        // 新增一個 div 包含公告內容
         const modalContent = $(`<div>${content}</div>`);
 
-        // 確保圖片使用正確樣式
         modalContent.find("img").each(function () {
             $(this).addClass("img-responsive");
         });
 
-        // 使用 jQuery UI 的 dialog 顯示內容
         modalContent.dialog({
             title: title,
             modal: true,
-            width: "90%", // 動態寬度適配裝置大小
-            maxWidth: 600, // 限制最大寬度
+            width: "90%",
+            maxWidth: 600,
             buttons: {
                 關閉: function () {
                     $(this).dialog("close");
@@ -114,11 +112,8 @@ $(document).ready(async function () {
         });
     }
 
-
     /**
      * 格式化日期
-     * @param {string} date 日期字串
-     * @returns {string} 格式化後的日期
      */
     function formatDate(date) {
         return new Date(date).toLocaleDateString("zh-TW", {
@@ -129,25 +124,37 @@ $(document).ready(async function () {
     }
 
     /**
-     * 取得人員資料並加總
+     * 取得人員資料
+     * 排除 person_type = group
      */
     async function get_person_types() {
         const api_url = "https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
+                staff_qty = 0;
+                staff_details = [];
+
                 data.forEach(person => {
-                    staff_qty++;
-                    staff_details.push(person);
+                    if (person.person_type !== "group") {
+                        staff_qty++;
+                        staff_details.push(person);
+                    }
                 });
 
-                // 更新對應的 HTML 顯示
                 updatePersonCount();
+                console.log("員工總數(排除group):", staff_qty);
+                console.log("員工明細:", staff_details);
+            })
+            .fail(function (xhr, status, error) {
+                console.error("取得人員資料失敗:", status, error);
             });
     }
 
-    // 更新人數顯示
+    /**
+     * 更新員工總數顯示
+     */
     function updatePersonCount() {
-        $('#staff_qty').text(`${staff_qty}人`);
+        $('#staff_qty').text(staff_qty + '人');
     }
 
     /**
@@ -158,8 +165,11 @@ $(document).ready(async function () {
         const api_url = "https://internal.hochi.org.tw:8082/api/attendance/get_today_attendance_record/";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
+                attendance_details = [];
+
                 if (data.length > 0) {
                     const attendance_name_set = new Set();
+
                     data.forEach(record => {
                         if (!attendance_name_set.has(record.user_name) &&
                             ['到班', '外出公務'].includes(record.attendance_status)) {
@@ -167,52 +177,55 @@ $(document).ready(async function () {
                             attendance_details.push(record);
                         }
                     });
-                    $('#attendance_qty').text(attendance_name_set.size);
+
+                    $('#attendance_qty').text(attendance_name_set.size + '人');
+                } else {
+                    $('#attendance_qty').text('0人');
                 }
+            })
+            .fail(function (xhr, status, error) {
+                console.error("取得今日出勤資料失敗:", status, error);
+                $('#attendance_qty').text('0人');
             });
     }
 
     /**
      * 取得今日請假數據
-     * 顯示請假人數及詳細資料
      */
     async function get_today_leave_records() {
         const api_url = "https://internal.hochi.org.tw:8082/api/attendance/get_today_leave_record";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
-                if (data.length > 0) {
-                    $('#leave_qty').text(data.length);
-                    leave_details = data;
-                    renderLeaveTable(leave_details); // 渲染請假紀錄表格
-                }
+                leave_details = data || [];
+                $('#leave_qty').text(leave_details.length + '人');
+                renderLeaveTable(leave_details);
+            })
+            .fail(function (xhr, status, error) {
+                console.error("取得今日請假資料失敗:", status, error);
+                leave_details = [];
+                $('#leave_qty').text('0人');
+                renderLeaveTable([]);
             });
     }
 
-    // 計算未出勤人數並顯示
+    /**
+     * 計算未出勤人數
+     */
     function updateNoAttendanceQty() {
-        const total_qty = staff_qty; // 總人數
-        const attendance_qty = parseInt($('#attendance_qty').text()); // 已出勤人數
-        const leave_qty = parseInt($('#leave_qty').text()); // 已請假人數
-        /*const no_attendance_qty = total_qty - attendance_qty - leave_qty; // 未出勤人數 = 總人數 - 已出勤人數 - 已請假人數*/
-
-        
-
-        // 計算未出勤人員清單
         const all_persons = staff_details;
         const attendance_names = new Set(attendance_details.map(record => record.user_name));
         const leave_names = new Set(leave_details.map(record => record.userName));
 
-        // 過濾掉已請假和已出勤人員
-        no_attendance_details = all_persons.filter(person =>
-            !attendance_names.has(person.person_name) && !leave_names.has(person.person_name)
-        );
+        no_attendance_details = all_persons.filter(function (person) {
+            return !attendance_names.has(person.person_name) &&
+                !leave_names.has(person.person_name);
+        });
 
-        $('#no_attendance_qty').text(no_attendance_details.length + '人'); // 顯示未出勤人數
+        $('#no_attendance_qty').text(no_attendance_details.length + '人');
     }
 
     /**
      * 渲染請假紀錄表格
-     * @param {Array} leaveDetails 請假詳細資料
      */
     function renderLeaveTable(leaveDetails) {
         const leaveTable = `
@@ -229,86 +242,113 @@ $(document).ready(async function () {
                 <tbody>
                     ${leaveDetails.map(detail => `
                         <tr>
-                            <td>${detail.userName}<br/> (${detail.userId})</td>
+                            <td>${detail.userName}<br/>(${detail.userId})</td>
                             <td>${detail.leaveType}</td>
                             <td>${new Date(detail.startTime).toLocaleString('sv', 1).replace(' ', '<br/>')}</td>
                             <td>${new Date(detail.endTime).toLocaleString('sv', 1).replace(' ', '<br/>')}</td>
-                            <td>${detail.count_hours} </td>
+                            <td>${detail.count_hours}</td>
                         </tr>
                     `).join('')}
                 </tbody>
             </table>
         `;
-        $('.leave-records').html(leaveTable); // 將表格插入到 .leave-records 區域
+
+        $('.leave-records').html(leaveTable);
     }
 
-    // 更新請求審核和休假審批的待簽核數量
+    /**
+     * 更新待簽核數量
+     */
     async function updatePendingRequests() {
         const overtimeApiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_overtime_record';
         const leaveApiUrl = 'https://internal.hochi.org.tw:8082/api/attendance/waiting_for_approval_of_leave_record';
 
-        // 取得加班待審核數據
-        const overtimePendingCount = await $.getJSON(overtimeApiUrl).then(data => {
-            return data.filter(item => item.approved_by === null).length;
+        const overtimePendingCount = await $.getJSON(overtimeApiUrl).then(function (data) {
+            return data.filter(function (item) {
+                return item.approved_by === null;
+            }).length;
         });
 
-        // 取得請假待審核數據
-        const leavePendingCount = await $.getJSON(leaveApiUrl).then(data => {
-            return data.filter(item => item.approved_by === null).length;
+        const leavePendingCount = await $.getJSON(leaveApiUrl).then(function (data) {
+            return data.filter(function (item) {
+                return item.approved_by === null;
+            }).length;
         });
 
-        // 更新HTML顯示
         $('#request-review').text(`請求1: 請求審核 (尚有${leavePendingCount}筆待簽核)`);
         $('#leave-approval').text(`請求3: 休假審批 (尚有${overtimePendingCount}筆待簽核)`);
     }
 
-    // 顯示各類別的詳細人員資訊
+    /**
+     * 顯示一般人員詳細資訊
+     */
     function showPersonDetails(details) {
         return details.length > 0
-            ? details.map(person => `ID: ${person.person_id}, 姓名: ${person.person_name}`).join("\n")
+            ? details.map(function (person) {
+                return `ID: ${person.person_id}, 姓名: ${person.person_name}`;
+            }).join("\n")
             : "無人員資料";
     }
 
-    // 顯示出勤詳細人員資料
+    /**
+     * 顯示出勤詳細資訊
+     */
     function showAttendanceDetails(details) {
         return details.length > 0
-            ? details.map(person => `ID: ${person.user_id}, 姓名: ${person.user_name}`).join("\n")
+            ? details.map(function (person) {
+                return `ID: ${person.user_id}, 姓名: ${person.user_name}`;
+            }).join("\n")
             : "無人員資料";
     }
 
-    // ★ 新增：點擊對應 form-group 也能顯示同一份詳細資訊
-
-    // 社團 /人員類型
-    bindClickEvent('#staff_qty', staff_details);
-    bindClickEvent('#disciples_qty', disciples_details);
-    bindClickEvent('#secretary_qty', secretary_details);
-    bindClickEvent('#IT_qty', IT_details);
-
-    // 出勤人員
-    bindClickEvent('#attendance_qty', attendance_details, showAttendanceDetails);
-
-    // 未出勤人員
-    bindClickEvent('#no_attendance_qty', no_attendance_details);
-
-    // 請假人員（改用共用的 getLeaveTooltipText）
-    bindClickEvent('#leave_qty', leave_details, function () {
-        return getLeaveTooltipText();
-    });
-
-
-    // 組出請假 tooltip 的文字（供 hover / click 共用）
+    /**
+     * 請假 tooltip / click 共用文字
+     */
     function getLeaveTooltipText() {
         if (leave_details.length === 0) return "無請假資料";
 
-        return leave_details.map(detail =>
-            `姓名: ${detail.userName} (${detail.userId})\n` +
-            `類型: ${detail.leaveType}\n` +
-            `時間: ${new Date(detail.startTime).toLocaleString()} - ${new Date(detail.endTime).toLocaleString()}\n` +
-            `時數: ${detail.count_hours} 小時`
-        ).join("\n\n");
+        return leave_details.map(function (detail) {
+            return `姓名: ${detail.userName} (${detail.userId})\n` +
+                `類型: ${detail.leaveType}\n` +
+                `時間: ${new Date(detail.startTime).toLocaleString()} - ${new Date(detail.endTime).toLocaleString()}\n` +
+                `時數: ${detail.count_hours} 小時`;
+        }).join("\n\n");
     }
 
-    // 綁定滑鼠移動事件以顯示請假人員詳細資訊
+    /**
+     * 綁定 click 事件
+     */
+    function bindClickEvent(selector, getTextFn) {
+        var $target = $(selector);
+        var $group = $target.closest('.form-group');
+
+        $group.css('cursor', 'pointer');
+
+        $group.off('click').on('click', function () {
+            var text = getTextFn();
+            if (!text || !String(text).trim()) return;
+            alert(text);
+        });
+    }
+
+    // 綁定 click：改成用函式動態取最新資料
+    bindClickEvent('#staff_qty', function () {
+        return showPersonDetails(staff_details);
+    });
+
+    bindClickEvent('#attendance_qty', function () {
+        return showAttendanceDetails(attendance_details);
+    });
+
+    bindClickEvent('#no_attendance_qty', function () {
+        return showPersonDetails(no_attendance_details);
+    });
+
+    bindClickEvent('#leave_qty', function () {
+        return getLeaveTooltipText();
+    });
+
+    // 請假 hover
     $('#leave_qty').hover(
         function () {
             const tooltipText = getLeaveTooltipText();
@@ -320,44 +360,4 @@ $(document).ready(async function () {
             $(this).removeAttr('title');
         }
     );
-
-
-    // 綁定 hover 事件的共用函數
-    function bindHoverEvent(selector, details, displayFn = showPersonDetails) {
-        $(selector).hover(
-            function () {
-                $(this).attr('title', displayFn(details));
-            },
-            function () {
-                $(this).removeAttr('title');
-            }
-        );
-    }
-
-    // 綁定 click 事件：點擊對應的 form-group，也顯示詳細資訊
-    function bindClickEvent(selector, details, displayFn) {
-        displayFn = displayFn || showPersonDetails;
-
-        var $target = $(selector);
-        var $group = $target.closest('.form-group');
-
-        // 讓使用者知道這區塊可點擊
-        $group.css('cursor', 'pointer');
-
-        $group.on('click', function () {
-            var text = displayFn(details);
-            if (!text || !text.trim()) return;
-
-            // 這裡用 alert 最簡單；若想改成 jQuery UI dialog 也很容易
-            alert(text);
-            // 若想用 dialog 可以改成：
-            // $("<div/>").text(text).dialog({
-            //     title: $group.text().trim() || "詳細資訊",
-            //     modal: true,
-            //     width: 400,
-            //     buttons: { "關閉": function () { $(this).dialog("close"); } }
-            // });
-        });
-    }
-
 });

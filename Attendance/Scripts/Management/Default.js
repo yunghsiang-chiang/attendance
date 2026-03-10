@@ -12,15 +12,9 @@ $(document).ready(async function () {
     const API_URL = "https://internal.hochi.org.tw:8082/api/attendance/GetPublishedAnnouncements";
     // 各類型人數初始化
     let staff_qty = 0;
-    let disciples_qty = 0;
-    let secretary_qty = 0;
-    let IT_qty = 0;
 
-    // 儲存各類型的人員詳細資訊
+    // 儲存人員詳細資訊
     let staff_details = [];
-    let disciples_details = [];
-    let secretary_details = [];
-    let IT_details = [];
     let attendance_details = [];
     let leave_details = [];
     let no_attendance_details = []; // 未出勤人員清單
@@ -135,33 +129,15 @@ $(document).ready(async function () {
     }
 
     /**
-     * 取得人員屬性並分類加總
-     * 將不同類型的人員分開計數，並更新對應的人數顯示
+     * 取得人員資料並加總
      */
     async function get_person_types() {
         const api_url = "https://internal.hochi.org.tw:8082/api/hochi_learners/get_person_IdNameType";
         return $.getJSON(api_url, { format: "json" })
             .done(function (data) {
                 data.forEach(person => {
-                    // 根據人員類型分類並加總
-                    switch (person.person_type) {
-                        case 'staff':
-                            staff_qty++;
-                            staff_details.push(person);
-                            break;
-                        case 'disciple':
-                            disciples_qty++;
-                            disciples_details.push(person);
-                            break;
-                        case 'secretary':
-                            secretary_qty++;
-                            secretary_details.push(person);
-                            break;
-                        case 'IT':
-                            IT_qty++;
-                            IT_details.push(person);
-                            break;
-                    }
+                    staff_qty++;
+                    staff_details.push(person);
                 });
 
                 // 更新對應的 HTML 顯示
@@ -172,9 +148,6 @@ $(document).ready(async function () {
     // 更新人數顯示
     function updatePersonCount() {
         $('#staff_qty').text(`${staff_qty}人`);
-        $('#disciples_qty').text(`${disciples_qty}人`);
-        $('#secretary_qty').text(`${secretary_qty}人`);
-        $('#IT_qty').text(`${IT_qty}人`);
     }
 
     /**
@@ -217,7 +190,7 @@ $(document).ready(async function () {
 
     // 計算未出勤人數並顯示
     function updateNoAttendanceQty() {
-        const total_qty = staff_qty + disciples_qty + secretary_qty + IT_qty; // 總人數
+        const total_qty = staff_qty; // 總人數
         const attendance_qty = parseInt($('#attendance_qty').text()); // 已出勤人數
         const leave_qty = parseInt($('#leave_qty').text()); // 已請假人數
         /*const no_attendance_qty = total_qty - attendance_qty - leave_qty; // 未出勤人數 = 總人數 - 已出勤人數 - 已請假人數*/
@@ -225,7 +198,7 @@ $(document).ready(async function () {
         
 
         // 計算未出勤人員清單
-        const all_persons = [...staff_details, ...disciples_details, ...secretary_details, ...IT_details];
+        const all_persons = staff_details;
         const attendance_names = new Set(attendance_details.map(record => record.user_name));
         const leave_names = new Set(leave_details.map(record => record.userName));
 

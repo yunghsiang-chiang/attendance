@@ -24,15 +24,6 @@
                     <div class="col-sm-6 form-group">
                         員工：<label class="status-item" id="staff_qty"></label>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        同修：<label class="status-item" id="disciples_qty"></label>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        機要：<label class="status-item" id="secretary_qty"></label>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        IT：<label class="status-item" id="IT_qty"></label>
-                    </div>
                 </div>
 
                 <!-- 員工狀態總覽以 label 呈現，兩行水平排列 -->

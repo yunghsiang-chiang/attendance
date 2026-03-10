@@ -135,7 +135,7 @@ $(document).ready(async function () {
                 staff_details = [];
 
                 data.forEach(person => {
-                    if (person.person_type !== "group") {
+                    if (person.person_type !== "group" && person.person_type !== "chairman") {
                         staff_qty++;
                         staff_details.push(person);
                     }
